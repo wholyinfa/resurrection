@@ -1,0 +1,1 @@
+let aVar:string = 'Eyo';

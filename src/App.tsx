@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Route } from 'react-router-dom';
 
-function App() {
+
+
+export default function App() {
+  
   return (
     <>
       <Route path='/'>
@@ -18,11 +22,9 @@ function App() {
       <Route path='/projects:title'>
         
       </Route>
-      <Route path='/characteristics'>
+      <Route path='/character'>
         
       </Route>
     </>
   );
 }
-
-export default App;

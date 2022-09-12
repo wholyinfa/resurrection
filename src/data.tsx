@@ -86,19 +86,44 @@ interface Character {
     life: CharacterData[],
 }
 
-const Character: Character = {
+export const Character: Character = {
     work: [
         {
             imgSource: require('./Assets/Chatacter/Coder.jpg'),
             title: 'coder',
-            description: '',
+            description: 'In a universe where every life form is structured to get something done it\'s empowering to be the one who defines the structure; Today, many every-day items that operate the simplest reactions contain the most complex code either in them, or in the process of making them.',
+        },
+        {
+            imgSource: require('./Assets/Chatacter/Singer.jpg'),
+            title: 'singer',
+            description: 'Words offer the ability to interact with people, when combined with music, interaction with souls is made possible; To sing from the deepest note of the heart and relate to someone far in the world and fill their heart with compassion and inform them of not being alone in their journey, makes one pick up the mic...',
+        },
+        {
+            imgSource: require('./Assets/Chatacter/TechSavvy.jpg'),
+            title: 'techsavvy',
+            description: 'Computers can do what humans are unable to do, they grant us extra abilities making our lives easier and more efficient; Harnessing a tiny bit of the power of this digital ocean of information ensures entrance to the future era in a ready state.',
+        },
+        {
+            imgSource: require('./Assets/Chatacter/Student.jpg'),
+            title: 'student',
+            description: 'To be fearless in learning new skills and experience the unkown is to be free, free from lack and leaning towards abundance. Also each character has a different perspective, as the main character, it\'s foolish to refuse to learn other character\'s perspectives and experiences, as they may offer an insight that prevents one from falling where they fell before.',
+        },
+        {
+            imgSource: require('./Assets/Chatacter/Fixer.jpg'),
+            title: 'fixer',
+            description: 'It\'s different to pose as a know-it-all than having the mindset or belief that you are capable of doing it yourself, it\'s just a matter of whether it\'s worth your time and effort to do it yourself. This mindset pushes you to at least research to see whether you can get it done without help or not, and this process, you learn a lot! There are others who are more experienced after all, we may also give them a call;)',
+        },
+        {
+            imgSource: require('./Assets/Chatacter/Designer.jpg'),
+            title: 'designer',
+            description: 'I could be considered as an artistic person but I let them shine elsewhere, meaning that I\'m into designing webpages and even enjoy it as I do it, but I long for getting into programming phase, everytime I start designing. That should say a lot:)',
         },
     ],
     life: [
         {
             imgSource: require('./Assets/Chatacter/Athlete.jpg'),
             title: 'athlete',
-            description: 'Feeling the hard cold ground as it reflects "power" for each Push-up, hearing the sky yell “higher” on every Pull-up, fighting the wind, the rain, the snow and the dust while running towards a superior shape of body and mind is worth hustling for repeatedly.',
+            description: 'Feeling the hard cold ground as it reflects "POWER!" for each Push-up, hearing the sky yell "HIGHER!" on every Pull-up, fighting the wind, the rain, the snow and the dust while running towards a superior shape of body and mind is worth hustling for repeatedly.',
         },
         {
             imgSource: require('./Assets/Chatacter/Gamer.jpg'),

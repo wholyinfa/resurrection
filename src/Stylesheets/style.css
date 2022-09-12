@@ -1,1 +1,18 @@
-/*# sourceMappingURL=style.css.map */
+@font-face {
+  font-family: "latoLight";
+  src: url("./Fonts/latoLight.woff2") format("woff2"), url("./Fonts/latoLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "latoMedium";
+  src: url("./Fonts/latoMedium.woff2") format("woff2"), url("./Fonts/latoMedium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  background: #000;
+  color: #fff;
+  margin: 0;
+  font-size: 16px;
+}/*# sourceMappingURL=style.css.map */

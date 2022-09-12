@@ -9,6 +9,7 @@ import IndexPage from './IndexPage';
 import NotFound from './NotFound';
 import ProjectsPage from './ProjectsPage';
 import SingleProjectPage from './SingleProjectPage';
+import './Stylesheets/style.css';
 
 export const titleConversion = (query: string) => {
   return query.toLowerCase().replaceAll(' ', '-');

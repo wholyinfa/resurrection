@@ -1,0 +1,18 @@
+@import './style.scss';
+nav{
+    width: 100%;
+    position: fixed;
+    text-align: center;
+    > div{
+        position: relative;
+        margin: 0 auto;
+        a{
+            color: #fff;
+            text-decoration: none;
+            font-family: latoMedium;
+            font-size: 1em;
+            padding: 15px 20px;
+            margin: 0 10px;
+        }
+    }
+}

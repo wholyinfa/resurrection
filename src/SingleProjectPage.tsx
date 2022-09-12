@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { titleConversion } from './App';
 import { Projects } from './data';
 import NotFound from './NotFound';
+import './Stylesheets/projects.css';
 
 export default function SingleProjectPage() {
     type Param = {projectName: string};

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { PageData, Pages } from "./data";
+import './Stylesheets/menu.css';
 
 export const Menu = () => {
 

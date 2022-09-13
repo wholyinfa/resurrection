@@ -22,15 +22,21 @@ nav {
   position: fixed;
   text-align: center;
 }
-nav > div {
+nav #dialerContainer {
   position: relative;
   margin: 0 auto;
+  display: inline-block;
+  border: 1px solid;
 }
-nav > div a {
+nav #dialerContainer a {
   color: #fff;
   text-decoration: none;
   font-family: latoMedium;
   font-size: 1em;
-  padding: 15px 20px;
-  margin: 0 10px;
+  padding: 15px 0;
+  display: inline-block;
+  box-sizing: border-box;
+}
+nav #dialerContainer .lefties {
+  position: absolute;
 }/*# sourceMappingURL=menu.css.map */

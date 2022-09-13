@@ -6,12 +6,37 @@ import './Stylesheets/menu.css';
 
 export const Menu = () => {
 
-    const location = useLocation();
-    const itemList: PageData[] = [];
-    const activePage: PageData = Object.values(Pages).filter( entry => entry.url === titleConversion(location.pathname) )[0];
+    const location = useLocation(),
+          itemList: PageData[] = [];
+    interface activePage {
+        pageID: number;
+        pageData: PageData ;
+    }
+    let activePage: activePage = {
+        pageID: 0,
+        pageData: Pages.index
+    };
+    Object.values(Pages).filter( (entry, i) => {
+        if( entry.url === titleConversion(location.pathname) )
+        activePage = {
+            pageID: i,
+            pageData: entry
+        };
+    } );
+    
     Object.keys(Pages).map( item => {
         itemList.push(Pages[item as keyof Pages]);
     });
+
+    const theMiddle: number = Math.floor(itemList.length / 2);
+    let roadToCenter: number = ( activePage.pageID < theMiddle ) ? theMiddle - activePage.pageID :
+                               ( activePage.pageID > theMiddle ) ? theMiddle - activePage.pageID + itemList.length  :
+                       0 ;
+    for( let i = 0; i < roadToCenter; i++ ){
+        let lastItem: PageData = itemList[itemList.length-1];
+        itemList.pop();
+        itemList.unshift(lastItem);
+    }
 
     useEffect( () => {
         

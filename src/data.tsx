@@ -6,13 +6,23 @@ export interface PageData {
     text: string;
 }
 export interface Pages {
+    projects: PageData;
+    contact: PageData;
     index: PageData;
     about: PageData;
     character: PageData;
-    projects: PageData;
-    contact: PageData;
 };
 export const Pages: Pages = {
+    projects: {
+        title: 'Projects - '+defaultTitlePrefix,
+        url: '/projects',
+        text: 'PROJECTS',
+    },
+    contact: {
+        title: 'Contact - '+defaultTitlePrefix,
+        url: '/contact',
+        text: 'CONTACT',
+    },
     index: {
         title: defaultTitlePrefix,
         url: '/',
@@ -27,16 +37,6 @@ export const Pages: Pages = {
         title: 'Character - '+defaultTitlePrefix,
         url: '/character',
         text: 'CHARACTER',
-    },
-    projects: {
-        title: 'Projects - '+defaultTitlePrefix,
-        url: '/projects',
-        text: 'PROJECTS',
-    },
-    contact: {
-        title: 'Contact - '+defaultTitlePrefix,
-        url: '/contact',
-        text: 'CONTACT',
     },
 }
 

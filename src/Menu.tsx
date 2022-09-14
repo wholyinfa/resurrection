@@ -78,7 +78,8 @@ export const Menu = () => {
         const x = Draggable.get('#dialer') && Draggable.get('#dialer').x;
         
         gsap.set("#dialer", {width: menuItemW*items.length});
-        gsap.set("#dialer a", {width: menuItemW, opacity: .4});
+        gsap.set("#dialer a", {width: menuItemW});
+        gsap.to("#dialer a", {opacity: 1});
         
     }, [items]);
 
@@ -108,9 +109,12 @@ export const Menu = () => {
         const doAfterAdjustment = (x: number) => {
             const excessLength = addAll(true).length / 2;
             setItems(prev => {
-                let copy = prev.slice();
-                copy.splice(0, excessLength - Math.round(x / menuItemW));
-                copy.splice( (copy.length - excessLength) - Math.round(x / menuItemW) , copy.length - 1);
+                let firstVis = Math.abs(
+                    Math.round(
+                         ( x - menuItemW * (addAll(true).length/2) ) / menuItemW
+                         )
+                    );
+                let copy = prev.splice(firstVis, 5);
                 newList.current = copy;
                 makeInfiniteItems(copy);
                 gsap.set('#dialer', {x: 0});
@@ -139,12 +143,28 @@ export const Menu = () => {
             onDrag: function(endValue){
                 let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2);
                 gsap.set('#dialer', {x: x});
+                
+                let aElements = Array.from(document.querySelectorAll('#dialer a'));
+                let firstVis = Math.abs(
+                    Math.round(
+                         ( this.x - menuItemW * (addAll(true).length/2) ) / menuItemW
+                         )
+                    );
+                let visibleItems = aElements.splice(firstVis, 5);
+                let hiddenItems = aElements.splice(0, firstVis - 1);
+                    hiddenItems.push(
+                        ...aElements.splice(firstVis + visibleItems.length)
+                    );
+                gsap.to([visibleItems[0], visibleItems[visibleItems.length-1]], {duration: .4, opacity: .1});
+                gsap.to([visibleItems[1], visibleItems[visibleItems.length-2]], {duration: .4, opacity: .3});
+                gsap.to(visibleItems[2], {duration: .4, opacity: 1});
+                gsap.to(hiddenItems, {duration: .2, opacity: 0});
+                console.log(visibleItems);
             },
             onRelease: function() {
                 let dur = (this.x === this.endX) ? .2 : 0;
                 let x = ( xMemory.current ) ? ( Math.round(this.x / menuItemW) * menuItemW ) : ( Math.round(this.x / menuItemW) * menuItemW ) - menuItemW * (addAll(true).length/2);
-                let trueX = ( xMemory.current ) ? this.x + menuItemW * (addAll(true).length/2) : this.x;
-                snapTo.to('#dialer', {ease: "power2.inOut", duration: dur, x: x, onComplete: doAfterAdjustment, onCompleteParams: [trueX] });
+                snapTo.to('#dialer', {ease: "power2.inOut", duration: dur, x: x, onComplete: doAfterAdjustment, onCompleteParams: [this.x] });
             }
             
         });

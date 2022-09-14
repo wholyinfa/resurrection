@@ -26,7 +26,7 @@ nav #dialerContainer {
   position: relative;
   margin: 0 auto;
   display: inline-block;
-  border: 1px solid;
+  overflow: hidden;
 }
 nav #dialerContainer a {
   color: #fff;
@@ -37,6 +37,11 @@ nav #dialerContainer a {
   display: inline-block;
   box-sizing: border-box;
 }
-nav #dialerContainer .lefties {
+nav #dialerHandle {
+  width: 10000vh;
+  height: 150px;
   position: absolute;
+  left: -5000vh;
+  top: -100%;
+  z-index: 69;
 }/*# sourceMappingURL=menu.css.map */

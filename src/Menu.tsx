@@ -10,7 +10,7 @@ gsap.registerPlugin(Draggable);
 export const Menu = () => {
 
     const location = useLocation(),
-          itemList: PageData[] = [];
+          itemList: itemData[] = [];
     interface activePage {
         pageID: number;
         pageData: PageData ;
@@ -36,7 +36,7 @@ export const Menu = () => {
                                ( activePage.pageID > theMiddle ) ? theMiddle - activePage.pageID + itemList.length  :
                        0 ;
     for( let i = 0; i < roadToCenter; i++ ){
-        let lastItem: PageData = itemList[itemList.length-1];
+        let lastItem: itemData = itemList[itemList.length-1];
         itemList.pop();
         itemList.unshift(lastItem);
     }
@@ -47,7 +47,7 @@ export const Menu = () => {
 
     interface itemData extends PageData {
         ghost?: boolean | undefined;
-    }
+    };
     const [items, setItems] = useState<itemData[]>(itemList);
     const [checkItems, setCheckItems] = useState<boolean>();
 
@@ -62,31 +62,40 @@ export const Menu = () => {
     const xMemory = useRef<number>(0);
     const makeInfiniteItems = ( items :itemData[] ) => {
         infiniteItems.current.splice(0, infiniteItems.current.length);
-        let LeftyItems = items.slice();
-        for (let i = 0; i < 5; i++){
-            LeftyItems.map( item => {
-                infiniteItems.current.push(item);
+        for (let i = 0; i < 20; i++){
+            items.map( item => {
+                let newItem = {...item};
+                newItem.ghost = true;
+                infiniteItems.current.push(newItem);
             })
         }
+        return infiniteItems.current;
     }
-    if( infiniteItems.current.length === 0 ) makeInfiniteItems(items);
     
-    const [leftiesList, setLeftiesList] = useState<itemData[]>();
     const menuItemW = 160;
 
+    const makeVisible = ( theItems: Element[], immediate?: boolean) => {
+        let set = (immediate) ? 0 : .2;
+        gsap.to([theItems[0], theItems[theItems.length-1]], {duration: set, autoAlpha: .1});
+        gsap.to([theItems[1], theItems[theItems.length-2]], {duration: set, autoAlpha: .3});
+        gsap.to(theItems[2], {duration: set, autoAlpha: 1});  
+    }
     useEffect(() => {
-        const x = Draggable.get('#dialer') && Draggable.get('#dialer').x;
-        
-        gsap.set("#dialer", {width: menuItemW*items.length});
         gsap.set("#dialer a", {width: menuItemW});
-        gsap.to("#dialer a", {opacity: 1});
-        
+        document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
+
+        gsap.set("#dialer", {width: menuItemW*items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length});
+        items.filter(item => item.ghost === false ).length > 0 && gsap.set('#dialer', {x: 0});
+
+        let aElements = Array.from(document.querySelectorAll('#dialer a'));
+        let firstVis = items.findIndex( item => typeof item.ghost === 'undefined');
+        let visibleItems = aElements.splice(firstVis, 5);
+        if( visibleItems.length > 0 ){
+            makeVisible(visibleItems, true);
+        }
     }, [items]);
 
-
     useEffect(() => {
-        gsap.set("#dialer a", {width: menuItemW});
-        gsap.set("#dialer", {width: menuItemW*items.length});
         gsap.set("#dialerContainer", {width: menuItemW*5});
 
         const addAll = ( excess?: boolean ) => {
@@ -106,20 +115,25 @@ export const Menu = () => {
         }
 
         let snapTo = gsap.timeline();
-        const doAfterAdjustment = (x: number) => {
-            const excessLength = addAll(true).length / 2;
-            setItems(prev => {
-                let firstVis = Math.abs(
-                    Math.round(
-                         ( x - menuItemW * (addAll(true).length/2) ) / menuItemW
-                         )
-                    );
-                let copy = prev.splice(firstVis, 5);
+        const doAfterAdjustment = (firstVis: number) => {
+                let copy = addAll().slice();
+                let nullItem: itemData = {
+                    text: '',
+                    title: '',
+                    url: '',
+                    ghost: false
+                };
+                copy = copy.map( (item, i) => {
+                    let newItem = {...item};
+                    if ( i < firstVis || i >= firstVis+5 )
+                        newItem = nullItem;
+                    else
+                        delete newItem.ghost;
+                    return newItem;
+                });
                 newList.current = copy;
                 makeInfiniteItems(copy);
-                gsap.set('#dialer', {x: 0});
-                return copy;
-            });
+            setItems(copy);
             itemReset.current = true;
         }
         Draggable.create("#dialer", {
@@ -129,42 +143,40 @@ export const Menu = () => {
             onPress: function() {
                 if( itemReset.current ) {
                     xMemory.current = 0;
-                    setItems(prev => {
-                        let copy = prev.slice();
-                        newList.current = copy;
-                        makeInfiniteItems(copy);
-                        return addAll();
-                    });
+
+                    let copy = addAll().slice();
+                    let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
+                    makeInfiniteItems(visibles);
+                    newList.current = visibles;
+                    copy = addAll();
+                    setItems(copy);
+
+                    let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2);
+                    gsap.set('#dialer', {x: x});
                     itemReset.current = false;
                 }else xMemory.current = 1;
             },
-            onDragStart: function() {
-            },
             onDrag: function(endValue){
-                let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2);
+                let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2),
+                    aElements = Array.from(document.querySelectorAll('#dialer a')),
+                    firstVis = Math.abs( Math.round( x / menuItemW ) ),
+                    visibleItems = aElements.splice(firstVis, 5),
+                    hiddenItems = aElements;
+
+                makeVisible(visibleItems);
                 gsap.set('#dialer', {x: x});
-                
-                let aElements = Array.from(document.querySelectorAll('#dialer a'));
-                let firstVis = Math.abs(
-                    Math.round(
-                         ( this.x - menuItemW * (addAll(true).length/2) ) / menuItemW
-                         )
-                    );
-                let visibleItems = aElements.splice(firstVis, 5);
-                let hiddenItems = aElements.splice(0, firstVis - 1);
-                    hiddenItems.push(
-                        ...aElements.splice(firstVis + visibleItems.length)
-                    );
-                gsap.to([visibleItems[0], visibleItems[visibleItems.length-1]], {duration: .4, opacity: .1});
-                gsap.to([visibleItems[1], visibleItems[visibleItems.length-2]], {duration: .4, opacity: .3});
-                gsap.to(visibleItems[2], {duration: .4, opacity: 1});
-                gsap.to(hiddenItems, {duration: .2, opacity: 0});
-                console.log(visibleItems);
+                gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
             },
             onRelease: function() {
-                let dur = (this.x === this.endX) ? .2 : 0;
-                let x = ( xMemory.current ) ? ( Math.round(this.x / menuItemW) * menuItemW ) : ( Math.round(this.x / menuItemW) * menuItemW ) - menuItemW * (addAll(true).length/2);
-                snapTo.to('#dialer', {ease: "power2.inOut", duration: dur, x: x, onComplete: doAfterAdjustment, onCompleteParams: [this.x] });
+                let dur = (this.x === this.endX) ? .2 : 0,
+                    xAlgo = ( Math.round(this.x / menuItemW) * menuItemW ),
+                    x = ( xMemory.current ) ? xAlgo : xAlgo - menuItemW * (addAll(true).length/2),
+                    firstVis = Math.abs(Math.round(x / menuItemW)),
+                    aElements = Array.from(document.querySelectorAll('#dialer a')),
+                    visibleItems = aElements.splice(firstVis, 5);
+
+                snapTo.to('#dialer', {ease: "power2.inOut", duration: dur, x: x, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+                makeVisible(visibleItems);
             }
             
         });
@@ -175,7 +187,7 @@ export const Menu = () => {
         <div id='dialerContainer'>
             <div id='dialer'>
             { items.map( (item, i) => {
-                return <NavLink exact className={ item.ghost ? 'ghost' : '' } key={i} to={item.url}>
+                return item.url !== '' && <NavLink exact className={ item.ghost ? 'ghost' : '' } key={i} to={item.url}>
                     {item.text}
                 </NavLink>;
             }) }

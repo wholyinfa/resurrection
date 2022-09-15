@@ -20,6 +20,8 @@ body {
 nav {
   width: 100%;
   position: fixed;
+  top: 0;
+  left: 0;
   text-align: center;
 }
 nav #dialerContainer {
@@ -63,4 +65,35 @@ nav #dialerHandle {
   left: -5000vh;
   top: -100%;
   z-index: 0;
+}
+nav #expansionArrow {
+  width: 33px;
+  height: 15px;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0%);
+  cursor: pointer;
+  z-index: 2;
+  padding: 10px;
+  background: transparent;
+  border: 0;
+  box-sizing: content-box;
+}
+nav #expansionArrow div {
+  content: "";
+  width: 50%;
+  height: 2px;
+  position: absolute;
+  background: #fff;
+  left: 0;
+  bottom: 20%;
+  transform-origin: right;
+  transform: rotate(45deg);
+}
+nav #expansionArrow div:last-child {
+  left: inherit;
+  right: 0;
+  transform-origin: left;
+  transform: rotate(-45deg);
 }/*# sourceMappingURL=menu.css.map */

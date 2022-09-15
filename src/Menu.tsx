@@ -7,6 +7,7 @@ import { PageData, Pages } from "./data";
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
 
+let expansionAnimation: gsap.core.Timeline;
 export const Menu = () => {
 
     const location = useLocation(),
@@ -214,6 +215,29 @@ export const Menu = () => {
         restoreFromInfinity(x, x);
     }
 
+    const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
+    useEffect( () => {
+        if( typeof expansionAnimation === 'undefined' ){
+            expansionAnimation = gsap.timeline({duration: .1});
+            expansionAnimation.fromTo('#dialerContainer, #dialerHandle', {y: '-100%'}, {y: '0%'})
+            .fromTo('#expansionArrow', {y: -30}, {y: 0}, '<')
+            .fromTo('#expansionArrow div:first-child', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20}, '<')
+            .fromTo('#expansionArrow div:last-child', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20}, '<');
+        }
+        console.log(expansionAnimation.progress());
+        
+        if( expansionAnimation.progress() > 0 ){
+            expansionAnimation.reverse();
+        }else{
+            expansionAnimation.reversed(!expansionAnimation.reversed());
+            expansionAnimation.play();
+        }
+
+    }, [dialerExpansion])
+    const handleExpansion = () => {
+        setDialerExpansion(!dialerExpansion);
+    }
+
     return <nav>
         <div id='dialerHandle'></div>
         <div id='dialerContainer'>
@@ -231,5 +255,10 @@ export const Menu = () => {
             }) }
             </div>
         </div>
+        <button id="expansionArrow" onClick={handleExpansion}>
+            expand
+            <div></div>
+            <div></div>
+        </button>
     </nav>;
 }

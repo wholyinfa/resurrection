@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { titleConversion } from "./App";
@@ -112,6 +112,7 @@ export const Menu = () => {
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
 
+    const history = useHistory();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
         let nullItem: itemData = {
@@ -129,9 +130,12 @@ export const Menu = () => {
             return newItem;
         });
         newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
-    setItems(copy);
-    itemReset.current = true;
-    xMemory.current = false;
+        setItems(copy);
+
+        history.push(newList.current[2].url);
+
+        itemReset.current = true;
+        xMemory.current = false;
     }
 
     const applyInfinity = (theX: number) => {

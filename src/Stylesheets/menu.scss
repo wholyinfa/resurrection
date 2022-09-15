@@ -22,20 +22,21 @@ nav{
     #dialerContainer::after{
         right: 0;
         background: rgb(0,0,0);
-        background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 100%);
+        background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
     }
     #dialerContainer::before{
         left: 0;
         background: rgb(0,0,0);
-        background: linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 100%);
+        background: linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
     }
     #dialerContainer::after,
     #dialerContainer::before{
         content: '';
-        width: 40px;
+        width: 50px;
         height: 100%;
         position: absolute;
         top: 0;
+        z-index: 2;
     }
     
     #dialerHandle{
@@ -45,6 +46,6 @@ nav{
         position: absolute;
         left: -1 * math.div($width ,2);
         top: -100%;
-        z-index: 69;
+        z-index: 0;
     }
 }

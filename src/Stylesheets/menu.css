@@ -40,20 +40,21 @@ nav #dialerContainer a {
 nav #dialerContainer::after {
   right: 0;
   background: rgb(0, 0, 0);
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 30%, rgb(0, 0, 0) 100%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
 }
 nav #dialerContainer::before {
   left: 0;
   background: rgb(0, 0, 0);
-  background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 30%, rgb(0, 0, 0) 100%);
+  background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
 }
 nav #dialerContainer::after,
 nav #dialerContainer::before {
   content: "";
-  width: 40px;
+  width: 50px;
   height: 100%;
   position: absolute;
   top: 0;
+  z-index: 2;
 }
 nav #dialerHandle {
   width: 10000vh;
@@ -61,5 +62,5 @@ nav #dialerHandle {
   position: absolute;
   left: -5000vh;
   top: -100%;
-  z-index: 69;
+  z-index: 0;
 }/*# sourceMappingURL=menu.css.map */

@@ -59,7 +59,7 @@ export const Menu = () => {
     const newList = useRef<itemData[]>(items);
     const infiniteItems = useRef<itemData[]>([]);
     const itemReset = useRef<boolean>(true);
-    const xMemory = useRef<number>(0);
+    const xMemory = useRef<boolean>(false);
     const makeInfiniteItems = ( items :itemData[] ) => {
         infiniteItems.current.splice(0, infiniteItems.current.length);
         for (let i = 0; i < 20; i++){
@@ -76,9 +76,9 @@ export const Menu = () => {
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
         let set = (immediate) ? 0 : .2;
-        gsap.to([theItems[0], theItems[theItems.length-1]], {duration: set, autoAlpha: .1});
-        gsap.to([theItems[1], theItems[theItems.length-2]], {duration: set, autoAlpha: .3});
-        gsap.to(theItems[2], {duration: set, autoAlpha: 1});  
+        gsap.to([theItems[0], theItems[theItems.length-1]], {duration: set, autoAlpha: .4, scale: 1});
+        gsap.to([theItems[1], theItems[theItems.length-2]], {duration: set, autoAlpha: .6, scale: 1});
+        gsap.to(theItems[2], {duration: set, autoAlpha: 1, scale: 1.2});  
     }
     useEffect(() => {
         gsap.set("#dialer a", {width: menuItemW});
@@ -95,68 +95,94 @@ export const Menu = () => {
         }
     }, [items]);
 
+
+    const addAll = ( excess?: boolean ) => {
+        interface arg{
+            left: itemData[];
+            main: itemData[];
+            right: itemData[];
+        } 
+        const endItems: arg ={
+            left: infiniteItems.current.slice(),
+            main: newList.current.slice(),
+            right: infiniteItems.current.slice(),
+        }
+        return ( excess ) ?
+        [...endItems.left, ...endItems.right] :
+        [...endItems.left, ...endItems.main, ...endItems.right];
+    }
+
+    const doAfterAdjustment = (firstVis: number) => {
+        let copy = addAll().slice();
+        let nullItem: itemData = {
+            text: '',
+            title: '',
+            url: '',
+            ghost: false
+        };
+        copy = copy.map( (item, i) => {
+            let newItem: itemData = {...item};
+            if ( i < firstVis || i >= firstVis+5 )
+                newItem = nullItem;
+            else
+                delete newItem.ghost;
+            return newItem;
+        });
+        newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
+    setItems(copy);
+    itemReset.current = true;
+    xMemory.current = false;
+    }
+
+    const applyInfinity = (theX: number) => {
+        if( itemReset.current ) {
+            let copy = addAll().slice();
+            let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
+            makeInfiniteItems(visibles);
+            newList.current = visibles;
+            copy = addAll();
+            setItems(copy);
+
+            let x = ( xMemory.current ) ? theX : theX - menuItemW * (addAll(true).length/2);
+            gsap.set('#dialer', {x: x});
+            itemReset.current = false;
+            xMemory.current = false;
+        }else xMemory.current = true;
+    }
+
+    const restoreFromInfinity = (theX: number, endX: number) => {
+        let dur = (theX === endX) ? .3 : 0,
+        xAlgo = ( Math.round(theX / menuItemW) * menuItemW ),
+        x = ( xMemory.current ) ? xAlgo : xAlgo - menuItemW * (addAll(true).length/2);
+
+        let currentX;
+        if ( manualDrag.current ){
+            currentX = x;
+            x += manualDrag.current;
+        }
+        let firstVis = Math.abs(Math.round(x / menuItemW)),
+            aElements = Array.from(document.querySelectorAll('#dialer a')),
+            visibleItems = aElements.splice(firstVis, 5),
+            relativeDuration = currentX ? (Math.abs(x - currentX) / menuItemW) * dur : dur;
+        
+        gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, x: x, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+        makeVisible(visibleItems);
+
+        manualDrag.current = false;
+    }
+
     useEffect(() => {
         gsap.set("#dialerContainer", {width: menuItemW*5});
 
-        const addAll = ( excess?: boolean ) => {
-            interface arg{
-                left: itemData[];
-                main: itemData[];
-                right: itemData[];
-            } 
-            const endItems: arg ={
-                left: infiniteItems.current.slice(),
-                main: newList.current.slice(),
-                right: infiniteItems.current.slice(),
-            }
-            return ( excess ) ?
-            [...endItems.left, ...endItems.right] :
-            [...endItems.left, ...endItems.main, ...endItems.right];
-        }
-
         let snapTo = gsap.timeline();
-        const doAfterAdjustment = (firstVis: number) => {
-                let copy = addAll().slice();
-                let nullItem: itemData = {
-                    text: '',
-                    title: '',
-                    url: '',
-                    ghost: false
-                };
-                copy = copy.map( (item, i) => {
-                    let newItem = {...item};
-                    if ( i < firstVis || i >= firstVis+5 )
-                        newItem = nullItem;
-                    else
-                        delete newItem.ghost;
-                    return newItem;
-                });
-                newList.current = copy;
-                makeInfiniteItems(copy);
-            setItems(copy);
-            itemReset.current = true;
-        }
         Draggable.create("#dialer", {
             type:"x",
-            trigger: '#dialerHandle',
+            trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
-                if( itemReset.current ) {
-                    xMemory.current = 0;
-
-                    let copy = addAll().slice();
-                    let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
-                    makeInfiniteItems(visibles);
-                    newList.current = visibles;
-                    copy = addAll();
-                    setItems(copy);
-
-                    let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2);
-                    gsap.set('#dialer', {x: x});
-                    itemReset.current = false;
-                }else xMemory.current = 1;
+                applyInfinity(this.x);
             },
-            onDrag: function(endValue){
+            onDrag: function() {
                 let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2),
                     aElements = Array.from(document.querySelectorAll('#dialer a')),
                     firstVis = Math.abs( Math.round( x / menuItemW ) ),
@@ -167,27 +193,35 @@ export const Menu = () => {
                 gsap.set('#dialer', {x: x});
                 gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
             },
-            onRelease: function() {
-                let dur = (this.x === this.endX) ? .2 : 0,
-                    xAlgo = ( Math.round(this.x / menuItemW) * menuItemW ),
-                    x = ( xMemory.current ) ? xAlgo : xAlgo - menuItemW * (addAll(true).length/2),
-                    firstVis = Math.abs(Math.round(x / menuItemW)),
-                    aElements = Array.from(document.querySelectorAll('#dialer a')),
-                    visibleItems = aElements.splice(firstVis, 5);
-
-                snapTo.to('#dialer', {ease: "power2.inOut", duration: dur, x: x, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
-                makeVisible(visibleItems);
+            onDragEnd: function() {
+                restoreFromInfinity(this.x, this.endX);
             }
-            
         });
     },[])
+
+    const manualDrag = useRef<number | false>(false);
+    const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
+        e.preventDefault();
+        xMemory.current = false;
+       
+        const dialer = document.querySelector('#dialer') as HTMLElement | null;
+        const x = dialer!.offsetLeft;
+        manualDrag.current = -1 * ( ( x + menuItemW * i ) - ( x + menuItemW * Math.floor( newList.current.length / 2 ) ) );
+        restoreFromInfinity(x, x);
+    }
 
     return <nav>
         <div id='dialerHandle'></div>
         <div id='dialerContainer'>
             <div id='dialer'>
             { items.map( (item, i) => {
-                return item.url !== '' && <NavLink exact className={ item.ghost ? 'ghost' : '' } key={i} to={item.url}>
+                return item.url !== '' &&
+                <NavLink exact
+                className={ item.ghost ? 'ghost' : '' }
+                key={i}
+                to={item.url}
+                onClick={(e) => handleClick(e, i - infiniteItems.current.length)}
+                >
                     {item.text}
                 </NavLink>;
             }) }

@@ -213,11 +213,12 @@ export const Menu = () => {
                 restoreFromInfinity(this.x, this.endX);
             },
             onRelease: function() {
-                if( xOnPress === trueX.current ){
-                    if( isSnapping.current ){
+                if( xOnPress === trueX.current &&
+                    isSnapping.current &&
+                    this.pointerEvent.target.localName !== 'a'
+                    ){
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
                         isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, x: oldVars.x, onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
-                    }
                 }
             }
         });
@@ -232,6 +233,9 @@ export const Menu = () => {
 
         restoreFromInfinity(x, x);
         xMemory.current = false;
+    }
+    const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
+        e.code !== 'Tab' && e.preventDefault();
     }
 
     const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
@@ -271,6 +275,7 @@ export const Menu = () => {
                 key={i}
                 to={item.url}
                 onClick={(e) => handleClick(e, i)}
+                onKeyDown={(e) => handleKeyDownClick(e)}
                 >
                     {item.text}
                 </NavLink>;

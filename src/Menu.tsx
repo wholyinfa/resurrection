@@ -113,6 +113,7 @@ export const Menu = () => {
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
 
+    const trueX = useRef<number>(0);
     const history = useHistory();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
@@ -134,7 +135,9 @@ export const Menu = () => {
         setItems(copy);
 
         history.push(newList.current[2].url);
+        trueX.current = Number(gsap.getProperty("#dialer", "x"));
 
+        isSnapping.current = false;
         itemReset.current = true;
         xMemory.current = false;
     }
@@ -150,27 +153,32 @@ export const Menu = () => {
 
             let x = ( xMemory.current ) ? theX : theX - menuItemW * (addAll(true).length/2);
             gsap.set('#dialer', {x: x});
+            trueX.current = x;
             itemReset.current = false;
             xMemory.current = false;
         }else xMemory.current = true;
     }
 
+    const updateX = () => {
+        trueX.current = Number(gsap.getProperty("#dialer", "x"));
+    }
+    const isSnapping = useRef<false | gsap.core.Tween>(false);
     const restoreFromInfinity = (theX: number, endX: number) => {
         let dur = (theX === endX) ? .3 : 0,
         xAlgo = ( Math.round(theX / menuItemW) * menuItemW ),
         x = ( xMemory.current ) ? xAlgo : xAlgo - menuItemW * (addAll(true).length/2);
 
         let currentX;
-        if ( manualDrag.current ){
+        if ( manualDrag.current !== false ){
             currentX = x;
-            x += manualDrag.current;
+            x = manualDrag.current;
         }
         let firstVis = Math.abs(Math.round(x / menuItemW)),
             aElements = Array.from(document.querySelectorAll('#dialer a')),
             visibleItems = aElements.splice(firstVis, 5),
             relativeDuration = currentX ? (Math.abs(x - currentX) / menuItemW) * dur : dur;
-        
-        gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, x: x, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+
+        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, x: x, onUpdate: updateX, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
 
         manualDrag.current = false;
@@ -180,12 +188,14 @@ export const Menu = () => {
         gsap.set("#dialerContainer", {width: menuItemW*5});
 
         let snapTo = gsap.timeline();
+        let xOnPress: number;
         Draggable.create("#dialer", {
             type:"x",
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
                 applyInfinity(this.x);
+                xOnPress = trueX.current;
             },
             onDrag: function() {
                 let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2),
@@ -196,10 +206,19 @@ export const Menu = () => {
 
                 makeVisible(visibleItems);
                 gsap.set('#dialer', {x: x});
+                trueX.current = x;
                 gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
             },
             onDragEnd: function() {
                 restoreFromInfinity(this.x, this.endX);
+            },
+            onRelease: function() {
+                if( xOnPress === trueX.current ){
+                    if( isSnapping.current ){
+                        const oldVars: gsap.TweenVars = isSnapping.current.vars;
+                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, x: oldVars.x, onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                    }
+                }
             }
         });
     },[])
@@ -207,24 +226,27 @@ export const Menu = () => {
     const manualDrag = useRef<number | false>(false);
     const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
         e.preventDefault();
-        xMemory.current = false;
        
-        const dialer = document.querySelector('#dialer') as HTMLElement | null;
-        const x = dialer!.offsetLeft;
-        manualDrag.current = -1 * ( ( x + menuItemW * i ) - ( x + menuItemW * Math.floor( newList.current.length / 2 ) ) );
+        const x = Draggable.get('#dialer').x;
+        manualDrag.current = -1 * ( ( trueX.current + menuItemW * i ) - ( trueX.current + menuItemW * Math.floor( newList.current.length / 2 ) ) );
+
         restoreFromInfinity(x, x);
+        xMemory.current = false;
     }
 
     const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
     useEffect( () => {
         if( typeof expansionAnimation === 'undefined' ){
-            expansionAnimation = gsap.timeline({duration: .1});
-            expansionAnimation.fromTo('#dialerContainer, #dialerHandle', {y: '-100%'}, {y: '0%'})
-            .fromTo('#expansionArrow', {y: -30}, {y: 0}, '<')
-            .fromTo('#expansionArrow div:first-child', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20}, '<')
-            .fromTo('#expansionArrow div:last-child', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20}, '<');
+            expansionAnimation = gsap.timeline();
+            const properties = {
+                ease: 'sine.inOut',
+                duration: .3,
+            }
+            expansionAnimation.fromTo('#dialerContainer, #dialerHandle', {y: '-100%'}, {y: '0%', ...properties}, 0)
+            .fromTo('#expansionArrow', {y: -30}, {y: 0, ...properties}, '<')
+            .fromTo('#expansionArrow div:first-child', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20, ...properties}, '<')
+            .fromTo('#expansionArrow div:last-child', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20, ...properties}, '<');
         }
-        console.log(expansionAnimation.progress());
         
         if( expansionAnimation.progress() > 0 ){
             expansionAnimation.reverse();
@@ -248,7 +270,7 @@ export const Menu = () => {
                 className={ item.ghost ? 'ghost' : '' }
                 key={i}
                 to={item.url}
-                onClick={(e) => handleClick(e, i - infiniteItems.current.length)}
+                onClick={(e) => handleClick(e, i)}
                 >
                     {item.text}
                 </NavLink>;

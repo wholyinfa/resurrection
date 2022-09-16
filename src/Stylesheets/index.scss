@@ -8,7 +8,7 @@
 
 @mixin lifeGradient ($deg, $blackPercentage: 33%){
     background: rgb(6,78,59);
-    background: linear-gradient($deg, rgba(6,78,59,1) 0%, rgba(0,0,0,1) $blackPercentage    );  
+    background: linear-gradient($deg, rgba(6,78,59,1) 0%, rgba(0,0,0,1) $blackPercentage);  
 }
 
 #homePage{
@@ -52,6 +52,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
     span{
         z-index: 2;
         position: relative;
@@ -59,8 +60,8 @@
 }
 .borderButton::after{
     content: '';
-    $width: 90%;
-    $height:  80%;
+    $width: 97.5%;
+    $height:  95%;
     width: $width;
     height: $height;
     position: absolute;
@@ -75,6 +76,7 @@
     z-index: -1;
     >div{
         @include division;
+        width: 100%;
     }
     .work{
         left: 0;
@@ -106,7 +108,7 @@
             background-image: url('./Assets/WorkCodes.png');
         }
         .borderButton{
-            @include workGradient(90deg, 100%);
+            @include workGradient(-90deg, 100%);
         }
     }
     .life{
@@ -116,7 +118,7 @@
             background-image: url('./Assets/LifeStrains.png');
         }
         .borderButton{
-            @include lifeGradient(-90deg, 100%);
+            @include lifeGradient(90deg, 100%);
         }
     }
 }

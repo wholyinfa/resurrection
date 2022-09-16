@@ -17,6 +17,11 @@ body {
   font-size: 16px;
 }
 
+.breathingFragment {
+  width: 180px;
+  height: 145px;
+}
+
 nav {
   width: 100%;
   position: fixed;

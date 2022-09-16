@@ -50,6 +50,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 .borderButton span {
   z-index: 2;
@@ -58,11 +59,11 @@ body {
 
 .borderButton::after {
   content: "";
-  width: 90%;
-  height: 80%;
+  width: 97.5%;
+  height: 95%;
   position: absolute;
-  left: 5%;
-  top: 10%;
+  left: 1.25%;
+  top: 2.5%;
   background: #000;
   z-index: 0;
 }
@@ -80,6 +81,7 @@ body {
   height: 100%;
   position: absolute;
   top: 0;
+  width: 100%;
 }
 #overTakers .work {
   left: 0;
@@ -121,7 +123,7 @@ body {
 }
 #division .work .borderButton {
   background: rgb(26, 35, 126);
-  background: linear-gradient(90deg, rgb(26, 35, 126) 0%, rgb(0, 0, 0) 100%);
+  background: linear-gradient(-90deg, rgb(26, 35, 126) 0%, rgb(0, 0, 0) 100%);
 }
 #division .life {
   right: 0;
@@ -132,5 +134,5 @@ body {
 }
 #division .life .borderButton {
   background: rgb(6, 78, 59);
-  background: linear-gradient(-90deg, rgb(6, 78, 59) 0%, rgb(0, 0, 0) 100%);
+  background: linear-gradient(90deg, rgb(6, 78, 59) 0%, rgb(0, 0, 0) 100%);
 }/*# sourceMappingURL=index.css.map */

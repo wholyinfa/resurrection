@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Pages } from './data';
 import { Menu } from './Menu'
@@ -17,6 +17,55 @@ export const titleConversion = (query: string) => {
 
 export default function App() {
   
+  interface upNdown{
+    up: boolean;
+    down: boolean;
+  }
+  const allowPagination = useRef<upNdown>({
+    up: false,
+    down: false
+  });
+  useEffect( () => {
+
+    addEventListener('wheel', (e) => {
+      if( e.deltaY >= 0 && allowPagination.current.down === true ){
+        // down
+        
+      }else if( allowPagination.current.up === true ){
+        // up
+        
+      }
+    });
+  
+    let touchStart: number;
+    let touchEnd: number;
+    addEventListener('touchstart', (e) => {
+      touchStart = e.changedTouches[0].screenY;
+    }, false); 
+          
+    addEventListener('touchend', (e) => {
+      touchEnd = e.changedTouches[0].screenY;
+      if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
+        // down
+        
+      }else if( allowPagination.current.up === true ){
+        // up
+        
+      }
+    }, false);
+          
+    document.addEventListener('keyup', (e) => {
+      if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
+        // down
+        
+      }else if( e.code === 'ArrowUp' && allowPagination.current.up === true ){
+        // up
+        
+      }
+    }, false);
+
+  }, []);
+
   return (
     <>
       <Menu />

@@ -25,3 +25,10 @@ body{
     font-size: 16px;
 }
 
+.breathingFragment{
+    $width: 180px;
+    $height: $width / 1.241379310344828;
+    width: $width;
+    height: $height;
+}
+

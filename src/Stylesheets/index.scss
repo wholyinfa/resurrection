@@ -1,9 +1,28 @@
+@use 'sass:math';
+@import './style.scss';
+
+@mixin workGradient ($deg, $blackPercentage: 33%){
+    background: rgb(26,35,126);
+    background: linear-gradient($deg, rgba(26,35,126,1) 0%, rgba(0,0,0,1) $blackPercentage);
+}
+
+@mixin lifeGradient ($deg, $blackPercentage: 33%){
+    background: rgb(6,78,59);
+    background: linear-gradient($deg, rgba(6,78,59,1) 0%, rgba(0,0,0,1) $blackPercentage    );  
+}
+
 #homePage{
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
+    .breathingFragment{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
 @mixin freeFlow {
     width: 100%;
@@ -18,6 +37,39 @@
     position: absolute;
     top: 0;
 }
+
+.borderButton{
+    width: 220px;
+    height: 85px;
+    font-size: 40px;
+    font-family: latoMedium;
+    color: #fff;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: #000;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    span{
+        z-index: 2;
+        position: relative;
+    }
+}
+.borderButton::after{
+    content: '';
+    $width: 90%;
+    $height:  80%;
+    width: $width;
+    height: $height;
+    position: absolute;
+    left: math.div(100 - $width, 2);
+    top: math.div(100 - $height, 2);
+    background: #000;
+    z-index: 0;
+}
+
 #overTakers{
     @include freeFlow;
     z-index: -1;
@@ -26,13 +78,11 @@
     }
     .work{
         left: 0;
-        background: rgb(26,35,126);
-        background: linear-gradient(45deg, rgba(26,35,126,1) 0%, rgba(0,0,0,1) 33%);
+        @include workGradient(45deg);
     }
     .life{
-        right: 0;
-        background: rgb(6,78,59);
-        background: linear-gradient(-45deg, rgba(6,78,59,1) 0%, rgba(0,0,0,1) 33%);        
+        right: 0;      
+        @include lifeGradient(-45deg);
     }
 }
 #division{
@@ -45,7 +95,7 @@
             width: $width;
             padding-bottom: $height;
             position: absolute;
-            top: ( 100 - $height ) / 2;
+            top: math.div(100 - $height, 2);
             background-size: 100%;
         }
     }
@@ -55,12 +105,18 @@
             right: 0;
             background-image: url('./Assets/WorkCodes.png');
         }
+        .borderButton{
+            @include workGradient(90deg, 100%);
+        }
     }
     .life{
         right: 0;
         .treeBrain{
             left: 0;
             background-image: url('./Assets/LifeStrains.png');
+        }
+        .borderButton{
+            @include lifeGradient(-90deg, 100%);
         }
     }
 }

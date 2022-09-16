@@ -1,9 +1,70 @@
+@font-face {
+  font-family: "latoLight";
+  src: url("./Fonts/latoLight.woff2") format("woff2"), url("./Fonts/latoLight.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "latoMedium";
+  src: url("./Fonts/latoMedium.woff2") format("woff2"), url("./Fonts/latoMedium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  background: #000;
+  color: #fff;
+  margin: 0;
+  font-size: 16px;
+}
+
+.breathingFragment {
+  width: 180px;
+  height: 145px;
+}
+
 #homePage {
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
+}
+#homePage .breathingFragment {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.borderButton {
+  width: 220px;
+  height: 85px;
+  font-size: 40px;
+  font-family: latoMedium;
+  color: #fff;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: #000;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.borderButton span {
+  z-index: 2;
+  position: relative;
+}
+
+.borderButton::after {
+  content: "";
+  width: 90%;
+  height: 80%;
+  position: absolute;
+  left: 5%;
+  top: 10%;
+  background: #000;
+  z-index: 0;
 }
 
 #overTakers {
@@ -58,10 +119,18 @@
   right: 0;
   background-image: url("./Assets/WorkCodes.png");
 }
+#division .work .borderButton {
+  background: rgb(26, 35, 126);
+  background: linear-gradient(90deg, rgb(26, 35, 126) 0%, rgb(0, 0, 0) 100%);
+}
 #division .life {
   right: 0;
 }
 #division .life .treeBrain {
   left: 0;
   background-image: url("./Assets/LifeStrains.png");
+}
+#division .life .borderButton {
+  background: rgb(6, 78, 59);
+  background: linear-gradient(-90deg, rgb(6, 78, 59) 0%, rgb(0, 0, 0) 100%);
 }/*# sourceMappingURL=index.css.map */

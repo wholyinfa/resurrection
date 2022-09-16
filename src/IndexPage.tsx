@@ -12,13 +12,13 @@ export default function IndexPage() {
         <div id='division'>
             <div className='work'>
                 <div className='treeBrain'></div>
-                <button className='borderButton'>WORK</button>
+                <button className='borderButton'><span>WORK</span></button>
             </div>
             <div className='life'>
                 <div className='treeBrain'></div>
-                <button className='borderButton'>LIFE</button>
+                <button className='borderButton'><span>LIFE</span></button>
             </div>
         </div>
-        <div className='theBreathingFragment'></div>
+        <img src={require('./Assets/BreathingFragment.svg')} className='breathingFragment' />
     </article>;
 }

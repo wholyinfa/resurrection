@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Pages } from './data';
+import { PageData, Pages } from './data';
 import { Menu } from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
@@ -13,6 +13,32 @@ import './Stylesheets/style.css';
 
 export const titleConversion = (query: string) => {
   return query.toLowerCase().replaceAll(' ', '-');
+}
+
+interface paginationMap extends PageData {
+  current?: boolean;
+}
+let paginationMap: paginationMap[] = [
+  Pages.index,
+  Pages.about,
+  Pages.character,
+  Pages.projects,
+  Pages.contact,
+];
+export const changePagination = (newPage: PageData) => {
+  paginationMap = paginationMap.map( item => {
+    let newItem = item;
+    
+    if( item.text === newPage.text ){
+      newItem = {
+        ...newItem,
+        current: true
+      }
+    }else if( typeof item.current !== 'undefined' ){
+      delete newItem.current;
+    }
+    return newItem;
+  });
 }
 
 export default function App() {

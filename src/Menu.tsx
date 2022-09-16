@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
-import { titleConversion } from "./App";
+import { changePagination, titleConversion } from "./App";
 import { PageData, Pages } from "./data";
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
@@ -43,7 +43,7 @@ export const Menu = () => {
     }
 
     useEffect( () => {
-        
+        changePagination(newList.current[2]);
     }, [location]);
 
     interface itemData extends PageData {

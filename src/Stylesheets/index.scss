@@ -1,0 +1,66 @@
+#homePage{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+@mixin freeFlow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+@mixin division {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+#overTakers{
+    @include freeFlow;
+    z-index: -1;
+    >div{
+        @include division;
+    }
+    .work{
+        left: 0;
+        background: rgb(26,35,126);
+        background: linear-gradient(45deg, rgba(26,35,126,1) 0%, rgba(0,0,0,1) 33%);
+    }
+    .life{
+        right: 0;
+        background: rgb(6,78,59);
+        background: linear-gradient(-45deg, rgba(6,78,59,1) 0%, rgba(0,0,0,1) 33%);        
+    }
+}
+#division{
+    @include freeFlow();
+    >div{
+        @include division();
+        .treeBrain{
+            $width: 45%;
+            $height: $width * 1.695652173913043;
+            width: $width;
+            padding-bottom: $height;
+            position: absolute;
+            top: ( 100 - $height ) / 2;
+            background-size: 100%;
+        }
+    }
+    .work{
+        left: 0;
+        .treeBrain{
+            right: 0;
+            background-image: url('./Assets/WorkCodes.png');
+        }
+    }
+    .life{
+        right: 0;
+        .treeBrain{
+            left: 0;
+            background-image: url('./Assets/LifeStrains.png');
+        }
+    }
+}

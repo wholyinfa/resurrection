@@ -45,24 +45,22 @@ nav #dialerContainer a {
   display: inline-block;
   box-sizing: border-box;
 }
-nav #dialerContainer::after {
-  right: 0;
-  background: rgb(0, 0, 0);
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
-}
-nav #dialerContainer::before {
-  left: 0;
-  background: rgb(0, 0, 0);
-  background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
-}
-nav #dialerContainer::after,
-nav #dialerContainer::before {
-  content: "";
+nav #dialerContainer .shade {
   width: 50px;
   height: 100%;
   position: absolute;
   top: 0;
   z-index: 2;
+}
+nav #dialerContainer .shade.R {
+  right: 0;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+}
+nav #dialerContainer .shade.L {
+  left: 0;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(-90deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
 }
 nav #dialerHandle {
   width: 10000vh;

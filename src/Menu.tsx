@@ -267,6 +267,8 @@ export const Menu = () => {
     return <nav>
         <div id='dialerHandle'></div>
         <div id='dialerContainer'>
+            <div className='shade L'></div>
+            <div className='shade R'></div>
             <div id='dialer'>
             { items.map( (item, i) => {
                 return item.url !== '' &&

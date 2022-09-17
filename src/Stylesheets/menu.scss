@@ -21,25 +21,23 @@ nav{
             display: inline-block;
             box-sizing: border-box;
         }
+        .shade{
+            width: 50px;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            z-index: 2;
+        }
     }
-    #dialerContainer::after{
+    #dialerContainer .shade.R{
         right: 0;
         background: rgb(0,0,0);
         background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
     }
-    #dialerContainer::before{
+    #dialerContainer .shade.L{
         left: 0;
         background: rgb(0,0,0);
         background: linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
-    }
-    #dialerContainer::after,
-    #dialerContainer::before{
-        content: '';
-        width: 50px;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        z-index: 2;
     }
     #dialerHandle{
         $width: 10000vh;

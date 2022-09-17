@@ -22,6 +22,20 @@ body {
   height: 145px;
 }
 
+.noPeaky {
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  border: 0px none !important;
+  -webkit-clip-path: inset(50%) !important;
+          clip-path: inset(50%) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0px !important;
+  position: absolute !important;
+  white-space: nowrap !important;
+  width: 1px !important;
+}
+
 #homePage {
   width: 100vw;
   height: 100vh;
@@ -37,9 +51,9 @@ body {
 }
 
 .borderButton {
-  width: 220px;
-  height: 85px;
-  font-size: 40px;
+  width: 180px;
+  height: 70px;
+  font-size: 30px;
   font-family: latoMedium;
   color: #fff;
   margin: 0;
@@ -100,6 +114,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 #division > div {
   width: 50%;
@@ -111,8 +126,9 @@ body {
   width: 45%;
   padding-bottom: 76.3043478261%;
   position: absolute;
-  top: 11.847826087%;
+  top: 50%;
   background-size: 100%;
+  transform: translateY(-50%);
 }
 #division .work {
   left: 0;
@@ -135,4 +151,60 @@ body {
 #division .life .borderButton {
   background: rgb(6, 78, 59);
   background: linear-gradient(90deg, rgb(6, 78, 59) 0%, rgb(0, 0, 0) 100%);
+}
+
+@media only screen and (max-width: 1366px) {
+  #division .borderButton {
+    width: 150px;
+    height: 65px;
+    font-size: 24px;
+  }
+  #division .breathingFragment {
+    width: 130px;
+    height: 105px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #division > div {
+    width: 100%;
+    height: 50%;
+  }
+  #division .life {
+    top: 50%;
+  }
+  #division .life .treeBrain {
+    left: 50%;
+    top: 0;
+    transform: rotate(90deg) translateY(-50%);
+    transform-origin: top left;
+  }
+  #division .work {
+    top: 0%;
+  }
+  #division .work .treeBrain {
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: rotate(90deg) translate(-100%, 50%);
+    transform-origin: bottom left;
+  }
+  #overTakers > div {
+    width: 100%;
+    height: 50%;
+  }
+  #overTakers .work {
+    background: rgb(26, 35, 126);
+    background: linear-gradient(180deg, rgb(26, 35, 126) 0%, rgb(0, 0, 0) 33%);
+  }
+  #overTakers .life {
+    top: 50%;
+    background: rgb(6, 78, 59);
+    background: linear-gradient(0deg, rgb(6, 78, 59) 0%, rgb(0, 0, 0) 33%);
+  }
+}
+@media only screen and (max-width: 400px) {
+  #division > div .treeBrain {
+    width: 100%;
+    padding-bottom: 169.5652173913%;
+  }
 }/*# sourceMappingURL=index.css.map */

@@ -39,9 +39,9 @@
 }
 
 .borderButton{
-    width: 220px;
-    height: 85px;
-    font-size: 40px;
+    width: 180px;
+    height: 70px;
+    font-size: 30px;
     font-family: latoMedium;
     color: #fff;
     margin: 0;
@@ -89,6 +89,7 @@
 }
 #division{
     @include freeFlow();
+    overflow: hidden;
     >div{
         @include division();
         .treeBrain{
@@ -97,8 +98,9 @@
             width: $width;
             padding-bottom: $height;
             position: absolute;
-            top: math.div(100 - $height, 2);
+            top: 50%;
             background-size: 100%;
+            transform: translateY(-50%);
         }
     }
     .work{
@@ -119,6 +121,72 @@
         }
         .borderButton{
             @include lifeGradient(90deg, 100%);
+        }
+    }
+}
+
+@media only screen and (max-width: 1366px) {
+    #division{
+        .borderButton{
+            width: 150px;
+            height: 65px;
+            font-size: 24px;
+        }
+        .breathingFragment{
+            width: 130px;
+            height: 105px;
+        }
+    }
+}
+@media only screen and (max-width: 768px) {
+    #division{
+        >div{
+            width: 100%;
+            height: 50%;
+        }
+        .life{
+            top: 50%;
+            .treeBrain{
+                left: 50%;
+                top: 0;
+                transform: rotate(90deg) translateY(-50%);
+                transform-origin: top left;
+            }
+        }
+        .work{
+            top: 0%;
+            .treeBrain{
+                left: 50%;
+                top: auto;
+                bottom: 0;
+                transform: rotate(90deg) translate(-100%, 50%);
+                transform-origin: bottom left;
+            }
+        }
+    }
+    #overTakers{
+        >div{
+            width: 100%;
+            height: 50%;
+        }
+        .work{
+            @include workGradient(180deg);
+        }
+        .life{
+            top: 50%;
+            @include lifeGradient(0deg);
+        }
+    }
+}
+@media only screen and (max-width: 400px) {
+    #division{
+        >div{
+            .treeBrain{
+                $width: 100%;
+                $height: $width * 1.695652173913043;
+                width: $width;
+                padding-bottom: $height;
+            }
         }
     }
 }

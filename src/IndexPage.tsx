@@ -1,21 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import './Stylesheets/index.css';
 
 export default function IndexPage() {
 
-
     let workHover: gsap.core.Timeline;
     let lifeHover: gsap.core.Timeline;
     let workResurrection: gsap.core.Timeline;
     let lifeResurrection: gsap.core.Timeline;
-    useEffect(() => {
         
+    const [isMobile, setIsMobile] = useState<boolean>();
+    const resizePurposes = () => {
+        setIsMobile( window.innerWidth <= 768 );
+    }
 
-        const animProps = {
-            color: (t: 'work' | 'life') => (t === 'work') ? 'rgba(26,35,126,1)' : 'rgba(6,78,59,1)',
-            deg: (t: 'work' | 'life') => (t === 'work') ? '45deg' : '-45deg',
-        }
+    const gradientDeg = {
+        default: (t: 'work' | 'life') : string => (t === 'work') ? '45deg' : '-45deg',
+        mobile: (t: 'work' | 'life') : string => (t === 'work') ? '180deg' : '0deg',
+    }
+    const animProps = {
+        color: (t: 'work' | 'life') : string => (t === 'work') ? 'rgba(26,35,126,1)' : 'rgba(6,78,59,1)',
+        deg: gradientDeg.default,
+    }
+    useEffect(() => {
+    
+        if( window.innerWidth <= 768 ) animProps.deg = gradientDeg.mobile;
+        else animProps.deg = gradientDeg.default;
+
         const setHover = (type: 'work' | 'life') => {
             const timeline = gsap.timeline({paused: true});
             const color = animProps.color(type);
@@ -32,8 +43,8 @@ export default function IndexPage() {
             else
                 lifeHover = timeline;
         }
-        if( typeof workHover === 'undefined' ) setHover('work');
-        if( typeof lifeHover === 'undefined' ) setHover('life');
+        setHover('work');
+        setHover('life');
 
         const setResurrection = (type: 'work' | 'life') => {
             const timeline = gsap.timeline({paused: true});
@@ -58,8 +69,19 @@ export default function IndexPage() {
             else
                 lifeResurrection = timeline;
         }
-        if( typeof lifeResurrection === 'undefined' ) setResurrection('life');
-        if( typeof workResurrection === 'undefined' ) setResurrection('work');
+        setResurrection('life');
+        setResurrection('work');
+
+    }, [isMobile]);
+
+
+    useEffect(() => {
+        resizePurposes();
+        window.addEventListener('resize', resizePurposes);
+
+        return( () => {
+            window.removeEventListener('resize', resizePurposes)
+        })
     }, []);
 
     const handleMouseEnter = (type?: 'life' | 'work') => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { PageData, Pages } from './data';
+import { breakPoints, PageData, Pages } from './data';
 import { Menu } from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
@@ -51,7 +51,14 @@ export default function App() {
     up: false,
     down: false
   });
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= breakPoints.dialer);
+  const resizePurposes = () => {
+      setIsMobile( window.innerWidth <= breakPoints.dialer );
+  }
   useEffect( () => {
+
+    resizePurposes();
+    window.addEventListener('resize', resizePurposes);
 
     addEventListener('wheel', (e) => {
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
@@ -90,6 +97,10 @@ export default function App() {
       }
     }, false);
 
+    return( () => {
+        window.removeEventListener('resize', resizePurposes)
+    })
+
   }, []);
 
   return (
@@ -97,7 +108,9 @@ export default function App() {
       <Menu />
       <Switch>
         <Route exact path={Pages.index.url}>
-          <IndexPage />
+          <IndexPage
+            isMobile = {isMobile}
+          />
         </Route>
         <Route exact path={Pages.about.url}>
           <AboutPage />

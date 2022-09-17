@@ -2,18 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import './Stylesheets/index.css';
 import { breakPoints } from './data';
+import PropTypes, {InferProps} from 'prop-types';
 
-export default function IndexPage() {
 
+export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTypes>) {
     let workHover: gsap.core.Timeline;
     let lifeHover: gsap.core.Timeline;
     let workResurrection: gsap.core.Timeline;
     let lifeResurrection: gsap.core.Timeline;
-        
-    const [isMobile, setIsMobile] = useState<boolean>();
-    const resizePurposes = () => {
-        setIsMobile( window.innerWidth <= breakPoints.dialer );
-    }
 
     const gradientDeg = {
         default: (t: 'work' | 'life') : string => (t === 'work') ? '45deg' : '-45deg',
@@ -25,8 +21,8 @@ export default function IndexPage() {
     }
     useEffect(() => {
     
-        if( window.innerWidth <= breakPoints.dialer ) animProps.deg = gradientDeg.mobile;
-        else animProps.deg = gradientDeg.default;
+        animProps.deg = ( window.innerWidth <= breakPoints.dialer ) ? gradientDeg.mobile : gradientDeg.default;
+  
 
         const setHover = (type: 'work' | 'life') => {
             const timeline = gsap.timeline({paused: true});
@@ -74,16 +70,6 @@ export default function IndexPage() {
         setResurrection('work');
 
     }, [isMobile]);
-
-
-    useEffect(() => {
-        resizePurposes();
-        window.addEventListener('resize', resizePurposes);
-
-        return( () => {
-            window.removeEventListener('resize', resizePurposes)
-        })
-    }, []);
 
     const handleMouseEnter = (type?: 'life' | 'work') => {
         if (resurrecting.current) return; 
@@ -138,4 +124,7 @@ export default function IndexPage() {
         <img src={require('./Assets/BreathingFragment.svg')} className='breathingFragment' alt='The main logo | Infa (infamousrocket)' />
         </div>
     </article>;
+}
+IndexPage.propTypes ={
+    isMobile: PropTypes.bool.isRequired
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { breakPoints, PageData, Pages } from './data';
-import { Menu } from './Menu'
+import Menu from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
 import ContactPage from './ContactPage';
@@ -105,7 +105,9 @@ export default function App() {
 
   return (
     <>
-      <Menu />
+      <Menu
+        isMobile ={isMobile}
+      />
       <Switch>
         <Route exact path={Pages.index.url}>
           <IndexPage

@@ -114,4 +114,10 @@ nav #expansionArrow div:last-child {
   right: 0;
   transform-origin: left;
   transform: rotate(-45deg);
+}
+
+@media only screen and (max-width: 900px) {
+  nav #dialerContainer a {
+    display: block;
+  }
 }/*# sourceMappingURL=menu.css.map */

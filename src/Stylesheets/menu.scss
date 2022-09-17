@@ -80,3 +80,8 @@ nav{
         }
     }
 }
+@media only screen and (max-width: 900px) {
+    nav #dialerContainer a{
+        display: block;
+    } 
+}

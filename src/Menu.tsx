@@ -4,11 +4,12 @@ import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { changePagination, titleConversion } from "./App";
 import { PageData, Pages } from "./data";
+import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
 
 let expansionAnimation: gsap.core.Timeline;
-export const Menu = () => {
+export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -50,17 +51,11 @@ export const Menu = () => {
         ghost?: boolean | undefined;
     };
     const [items, setItems] = useState<itemData[]>(itemList);
-    const [checkItems, setCheckItems] = useState<boolean>();
-
-    
-    useEffect(() => {
-
-    }, [checkItems]);
 
     const newList = useRef<itemData[]>(items);
     const infiniteItems = useRef<itemData[]>([]);
     const itemReset = useRef<boolean>(true);
-    const xMemory = useRef<boolean>(false);
+    const xyMemory = useRef<boolean>(false);
     const makeInfiniteItems = ( items :itemData[] ) => {
         infiniteItems.current.splice(0, infiniteItems.current.length);
         for (let i = 0; i < 20; i++){
@@ -73,7 +68,34 @@ export const Menu = () => {
         return infiniteItems.current;
     }
     
+    const resizePurposes = () => {
+        const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
+        if( isMobile ){
+            setXOrY = (t: number | string) => ({y: t});
+            xOrYString = 'y';
+            menuItemD = menuItemH;
+            getXY = (t: Draggable.Vars) => t.y;
+            dialerProps = { width: menuItemW,
+                height: menuItemH*ghostItems
+            };
+        }else{
+            setXOrY = (t: number | string) => ({x: t});
+            xOrYString = 'x';
+            menuItemD = menuItemW;
+            getXY = (t: Draggable.Vars) => t.x;
+            dialerProps = { width: menuItemW*ghostItems,
+                height: menuItemH
+            }
+        }
+    }
+
     const menuItemW = 160;
+    const menuItemH = 52;
+    let dialerProps: any, setXOrY: any, xOrYString: any, menuItemD: number, getXY: any;
+    resizePurposes();
+    useEffect(() => {
+        resizePurposes();
+    }, [isMobile]);
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
         let set = (immediate) ? 0 : .2;
@@ -84,9 +106,8 @@ export const Menu = () => {
     useEffect(() => {
         gsap.set("#dialer a", {width: menuItemW});
         document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
-
-        gsap.set("#dialer", {width: menuItemW*items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length});
-        items.filter(item => item.ghost === false ).length > 0 && gsap.set('#dialer', {x: 0});
+        gsap.set("#dialer", dialerProps);
+        items.filter(item => item.ghost === false ).length > 0 && gsap.set('#dialer', setXOrY(0));
 
         let aElements = Array.from(document.querySelectorAll('#dialer a'));
         let firstVis = items.findIndex( item => typeof item.ghost === 'undefined');
@@ -113,7 +134,7 @@ export const Menu = () => {
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
 
-    const trueX = useRef<number>(0);
+    const trueXY = useRef<number>(0);
     const history = useHistory();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
@@ -135,14 +156,14 @@ export const Menu = () => {
         setItems(copy);
 
         history.push(newList.current[2].url);
-        trueX.current = Number(gsap.getProperty("#dialer", "x"));
+        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString));
 
         isSnapping.current = false;
         itemReset.current = true;
-        xMemory.current = false;
+        xyMemory.current = false;
     }
 
-    const applyInfinity = (theX: number) => {
+    const applyInfinity = (theXY: number) => {
         if( itemReset.current ) {
             let copy = addAll().slice();
             let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
@@ -151,74 +172,73 @@ export const Menu = () => {
             copy = addAll();
             setItems(copy);
 
-            let x = ( xMemory.current ) ? theX : theX - menuItemW * (addAll(true).length/2);
-            gsap.set('#dialer', {x: x});
-            trueX.current = x;
+            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD * (addAll(true).length/2);
+            gsap.set('#dialer', setXOrY(xy));
+            trueXY.current = xy;
             itemReset.current = false;
-            xMemory.current = false;
-        }else xMemory.current = true;
+            xyMemory.current = false;
+        }else xyMemory.current = true;
     }
 
-    const updateX = () => {
-        trueX.current = Number(gsap.getProperty("#dialer", "x"));
+    const updateXY = () => {
+        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString));
     }
     const isSnapping = useRef<false | gsap.core.Tween>(false);
-    const restoreFromInfinity = (theX: number, endX: number) => {
-        let dur = (theX === endX) ? .3 : 0,
-        xAlgo = ( Math.round(theX / menuItemW) * menuItemW ),
-        x = ( xMemory.current ) ? xAlgo : xAlgo - menuItemW * (addAll(true).length/2);
+    const restoreFromInfinity = (theXY: number, endXY: number) => {
+        let dur = (theXY === endXY) ? .3 : 0,
+        xyAlgo = ( Math.round(theXY / menuItemD) * menuItemD ),
+        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD * (addAll(true).length/2);
 
-        let currentX;
+        let currentXY;
         if ( manualDrag.current !== false ){
-            currentX = x;
-            x = manualDrag.current;
+            currentXY = xy;
+            xy = manualDrag.current;
         }
-        let firstVis = Math.abs(Math.round(x / menuItemW)),
+        let firstVis = Math.abs(Math.round(xy / menuItemD)),
             aElements = Array.from(document.querySelectorAll('#dialer a')),
             visibleItems = aElements.splice(firstVis, 5),
-            relativeDuration = currentX ? (Math.abs(x - currentX) / menuItemW) * dur : dur;
+            relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD) * dur : dur;
 
-        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, x: x, onUpdate: updateX, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
 
         manualDrag.current = false;
     }
 
     useEffect(() => {
-        gsap.set("#dialerContainer", {width: menuItemW*5});
+        gsap.set("#dialerContainer", {width: menuItemD*5});
 
-        let snapTo = gsap.timeline();
-        let xOnPress: number;
+        let xyOnPress: number;
         Draggable.create("#dialer", {
-            type:"x",
+            type: xOrYString,
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
-                applyInfinity(this.x);
-                xOnPress = trueX.current;
+                applyInfinity( getXY(this) );
+                xyOnPress = trueXY.current;
             },
             onDrag: function() {
-                let x = ( xMemory.current ) ? this.x : this.x - menuItemW * (addAll(true).length/2),
+                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD * (addAll(true).length/2),
                     aElements = Array.from(document.querySelectorAll('#dialer a')),
-                    firstVis = Math.abs( Math.round( x / menuItemW ) ),
+                    firstVis = Math.abs( Math.round( xy / menuItemD ) ),
                     visibleItems = aElements.splice(firstVis, 5),
                     hiddenItems = aElements;
 
                 makeVisible(visibleItems);
-                gsap.set('#dialer', {x: x});
-                trueX.current = x;
+                gsap.set('#dialer', setXOrY(xy));
+                trueXY.current = xy;
                 gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
             },
             onDragEnd: function() {
-                restoreFromInfinity(this.x, this.endX);
+                restoreFromInfinity(getXY(this), ( isMobile ) ? this.endY : this.endX);
             },
             onRelease: function() {
-                if( xOnPress === trueX.current &&
+                if( xyOnPress === trueXY.current &&
                     isSnapping.current &&
                     this.pointerEvent.target.localName !== 'a'
                     ){
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
-                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, x: oldVars.x, onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(oldVars.x), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
                 }
             }
         });
@@ -228,11 +248,11 @@ export const Menu = () => {
     const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
         e.preventDefault();
        
-        const x = Draggable.get('#dialer').x;
-        manualDrag.current = -1 * ( ( trueX.current + menuItemW * i ) - ( trueX.current + menuItemW * Math.floor( newList.current.length / 2 ) ) );
+        const xy = getXY(Draggable.get('#dialer'));
+        manualDrag.current = -1 * ( ( trueXY.current + menuItemD * i ) - ( trueXY.current + menuItemD * Math.floor( newList.current.length / 2 ) ) );
 
-        restoreFromInfinity(x, x);
-        xMemory.current = false;
+        restoreFromInfinity(xy, xy);
+        xyMemory.current = false;
     }
     const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
         e.code !== 'Tab' && e.preventDefault();
@@ -290,4 +310,8 @@ export const Menu = () => {
             <div className='R'></div>
         </button>
     </nav>;
+}
+
+Menu.propTypes = {
+    isMobile: PropTypes.bool.isRequired
 }

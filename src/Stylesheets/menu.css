@@ -109,7 +109,7 @@ nav #expansionArrow div {
   transform-origin: right;
   transform: rotate(45deg);
 }
-nav #expansionArrow div:last-child {
+nav #expansionArrow .R {
   left: inherit;
   right: 0;
   transform-origin: left;
@@ -121,6 +121,31 @@ nav #expansionArrow div:last-child {
     width: auto;
     top: 50%;
     transform: translateY(-50%);
+  }
+  nav #expansionArrow {
+    width: 15px;
+    height: 33px;
+    left: auto;
+    right: 0;
+    top: 50%;
+    transform: translate(100%, -50%);
+  }
+  nav #expansionArrow > div {
+    width: 2px;
+    height: 50%;
+    top: 0;
+    left: 0;
+    transform: inherit;
+    transform-origin: left;
+  }
+  nav #expansionArrow .L {
+    top: 0;
+    left: 0;
+  }
+  nav #expansionArrow .R {
+    top: 50%;
+    left: 0;
+    right: auto;
   }
   nav #dialerContainer a {
     display: block;

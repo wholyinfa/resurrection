@@ -248,8 +248,8 @@ export const Menu = () => {
             }
             expansionAnimation.fromTo('#dialerContainer, #dialerHandle', {y: '-100%'}, {y: '0%', ...properties}, 0)
             .fromTo('#expansionArrow', {y: -30}, {y: 0, ...properties}, '<')
-            .fromTo('#expansionArrow div:first-child', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20, ...properties}, '<')
-            .fromTo('#expansionArrow div:last-child', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20, ...properties}, '<');
+            .fromTo('#expansionArrow .L', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20, ...properties}, '<')
+            .fromTo('#expansionArrow .R', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20, ...properties}, '<');
         }
         
         if( expansionAnimation.progress() > 0 ){
@@ -285,9 +285,9 @@ export const Menu = () => {
             </div>
         </div>
         <button id="expansionArrow" onClick={handleExpansion}>
-            expand
-            <div></div>
-            <div></div>
+            <span className='noPeaky'>Open main menu</span>
+            <div className='L'></div>
+            <div className='R'></div>
         </button>
     </nav>;
 }

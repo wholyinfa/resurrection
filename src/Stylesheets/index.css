@@ -127,7 +127,9 @@ body {
   padding-bottom: 76.3043478261%;
   position: absolute;
   top: 50%;
-  background-size: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   transform: translateY(-50%);
 }
 #division .work {
@@ -204,6 +206,7 @@ body {
 }
 @media only screen and (max-width: 400px) {
   #division > div .treeBrain {
+    max-width: 200px;
     width: 100%;
     padding-bottom: 169.5652173913%;
   }

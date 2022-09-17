@@ -99,7 +99,9 @@
             padding-bottom: $height;
             position: absolute;
             top: 50%;
-            background-size: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             transform: translateY(-50%);
         }
     }
@@ -183,6 +185,7 @@
         >div{
             .treeBrain{
                 $width: 100%;
+                max-width: 200px;
                 $height: $width * 1.695652173913043;
                 width: $width;
                 padding-bottom: $height;

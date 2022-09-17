@@ -147,3 +147,12 @@ export const Character: Character = {
         },
     ]
 }
+
+export const breakPoints = {
+    larger: 1920,
+    large: 1366,
+    dialer: 900,
+    medium: 768,
+    small: 428,
+    smaller: 375
+};

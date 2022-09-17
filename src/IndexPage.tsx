@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import './Stylesheets/index.css';
+import { breakPoints } from './data';
 
 export default function IndexPage() {
 
@@ -11,7 +12,7 @@ export default function IndexPage() {
         
     const [isMobile, setIsMobile] = useState<boolean>();
     const resizePurposes = () => {
-        setIsMobile( window.innerWidth <= 768 );
+        setIsMobile( window.innerWidth <= breakPoints.dialer );
     }
 
     const gradientDeg = {
@@ -24,7 +25,7 @@ export default function IndexPage() {
     }
     useEffect(() => {
     
-        if( window.innerWidth <= 768 ) animProps.deg = gradientDeg.mobile;
+        if( window.innerWidth <= breakPoints.dialer ) animProps.deg = gradientDeg.mobile;
         else animProps.deg = gradientDeg.default;
 
         const setHover = (type: 'work' | 'life') => {

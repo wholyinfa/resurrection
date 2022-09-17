@@ -117,7 +117,29 @@ nav #expansionArrow div:last-child {
 }
 
 @media only screen and (max-width: 900px) {
+  nav {
+    width: auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
   nav #dialerContainer a {
     display: block;
+  }
+  nav #dialerContainer .shade {
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+  }
+  nav #dialerContainer .shade.L {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+  }
+  nav #dialerContainer .shade.R {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+    top: auto;
+    bottom: 0;
   }
 }/*# sourceMappingURL=menu.css.map */

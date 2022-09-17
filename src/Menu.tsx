@@ -206,7 +206,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
 
     useEffect(() => {
-        gsap.set("#dialerContainer", {width: menuItemD*5});
+        gsap.set("#dialerContainer", {width: (isMobile) ? menuItemW : menuItemW*5, height: (isMobile) ? menuItemH*5 : menuItemH});
 
         let xyOnPress: number;
         Draggable.create("#dialer", {

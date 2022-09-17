@@ -1,5 +1,10 @@
 @use 'sass:math';
 @import './style.scss';
+
+@mixin shadeBG ($deg){
+    background: rgb(0,0,0);
+    background: linear-gradient($deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+}
 nav{
     width: 100%;
     position: fixed;
@@ -31,13 +36,11 @@ nav{
     }
     #dialerContainer .shade.R{
         right: 0;
-        background: rgb(0,0,0);
-        background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+        @include shadeBG(90deg);
     }
     #dialerContainer .shade.L{
         left: 0;
-        background: rgb(0,0,0);
-        background: linear-gradient(-90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+        @include shadeBG(-90deg);
     }
     #dialerHandle{
         $width: 10000vh;
@@ -81,7 +84,29 @@ nav{
     }
 }
 @media only screen and (max-width: 900px) {
-    nav #dialerContainer a{
-        display: block;
+    nav {
+        width: auto;
+        top: 50%;
+        transform: translateY(-50%);
+        #dialerContainer {
+            a{
+                display: block;
+            }
+            .shade{
+                width: 100%;
+                height: 20px;
+                position: absolute;
+                top: 0;
+                z-index: 2;
+            }
+            .shade.L{
+                @include shadeBG(0deg);
+            }
+            .shade.R{
+                @include shadeBG(180deg);
+                top: auto;
+                bottom: 0;
+            }
+        }
     } 
 }

@@ -41,12 +41,12 @@ export default function IndexPage() {
             const opposite = (type === 'work') ? '.life' : '.work';
             const dur = .2;
             const ease = 'power4.in';
+            const shadeBg = (deg: 90 | -90) => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${color} 100%)`;
 
             timeline
-            .set('#dialerContainer .shade', {
-                autoAlpha: 0,
-                background: `linear-gradient(90deg, rgba(0,0,0,0) 0%, ${color} 100%)`,
-            })
+            .set('#dialerContainer .shade', {autoAlpha: 0})
+            .set('#dialerContainer .shade.R', {background: shadeBg(90)})
+            .set('#dialerContainer .shade.L', {background: shadeBg(-90)})
             .to('#division', {autoAlpha: 0, scale: .8, duration: dur, ease: ease})
             .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
             .to('body', {background: color, duration: dur, ease: ease}, `<`)

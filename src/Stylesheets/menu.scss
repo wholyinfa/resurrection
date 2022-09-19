@@ -1,11 +1,14 @@
 @use 'sass:math';
 @import './style.scss';
 
+$menuItemD: 152px;
+
 @mixin shadeBG ($deg){
     background: rgb(0,0,0);
     background: linear-gradient($deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
 }
 nav{
+    
     width: 100%;
     position: fixed;
     top: 0;
@@ -45,7 +48,7 @@ nav{
     #dialerHandle{
         $width: 10000vh;
         width: $width;
-        height: 150px;
+        height: $menuItemD;
         position: absolute;
         left: -1 * math.div($width ,2);
         top: -100%;
@@ -56,7 +59,7 @@ nav{
         height: 15px;
         position: absolute;
         left: 50%;
-        top: 100%;
+        top: 80%;
         transform: translate(-50%, 0%);
         cursor: pointer;
         z-index: 2;
@@ -70,10 +73,12 @@ nav{
             height: 2px;
             position: absolute;
             background: #fff;
-            left: 0;
             bottom: 20%;
-            transform-origin: right;
+        }
+        .L{
             transform: rotate(45deg);
+            left: 0;
+            transform-origin: right;
         }
         .R{
             left: inherit;
@@ -91,8 +96,7 @@ nav{
         #expansionArrow{
             width: 15px;
             height: 33px;
-            left: auto;
-            right: 0;
+            left: 0;
             top: 50%;
             transform: translate(100%, -50%);
             >div{
@@ -101,17 +105,27 @@ nav{
                 top: 0;
                 left: 0;
                 transform: inherit;
-                transform-origin: left;
             }
             .L{
                 top: 0;
-                left: 0;
+                right: 0;
+                left: auto;
+                transform-origin: bottom;
             }
             .R{
                 top: 50%;
-                left: 0;
-                right: auto;
+                right: 0;
+                left: auto;
+                transform-origin: top;
             }
+        }
+        #dialerHandle {
+            $height: 10000vh;
+            width: $menuItemD;
+            height: $height;
+            position: absolute;
+            top: -1 * math.div($height ,2);
+            left: 0;
         }
         #dialerContainer {
             a{

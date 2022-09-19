@@ -78,7 +78,7 @@ nav #dialerContainer .shade.L {
 }
 nav #dialerHandle {
   width: 10000vh;
-  height: 150px;
+  height: 152px;
   position: absolute;
   left: -5000vh;
   top: -100%;
@@ -89,7 +89,7 @@ nav #expansionArrow {
   height: 15px;
   position: absolute;
   left: 50%;
-  top: 100%;
+  top: 80%;
   transform: translate(-50%, 0%);
   cursor: pointer;
   z-index: 2;
@@ -104,10 +104,12 @@ nav #expansionArrow div {
   height: 2px;
   position: absolute;
   background: #fff;
-  left: 0;
   bottom: 20%;
-  transform-origin: right;
+}
+nav #expansionArrow .L {
   transform: rotate(45deg);
+  left: 0;
+  transform-origin: right;
 }
 nav #expansionArrow .R {
   left: inherit;
@@ -125,8 +127,7 @@ nav #expansionArrow .R {
   nav #expansionArrow {
     width: 15px;
     height: 33px;
-    left: auto;
-    right: 0;
+    left: 0;
     top: 50%;
     transform: translate(100%, -50%);
   }
@@ -136,16 +137,25 @@ nav #expansionArrow .R {
     top: 0;
     left: 0;
     transform: inherit;
-    transform-origin: left;
   }
   nav #expansionArrow .L {
     top: 0;
-    left: 0;
+    right: 0;
+    left: auto;
+    transform-origin: bottom;
   }
   nav #expansionArrow .R {
     top: 50%;
+    right: 0;
+    left: auto;
+    transform-origin: top;
+  }
+  nav #dialerHandle {
+    width: 152px;
+    height: 10000vh;
+    position: absolute;
+    top: -5000vh;
     left: 0;
-    right: auto;
   }
   nav #dialerContainer a {
     display: block;

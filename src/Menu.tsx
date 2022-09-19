@@ -6,6 +6,7 @@ import { changePagination, titleConversion } from "./App";
 import { PageData, Pages } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
+import exp from "constants";
 gsap.registerPlugin(Draggable);
 
 let expansionAnimation: gsap.core.Timeline;
@@ -260,16 +261,34 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
 
     const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
     useEffect( () => {
+        const expW = document.querySelector('#expansionArrow');
         if( typeof expansionAnimation === 'undefined' ){
             expansionAnimation = gsap.timeline();
             const properties = {
                 ease: 'sine.inOut',
                 duration: .3,
             }
-            expansionAnimation.fromTo('#dialerContainer, #dialerHandle', {y: '-100%'}, {y: '0%', ...properties}, 0)
-            .fromTo('#expansionArrow', {y: -30}, {y: 0, ...properties}, '<')
-            .fromTo('#expansionArrow .L', {rotate: '45deg', y: 0}, {rotate: '-45deg', y: -20, ...properties}, '<')
-            .fromTo('#expansionArrow .R', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -20, ...properties}, '<');
+            const daWidth = 33;
+            const expW = (t: number) => (t * 100) / daWidth + '%';
+            const setY = () => (isMobile) ? 0 : -20;
+            const setXOrY = (t: number | string) => (isMobile) ? ({x: t}) : ({y: t});
+            const setP = (mobileVal: number | string, defaultVal: number | string) => {
+                return isMobile ? mobileVal : defaultVal;
+            }
+
+            console.log(setP(expW(20), '-50%'));
+            expansionAnimation
+            .fromTo('#dialerContainer, #dialerHandle', setXOrY('-100%'), {...setXOrY('0%'), ...properties}, '<')
+            .fromTo('#expansionArrow', {x: setP(expW(20), '')}, {x: setP(expW(menuItemW-10), '') , ...properties}, '<');
+            if( isMobile ){
+                expansionAnimation
+                .fromTo('#expansionArrow .L', {rotate: '-45deg',x: 0}, {rotate: '45deg', x: -daWidth, ...properties}, '<')
+                .fromTo('#expansionArrow .R', {rotate: '45deg',x: 0}, {rotate: '-45deg', x: -daWidth, ...properties}, '<');
+            }else{
+                expansionAnimation
+                .fromTo('#expansionArrow .L', {rotate: setP('45deg', '45deg'), y: 0}, {rotate: '-45deg', y: -daWidth/2, ...properties}, '<')
+                .fromTo('#expansionArrow .R', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -daWidth/2, ...properties}, '<');
+            }
         }
         
         if( expansionAnimation.progress() > 0 ){

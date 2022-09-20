@@ -69,30 +69,39 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         return infiniteItems.current;
     }
     
+    const trueMobile = useRef<boolean>();
     const resizePurposes = () => {
+        trueMobile.current = isMobile;
         const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
-        if( isMobile ){
-            setXOrY = (t: number | string) => ({y: t});
-            xOrYString = 'y';
-            menuItemD = menuItemH;
-            getXY = (t: Draggable.Vars) => t.y;
-            dialerProps = { width: menuItemW,
-                height: menuItemH*ghostItems
-            };
-        }else{
-            setXOrY = (t: number | string) => ({x: t});
-            xOrYString = 'x';
-            menuItemD = menuItemW;
-            getXY = (t: Draggable.Vars) => t.x;
-            dialerProps = { width: menuItemW*ghostItems,
-                height: menuItemH
-            }
-        }
+        setXOrY = (t) => ( (trueMobile.current) ? {y: t} : {x: t} );
+        getXY = (t) => (trueMobile.current) ? t.y : t.x;
+        xOrYString = () => (trueMobile.current) ? 'y' : 'x';
+        menuItemD = () => (trueMobile.current) ? menuItemH : menuItemW;
+        dialerProps = () => (trueMobile.current) ?
+        { width: menuItemW,
+            height: menuItemH*ghostItems
+        } :
+        { width: menuItemW*ghostItems,
+            height: menuItemH
+        };
+
+        gsap.set("#dialerContainer", {width: (trueMobile.current) ? menuItemW : menuItemW*5, height: (trueMobile.current) ? menuItemH*5 : menuItemH});
+        gsap.set("#dialer", dialerProps());
     }
 
     const menuItemW = 160;
     const menuItemH = 52;
-    let dialerProps: any, setXOrY: any, xOrYString: any, menuItemD: number, getXY: any;
+    let dialerProps: () => {
+        width: number,
+        height: number
+    },
+    setXOrY: (t: number | string ) =>
+        { y: number | string; x?: undefined; } |
+        { x: number | string; y?: undefined; },
+    xOrYString: () => 'y' | 'x',
+    menuItemD: () => number,
+    getXY: (t: Draggable.Vars) => number;
+
     resizePurposes();
     useEffect(() => {
         resizePurposes();
@@ -106,8 +115,8 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
     useEffect(() => {
         gsap.set("#dialer a", {width: menuItemW});
+        gsap.set("#dialer", dialerProps());
         document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
-        gsap.set("#dialer", dialerProps);
         items.filter(item => item.ghost === false ).length > 0 && gsap.set('#dialer', setXOrY(0));
 
         let aElements = Array.from(document.querySelectorAll('#dialer a'));
@@ -157,7 +166,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         setItems(copy);
 
         history.push(newList.current[2].url);
-        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString));
+        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
         itemReset.current = true;
@@ -173,7 +182,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             copy = addAll();
             setItems(copy);
 
-            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD * (addAll(true).length/2);
+            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
             gsap.set('#dialer', setXOrY(xy));
             trueXY.current = xy;
             itemReset.current = false;
@@ -182,23 +191,23 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
 
     const updateXY = () => {
-        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString));
+        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
     }
     const isSnapping = useRef<false | gsap.core.Tween>(false);
     const restoreFromInfinity = (theXY: number, endXY: number) => {
         let dur = (theXY === endXY) ? .3 : 0,
-        xyAlgo = ( Math.round(theXY / menuItemD) * menuItemD ),
-        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD * (addAll(true).length/2);
+        xyAlgo = ( Math.round(theXY / menuItemD()) * menuItemD() ),
+        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD() * (addAll(true).length/2);
 
         let currentXY;
         if ( manualDrag.current !== false ){
             currentXY = xy;
             xy = manualDrag.current;
         }
-        let firstVis = Math.abs(Math.round(xy / menuItemD)),
+        let firstVis = Math.abs(Math.round(xy / menuItemD())),
             aElements = Array.from(document.querySelectorAll('#dialer a')),
             visibleItems = aElements.splice(firstVis, 5),
-            relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD) * dur : dur;
+            relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD()) * dur : dur;
 
         isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
@@ -207,11 +216,10 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
 
     useEffect(() => {
-        gsap.set("#dialerContainer", {width: (isMobile) ? menuItemW : menuItemW*5, height: (isMobile) ? menuItemH*5 : menuItemH});
 
         let xyOnPress: number;
         Draggable.create("#dialer", {
-            type: xOrYString,
+            type: 'x,y',
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
@@ -219,19 +227,19 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
                 xyOnPress = trueXY.current;
             },
             onDrag: function() {
-                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD * (addAll(true).length/2),
+                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2),
                     aElements = Array.from(document.querySelectorAll('#dialer a')),
-                    firstVis = Math.abs( Math.round( xy / menuItemD ) ),
+                    firstVis = Math.abs( Math.round( xy / menuItemD() ) ),
                     visibleItems = aElements.splice(firstVis, 5),
                     hiddenItems = aElements;
 
                 makeVisible(visibleItems);
-                gsap.set('#dialer', setXOrY(xy));
+                gsap.set('#dialer', {...setXOrY(xy), ...(trueMobile.current) ? {x: 0} : {y: 0} });
                 trueXY.current = xy;
                 gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
             },
             onDragEnd: function() {
-                restoreFromInfinity(getXY(this), ( isMobile ) ? this.endY : this.endX);
+                restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
             },
             onRelease: function() {
                 if( xyOnPress === trueXY.current &&
@@ -239,7 +247,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
                     this.pointerEvent.target.localName !== 'a'
                     ){
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
-                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(oldVars.x), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
                 }
             }
         });
@@ -250,7 +258,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         e.preventDefault();
        
         const xy = getXY(Draggable.get('#dialer'));
-        manualDrag.current = -1 * ( ( trueXY.current + menuItemD * i ) - ( trueXY.current + menuItemD * Math.floor( newList.current.length / 2 ) ) );
+        manualDrag.current = -1 * ( ( trueXY.current + menuItemD() * i ) - ( trueXY.current + menuItemD() * Math.floor( newList.current.length / 2 ) ) );
 
         restoreFromInfinity(xy, xy);
         xyMemory.current = false;
@@ -276,7 +284,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
                 return isMobile ? mobileVal : defaultVal;
             }
 
-            console.log(setP(expW(20), '-50%'));
             expansionAnimation
             .fromTo('#dialerContainer, #dialerHandle', setXOrY('-100%'), {...setXOrY('0%'), ...properties}, '<')
             .fromTo('#expansionArrow', {x: setP(expW(20), '')}, {x: setP(expW(menuItemW-10), '') , ...properties}, '<');

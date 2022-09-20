@@ -132,6 +132,44 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             else expansionAnimation.reverse()
         }
     }
+    const [repellents, setRepellents] = useState<Element[]>([]);
+    const repulsion = () => {
+        const windowW = window.innerWidth;
+        const ignore: string[] = ['.treeBrain'];
+        let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`));
+        //if( isMobile && dialerExpansion ){
+            let phase1: Element[] = [], phase2: Element[] = [];
+            targets.map(t => {
+                if( t.clientWidth !== windowW ) phase1.push(t);
+            });
+            
+            phase1.map(t => {
+                let trueParent = t.parentElement;
+                
+                if( trueParent && trueParent.scrollWidth < windowW ){
+                    let grandParent = trueParent.parentElement;
+                    for( let i = 0; i <= 100000; i++ ){
+                        if( grandParent )
+                        if( grandParent.scrollWidth >= windowW ){
+                            phase2.push(trueParent);
+                            break;
+                        }else{
+                            grandParent = grandParent.parentElement;
+                        }
+                    }
+                }else phase2.push(t);
+            });
+            
+            phase2.map( (t, i) => {
+                let match = phase2.filter( tt => t === tt );
+                if( match.length !== 1 ) phase2.splice(i, 1);
+            });
+            console.log(phase2);
+        /* }else{
+            console.log('RESET');
+            setRepellents([]);
+        } */
+    }
     useEffect(() => {
         trueMobile.current = isMobile;
 
@@ -161,6 +199,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             .fromTo('#expansionArrow', {x: expW(20)}, {x: expW(menuItemW-10), ...properties}, '<');
         
         expandDialer(dialerExpansion, true);
+        repulsion();
     }, [isMobile]);
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {

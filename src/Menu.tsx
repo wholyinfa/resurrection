@@ -100,11 +100,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     const menuItemW = 160;
     const menuItemH = 52;
     const trueMobile = useRef<boolean>();
-    const resizePurposes = () => {
-        gsap.set("#dialerContainer", {width: (trueMobile.current) ? menuItemW : menuItemW*5, height: (trueMobile.current) ? menuItemH*5 : menuItemH});
-        gsap.set("#dialer", dialerProps());
-    }
-
     const setXOrY = (t: number | string):
     { y: number | string; x?: undefined; } |
     { x: number | string; y?: undefined; } =>
@@ -127,7 +122,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     { width: menuItemW*ghostItems,
         height: menuItemH
     };
-    resizePurposes();
     const expandDialer = (toggle: boolean, instant?: boolean) => {
         if( toggle ){
             expansionAnimation.reversed(!expansionAnimation.reversed());
@@ -140,7 +134,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
     useEffect(() => {
         trueMobile.current = isMobile;
-        resizePurposes();
 
         expansionAnimation = gsap.timeline({paused: true});
         const properties = {
@@ -154,6 +147,8 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             return trueMobile.current ? mobileVal : defaultVal;
         }
 
+        gsap.set("#dialerContainer", {width: (trueMobile.current) ? menuItemW : menuItemW*5, height: (trueMobile.current) ? menuItemH*5 : menuItemH});
+        gsap.set("#dialer", dialerProps());
         gsap.set('#dialerContainer, #dialerHandle', setXOrY(0));
         gsap.set('#expansionArrow', setP({y: '-50%'}, {x: '-50%', y: ''}));
         gsap.set('#expansionArrow div', {y: '', x: ''});

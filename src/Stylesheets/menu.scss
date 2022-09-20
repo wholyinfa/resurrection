@@ -60,7 +60,6 @@ nav{
         position: absolute;
         left: 50%;
         top: 80%;
-        transform: translate(-50%, 0%);
         cursor: pointer;
         z-index: 2;
         padding: 10px;
@@ -76,15 +75,13 @@ nav{
             bottom: 20%;
         }
         .L{
-            transform: rotate(45deg);
             left: 0;
             transform-origin: right;
         }
         .R{
             left: inherit;
             right: 0;
-            transform-origin: left;
-            transform: rotate(-45deg);
+            transform-origin: left
         }
     }
 }
@@ -98,7 +95,6 @@ nav{
             height: 33px;
             left: 0;
             top: 50%;
-            transform: translate(100%, -50%);
             >div{
                 width: 2px;
                 height: 50%;

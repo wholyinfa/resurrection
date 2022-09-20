@@ -71,40 +71,69 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     
     const trueMobile = useRef<boolean>();
     const resizePurposes = () => {
-        trueMobile.current = isMobile;
-        const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
-        setXOrY = (t) => ( (trueMobile.current) ? {y: t} : {x: t} );
-        getXY = (t) => (trueMobile.current) ? t.y : t.x;
-        xOrYString = () => (trueMobile.current) ? 'y' : 'x';
-        menuItemD = () => (trueMobile.current) ? menuItemH : menuItemW;
-        dialerProps = () => (trueMobile.current) ?
-        { width: menuItemW,
-            height: menuItemH*ghostItems
-        } :
-        { width: menuItemW*ghostItems,
-            height: menuItemH
-        };
-
         gsap.set("#dialerContainer", {width: (trueMobile.current) ? menuItemW : menuItemW*5, height: (trueMobile.current) ? menuItemH*5 : menuItemH});
         gsap.set("#dialer", dialerProps());
     }
 
     const menuItemW = 160;
     const menuItemH = 52;
-    let dialerProps: () => {
+
+    const setXOrY = (t: number | string):
+    { y: number | string; x?: undefined; } |
+    { x: number | string; y?: undefined; } =>
+    ( (trueMobile.current) ? {y: t} : {x: t} );
+
+    const getXY = (t: Draggable.Vars): number =>
+    (trueMobile.current) ? t.y : t.x;
+
+    const xOrYString = (): 'y' | 'x' =>
+    (trueMobile.current) ? 'y' : 'x';
+
+    const menuItemD = (): number =>
+    (trueMobile.current) ? menuItemH : menuItemW;
+    
+    const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
+    const dialerProps = () : {
         width: number,
         height: number
-    },
-    setXOrY: (t: number | string ) =>
-        { y: number | string; x?: undefined; } |
-        { x: number | string; y?: undefined; },
-    xOrYString: () => 'y' | 'x',
-    menuItemD: () => number,
-    getXY: (t: Draggable.Vars) => number;
+    } =>
+    (trueMobile.current) ?
+    { width: menuItemW,
+        height: menuItemH*ghostItems
+    } :
+    { width: menuItemW*ghostItems,
+        height: menuItemH
+    };
 
     resizePurposes();
     useEffect(() => {
+        trueMobile.current = isMobile;
         resizePurposes();
+
+        expansionAnimation = gsap.timeline({paused: true});
+        const properties = {
+            ease: 'sine.inOut',
+            duration: .3,
+        }
+        const daWidth = 33;
+        const expW = (t: number) => (t * 100) / daWidth + '%';
+        const setYOrX = (t: number | string) => (trueMobile.current) ? ({x: t}) : ({y: t});
+        const setP = (mobileVal: any, defaultVal: any) => {
+            return trueMobile.current ? mobileVal : defaultVal;
+        }
+
+        gsap.set('#dialerContainer, #dialerHandle', setXOrY(0));
+        gsap.set('#expansionArrow', setP({y: '-50%'}, {x: '-50%', y: ''}));
+        gsap.set('#expansionArrow div', {y: '', x: ''});
+        expansionAnimation
+        .fromTo('#dialerContainer, #dialerHandle', setYOrX('-100%'), {...setYOrX('0%'), ...properties}, '<')
+        .fromTo('#expansionArrow .L', {rotate: setP('-45deg', '45deg')}, {rotate: setP('45deg', '-45deg'), ...setP({x: -daWidth}, {y: -daWidth/2}), ...properties}, '<')
+        .fromTo('#expansionArrow .R', {rotate: setP('45deg', '-45deg')}, {rotate: setP('-45deg', '45deg'), ...setP({x: -daWidth}, {y: -daWidth/2}), ...properties}, '<');
+        if( trueMobile.current )
+            expansionAnimation
+            .fromTo('#expansionArrow', {x: expW(20)}, {x: expW(menuItemW-10), ...properties}, '<');
+        
+        expandDialer(true);
     }, [isMobile]);
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
@@ -268,43 +297,22 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     }
 
     const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
-    useEffect( () => {
-        const expW = document.querySelector('#expansionArrow');
-        if( typeof expansionAnimation === 'undefined' ){
-            expansionAnimation = gsap.timeline();
-            const properties = {
-                ease: 'sine.inOut',
-                duration: .3,
-            }
-            const daWidth = 33;
-            const expW = (t: number) => (t * 100) / daWidth + '%';
-            const setY = () => (isMobile) ? 0 : -20;
-            const setXOrY = (t: number | string) => (isMobile) ? ({x: t}) : ({y: t});
-            const setP = (mobileVal: number | string, defaultVal: number | string) => {
-                return isMobile ? mobileVal : defaultVal;
-            }
-
-            expansionAnimation
-            .fromTo('#dialerContainer, #dialerHandle', setXOrY('-100%'), {...setXOrY('0%'), ...properties}, '<')
-            .fromTo('#expansionArrow', {x: setP(expW(20), '')}, {x: setP(expW(menuItemW-10), '') , ...properties}, '<');
-            if( isMobile ){
-                expansionAnimation
-                .fromTo('#expansionArrow .L', {rotate: '-45deg',x: 0}, {rotate: '45deg', x: -daWidth, ...properties}, '<')
-                .fromTo('#expansionArrow .R', {rotate: '45deg',x: 0}, {rotate: '-45deg', x: -daWidth, ...properties}, '<');
-            }else{
-                expansionAnimation
-                .fromTo('#expansionArrow .L', {rotate: setP('45deg', '45deg'), y: 0}, {rotate: '-45deg', y: -daWidth/2, ...properties}, '<')
-                .fromTo('#expansionArrow .R', {rotate: '-45deg', y: 0}, {rotate: '45deg', y: -daWidth/2, ...properties}, '<');
-            }
-        }
-        
-        if( expansionAnimation.progress() > 0 ){
-            expansionAnimation.reverse();
-        }else{
+    const expandDialer = (instant?: boolean) => {
+        if( dialerExpansion ){
             expansionAnimation.reversed(!expansionAnimation.reversed());
-            expansionAnimation.play();
+            if( instant ) expansionAnimation.progress(1);
+            else{
+                expansionAnimation.play();
+            }
+        }else{
+            if( instant ) expansionAnimation.progress(0);
+            else{
+                expansionAnimation.reverse()
+            }
         }
-
+    }
+    useEffect( () => {
+        expandDialer();
     }, [dialerExpansion])
     const handleExpansion = () => {
         setDialerExpansion(!dialerExpansion);

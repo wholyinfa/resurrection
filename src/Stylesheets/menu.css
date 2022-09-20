@@ -90,7 +90,6 @@ nav #expansionArrow {
   position: absolute;
   left: 50%;
   top: 80%;
-  transform: translate(-50%, 0%);
   cursor: pointer;
   z-index: 2;
   padding: 10px;
@@ -107,7 +106,6 @@ nav #expansionArrow div {
   bottom: 20%;
 }
 nav #expansionArrow .L {
-  transform: rotate(45deg);
   left: 0;
   transform-origin: right;
 }
@@ -115,7 +113,6 @@ nav #expansionArrow .R {
   left: inherit;
   right: 0;
   transform-origin: left;
-  transform: rotate(-45deg);
 }
 
 @media only screen and (max-width: 900px) {
@@ -129,7 +126,6 @@ nav #expansionArrow .R {
     height: 33px;
     left: 0;
     top: 50%;
-    transform: translate(100%, -50%);
   }
   nav #expansionArrow > div {
     width: 2px;

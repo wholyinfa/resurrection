@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ReactComponentElement } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
@@ -6,9 +6,46 @@ import { changePagination, titleConversion } from "./App";
 import { PageData, Pages } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
-import exp from "constants";
 gsap.registerPlugin(Draggable);
 
+function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
+    return <nav>
+        <div id='dialerHandle'></div>
+        <div id='dialerContainer'>
+            <div className='shade L'></div>
+            <div className='shade R'></div>
+            <div id='dialer'>
+            { items.map( (item, i) => {
+                return item.url !== '' &&
+                <NavLink exact
+                className={ item.ghost ? 'ghost' : '' }
+                key={i}
+                to={item.url}
+                onClick={(e) => handleClick(e, i)}
+                onKeyDown={(e) => handleKeyDownClick(e)}
+                >
+                    {item.text}
+                </NavLink>;
+            }) }
+            </div>
+        </div>
+        <button id="expansionArrow" onClick={handleExpansion}>
+            <span className='noPeaky'>Open main menu</span>
+            <div className='L'></div>
+            <div className='R'></div>
+        </button>
+    </nav>
+}
+MenuDOM.propTypes = {
+    items: PropTypes.array.isRequired,
+    handleClick: PropTypes.func.isRequired,
+    handleKeyDownClick: PropTypes.func.isRequired,
+    handleExpansion: PropTypes.func.isRequired,
+}
+
+interface itemData extends PageData {
+    ghost?: boolean | undefined;
+};
 let expansionAnimation: gsap.core.Timeline;
 export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
 
@@ -29,11 +66,9 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             pageData: entry
         };
     } );
-    
     Object.keys(Pages).map( item => {
         itemList.push(Pages[item as keyof Pages]);
     });
-
     const theMiddle: number = Math.floor(itemList.length / 2);
     let roadToCenter: number = ( activePage.pageID < theMiddle ) ? theMiddle - activePage.pageID :
                                ( activePage.pageID > theMiddle ) ? theMiddle - activePage.pageID + itemList.length  :
@@ -43,20 +78,13 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         itemList.pop();
         itemList.unshift(lastItem);
     }
-
+    const [items, setItems] = useState<itemData[]>(itemList);
+    const newList = useRef<itemData[]>(items);
     useEffect( () => {
         changePagination(newList.current[2]);
     }, [location]);
 
-    interface itemData extends PageData {
-        ghost?: boolean | undefined;
-    };
-    const [items, setItems] = useState<itemData[]>(itemList);
-
-    const newList = useRef<itemData[]>(items);
     const infiniteItems = useRef<itemData[]>([]);
-    const itemReset = useRef<boolean>(true);
-    const xyMemory = useRef<boolean>(false);
     const makeInfiniteItems = ( items :itemData[] ) => {
         infiniteItems.current.splice(0, infiniteItems.current.length);
         for (let i = 0; i < 20; i++){
@@ -69,29 +97,24 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         return infiniteItems.current;
     }
     
+    const menuItemW = 160;
+    const menuItemH = 52;
     const trueMobile = useRef<boolean>();
     const resizePurposes = () => {
         gsap.set("#dialerContainer", {width: (trueMobile.current) ? menuItemW : menuItemW*5, height: (trueMobile.current) ? menuItemH*5 : menuItemH});
         gsap.set("#dialer", dialerProps());
     }
 
-    const menuItemW = 160;
-    const menuItemH = 52;
-
     const setXOrY = (t: number | string):
     { y: number | string; x?: undefined; } |
     { x: number | string; y?: undefined; } =>
     ( (trueMobile.current) ? {y: t} : {x: t} );
-
     const getXY = (t: Draggable.Vars): number =>
     (trueMobile.current) ? t.y : t.x;
-
     const xOrYString = (): 'y' | 'x' =>
     (trueMobile.current) ? 'y' : 'x';
-
     const menuItemD = (): number =>
     (trueMobile.current) ? menuItemH : menuItemW;
-    
     const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
     const dialerProps = () : {
         width: number,
@@ -104,8 +127,17 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
     { width: menuItemW*ghostItems,
         height: menuItemH
     };
-
     resizePurposes();
+    const expandDialer = (toggle: boolean, instant?: boolean) => {
+        if( toggle ){
+            expansionAnimation.reversed(!expansionAnimation.reversed());
+            if( instant ) expansionAnimation.progress(1);
+            else expansionAnimation.play();
+        }else{
+            if( instant ) expansionAnimation.progress(0);
+            else expansionAnimation.reverse()
+        }
+    }
     useEffect(() => {
         trueMobile.current = isMobile;
         resizePurposes();
@@ -133,7 +165,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             expansionAnimation
             .fromTo('#expansionArrow', {x: expW(20)}, {x: expW(menuItemW-10), ...properties}, '<');
         
-        expandDialer(true);
+        expandDialer(dialerExpansion, true);
     }, [isMobile]);
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
@@ -156,7 +188,31 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         }
     }, [items]);
 
+    const manualDrag = useRef<number | false>(false);
+    const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
+        e.preventDefault();
+       
+        const xy = getXY(Draggable.get('#dialer'));
+        manualDrag.current = -1 * ( ( trueXY.current + menuItemD() * i ) - ( trueXY.current + menuItemD() * Math.floor( newList.current.length / 2 ) ) );
 
+        restoreFromInfinity(xy, xy);
+        xyMemory.current = false;
+    }
+    const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
+        e.code !== 'Tab' && e.preventDefault();
+    }
+    const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
+    const handleExpansion = () => {
+        const toggle = !dialerExpansion;
+        setDialerExpansion(toggle);
+        expandDialer(toggle, false);
+    }
+
+    const history = useHistory();
+    const trueXY = useRef<number>(0);
+    const itemReset = useRef<boolean>(true);
+    const xyMemory = useRef<boolean>(false);
+    const isSnapping = useRef<false | gsap.core.Tween>(false);
     const addAll = ( excess?: boolean ) => {
         interface arg{
             left: itemData[];
@@ -172,9 +228,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         [...endItems.left, ...endItems.right] :
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
-
-    const trueXY = useRef<number>(0);
-    const history = useHistory();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
         let nullItem: itemData = {
@@ -201,32 +254,13 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         itemReset.current = true;
         xyMemory.current = false;
     }
-
-    const applyInfinity = (theXY: number) => {
-        if( itemReset.current ) {
-            let copy = addAll().slice();
-            let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
-            makeInfiniteItems(visibles);
-            newList.current = visibles;
-            copy = addAll();
-            setItems(copy);
-
-            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
-            gsap.set('#dialer', setXOrY(xy));
-            trueXY.current = xy;
-            itemReset.current = false;
-            xyMemory.current = false;
-        }else xyMemory.current = true;
-    }
-
-    const updateXY = () => {
-        trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
-    }
-    const isSnapping = useRef<false | gsap.core.Tween>(false);
     const restoreFromInfinity = (theXY: number, endXY: number) => {
         let dur = (theXY === endXY) ? .3 : 0,
         xyAlgo = ( Math.round(theXY / menuItemD()) * menuItemD() ),
         xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD() * (addAll(true).length/2);
+        const updateXY = () => {
+            trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
+        }
 
         let currentXY;
         if ( manualDrag.current !== false ){
@@ -243,7 +277,22 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
 
         manualDrag.current = false;
     }
+    const applyInfinity = (theXY: number) => {
+        if( itemReset.current ) {
+            let copy = addAll().slice();
+            let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
+            makeInfiniteItems(visibles);
+            newList.current = visibles;
+            copy = addAll();
+            setItems(copy);
 
+            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
+            gsap.set('#dialer', setXOrY(xy));
+            trueXY.current = xy;
+            itemReset.current = false;
+            xyMemory.current = false;
+        }else xyMemory.current = true;
+    }
     useEffect(() => {
 
         let xyOnPress: number;
@@ -282,68 +331,12 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         });
     },[])
 
-    const manualDrag = useRef<number | false>(false);
-    const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
-        e.preventDefault();
-       
-        const xy = getXY(Draggable.get('#dialer'));
-        manualDrag.current = -1 * ( ( trueXY.current + menuItemD() * i ) - ( trueXY.current + menuItemD() * Math.floor( newList.current.length / 2 ) ) );
-
-        restoreFromInfinity(xy, xy);
-        xyMemory.current = false;
-    }
-    const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
-        e.code !== 'Tab' && e.preventDefault();
-    }
-
-    const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
-    const expandDialer = (instant?: boolean) => {
-        if( dialerExpansion ){
-            expansionAnimation.reversed(!expansionAnimation.reversed());
-            if( instant ) expansionAnimation.progress(1);
-            else{
-                expansionAnimation.play();
-            }
-        }else{
-            if( instant ) expansionAnimation.progress(0);
-            else{
-                expansionAnimation.reverse()
-            }
-        }
-    }
-    useEffect( () => {
-        expandDialer();
-    }, [dialerExpansion])
-    const handleExpansion = () => {
-        setDialerExpansion(!dialerExpansion);
-    }
-
-    return <nav>
-        <div id='dialerHandle'></div>
-        <div id='dialerContainer'>
-            <div className='shade L'></div>
-            <div className='shade R'></div>
-            <div id='dialer'>
-            { items.map( (item, i) => {
-                return item.url !== '' &&
-                <NavLink exact
-                className={ item.ghost ? 'ghost' : '' }
-                key={i}
-                to={item.url}
-                onClick={(e) => handleClick(e, i)}
-                onKeyDown={(e) => handleKeyDownClick(e)}
-                >
-                    {item.text}
-                </NavLink>;
-            }) }
-            </div>
-        </div>
-        <button id="expansionArrow" onClick={handleExpansion}>
-            <span className='noPeaky'>Open main menu</span>
-            <div className='L'></div>
-            <div className='R'></div>
-        </button>
-    </nav>;
+    return <MenuDOM
+        items= {items}
+        handleClick= {handleClick}
+        handleKeyDownClick= {handleKeyDownClick}
+        handleExpansion= {handleExpansion}
+    />;
 }
 
 Menu.propTypes = {

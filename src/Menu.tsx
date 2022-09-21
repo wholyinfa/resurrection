@@ -132,13 +132,18 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
             else expansionAnimation.reverse()
         }
     }
-    const [repellents, setRepellents] = useState<Element[]>([]);
+    interface Repel {
+        gap: number;
+        left: number;
+        target: Element;
+    }
+    const [repellents, setRepellents] = useState<Repel[]>([]);
     const repulsion = () => {
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain'];
         let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`));
-        //if( isMobile && dialerExpansion ){
-            let phase1: Element[] = [], phase2: Element[] = [];
+        if( isMobile ){
+            let phase1: Element[] = [], phase2: Element[] = [], phase3: Repel[] = [];
             targets.map(t => {
                 if( t.clientWidth !== windowW ) phase1.push(t);
             });
@@ -164,11 +169,32 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
                 let match = phase2.filter( tt => t === tt );
                 if( match.length !== 1 ) phase2.splice(i, 1);
             });
-            console.log(phase2);
-        /* }else{
-            console.log('RESET');
+
+            const dialer = Object(document.querySelector('#dialer'));
+            const dialerW = dialer.clientWidth;
+            const dialerH = dialer.clientHeight;
+            const arrowsW = Object(document.querySelector('#expansionArrow')).clientWidth;
+            const gapL = dialerW + arrowsW;
+            const dialerT = dialer.getBoundingClientRect().top;
+            const freeG = 50;
+
+            phase2.map(t => {
+                const bound = Object(t).getBoundingClientRect();
+                if( bound.left <= gapL + freeG &&
+                    ( bound.top + bound.height >= dialerT - freeG && bound.top <= dialerT + dialerH + freeG )
+                ){
+                    phase3.push({
+                        gap: gapL,
+                        left: bound.left,
+                        target: t
+                    });
+                }
+            });
+
+            setRepellents(phase3);
+        }else{
             setRepellents([]);
-        } */
+        }
     }
     useEffect(() => {
         trueMobile.current = isMobile;

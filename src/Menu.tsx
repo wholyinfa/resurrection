@@ -123,6 +123,15 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         height: menuItemH
     };
     const expandDialer = (toggle: boolean, instant?: boolean) => {
+        if( repellents.length > 0 ){
+            const dur = expansionAnimation._dur;
+            const ease = expansionAnimation._first._ease;
+            repellents.map(t => {
+                expansionAnimation.fromTo( t.target,
+                    {x: 0}, {x: t.gap, duration: dur, ease: ease}
+                , '<')
+            })
+        }
         if( toggle ){
             expansionAnimation.reversed(!expansionAnimation.reversed());
             if( instant ) expansionAnimation.progress(1);
@@ -184,7 +193,7 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
                     ( bound.top + bound.height >= dialerT - freeG && bound.top <= dialerT + dialerH + freeG )
                 ){
                     phase3.push({
-                        gap: gapL,
+                        gap: gapL + freeG - bound.left,
                         left: bound.left,
                         target: t
                     });

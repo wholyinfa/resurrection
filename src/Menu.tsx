@@ -47,7 +47,8 @@ interface itemData extends PageData {
     ghost?: boolean | undefined;
 };
 let expansionAnimation: gsap.core.Timeline;
-export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
+let repulsionAnimation: gsap.core.Timeline;
+export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -123,22 +124,27 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         height: menuItemH
     };
     const expandDialer = (toggle: boolean, instant?: boolean) => {
-        if( repellents.length > 0 ){
-            const dur = expansionAnimation._dur;
-            const ease = expansionAnimation._first._ease;
-            repellents.map(t => {
-                expansionAnimation.fromTo( t.target,
-                    {x: 0}, {x: t.gap, duration: dur, ease: ease}
-                , '<')
-            })
-        }
         if( toggle ){
+            repulsion();
             expansionAnimation.reversed(!expansionAnimation.reversed());
-            if( instant ) expansionAnimation.progress(1);
-            else expansionAnimation.play();
+            if( instant ){
+                expansionAnimation.progress(1);
+                repulsionAnimation.progress(1);
+            }
+            else{
+                expansionAnimation.play();
+                repulsionAnimation.play();
+            }
         }else{
-            if( instant ) expansionAnimation.progress(0);
-            else expansionAnimation.reverse()
+            if( instant ){
+                expansionAnimation.progress(0);
+                repulsionAnimation && repulsionAnimation.progress(0);
+            }
+            else{
+                expansionAnimation.reverse();
+                repulsionAnimation && repulsionAnimation.reverse();
+
+            }
         }
     }
     interface Repel {
@@ -147,12 +153,18 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         target: Element;
     }
     const [repellents, setRepellents] = useState<Repel[]>([]);
-    const repulsion = () => {
+    const repulsion = (): Repel[] => {
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain'];
-        let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`));
+        let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`)),
+            phase3: Repel[] = [];
+
+        repellents.map(t => {
+            gsap.set(t.target, {clearProps: 'all'})
+        })
+
         if( isMobile ){
-            let phase1: Element[] = [], phase2: Element[] = [], phase3: Repel[] = [];
+            let phase1: Element[] = [], phase2: Element[] = [];
             targets.map(t => {
                 if( t.clientWidth !== windowW ) phase1.push(t);
             });
@@ -204,6 +216,16 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         }else{
             setRepellents([]);
         }
+        
+        const dur = expansionAnimation._dur;
+        const ease = expansionAnimation._first._ease;
+        repulsionAnimation = gsap.timeline({paused: true});
+        phase3.length && phase3.map(t => {
+            repulsionAnimation.fromTo( t.target,
+                {x: 0}, {x: t.gap, duration: dur, ease: ease}
+            , '<');
+        })
+        return phase3;
     }
     useEffect(() => {
         trueMobile.current = isMobile;
@@ -236,6 +258,10 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
         expandDialer(dialerExpansion, true);
         repulsion();
     }, [isMobile]);
+    useEffect(() => {
+        repulsion();
+        expandDialer(dialerExpansion, true);
+    }, [resize])
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
         let set = (immediate) ? 0 : .2;
@@ -409,5 +435,6 @@ export default function Menu({isMobile} : InferProps<typeof Menu.propTypes>) {
 }
 
 Menu.propTypes = {
-    isMobile: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    resize: PropTypes.bool.isRequired
 }

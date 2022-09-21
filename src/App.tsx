@@ -52,13 +52,17 @@ export default function App() {
     down: false
   });
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= breakPoints.dialer);
+  const [resize, setResize] = useState<boolean>(false);
   const resizePurposes = () => {
       setIsMobile( window.innerWidth <= breakPoints.dialer );
   }
   useEffect( () => {
 
     resizePurposes();
-    window.addEventListener('resize', resizePurposes);
+    window.addEventListener('resize', (e) => {
+      resizePurposes();
+      setResize(p => !p);
+    });
 
     addEventListener('wheel', (e) => {
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
@@ -106,7 +110,8 @@ export default function App() {
   return (
     <>
       <Menu
-        isMobile ={isMobile}
+        isMobile= {isMobile}
+        resize= {resize}
       />
       <Switch>
         <Route exact path={Pages.index.url}>

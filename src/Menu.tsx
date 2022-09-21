@@ -436,5 +436,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
 
 Menu.propTypes = {
     isMobile: PropTypes.bool.isRequired,
-    resize: PropTypes.bool.isRequired
+    resize: PropTypes.bool.isRequired,
+    paginating: PropTypes.func.isRequired
 }

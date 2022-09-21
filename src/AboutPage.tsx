@@ -1,5 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Stylesheets/about.css';
-export default function AboutPage() {
+import PropTypes, {InferProps} from 'prop-types';
+export default function AboutPage({paginating}: InferProps<typeof AboutPage.propTypes>) {
+
+    useEffect(() => {
+        paginating(false);
+    }, [])
     return <h1>I'm about</h1>;
+}
+AboutPage.propTypes ={
+    paginating: PropTypes.func.isRequired
 }

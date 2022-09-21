@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { breakPoints, PageData, Pages } from './data';
 import Menu from './Menu'
 import AboutPage from './AboutPage';
@@ -48,14 +48,16 @@ export default function App() {
     down: boolean;
   }
   const allowPagination = useRef<upNdown>({
-    up: false,
-    down: false
+    up: true,
+    down: true
   });
   const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= breakPoints.dialer);
   const [resize, setResize] = useState<boolean>(false);
   const resizePurposes = () => {
       setIsMobile( window.innerWidth <= breakPoints.dialer );
   }
+  const history = useHistory();
+  const [paginatingList, paginating] = useState<boolean>(false);
   useEffect( () => {
 
     resizePurposes();
@@ -64,13 +66,29 @@ export default function App() {
       setResize(p => !p);
     });
 
+    const portal = (direction: 'up' | 'down') => {
+      const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
+      delete paginationMap[i].current;
+
+      let targetI;
+      if( direction === 'up' ){
+        targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
+      }else{
+        targetI = ( paginationMap[i+1] ) ? i+1 : 0;
+      }
+      changePagination(paginationMap[targetI]);
+      history.push(paginationMap[targetI].url);
+    };
+
     addEventListener('wheel', (e) => {
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
         // down
-        
+        portal('down');
+        paginating(true);
       }else if( allowPagination.current.up === true ){
         // up
-        
+        portal('up');
+        paginating(true);
       }
     });
   
@@ -84,20 +102,20 @@ export default function App() {
       touchEnd = e.changedTouches[0].screenY;
       if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
         // down
-        
+        portal('down');
       }else if( allowPagination.current.up === true ){
         // up
-        
+        portal('up');
       }
     }, false);
           
     document.addEventListener('keyup', (e) => {
       if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
         // down
-        
+        portal('down');
       }else if( e.code === 'ArrowUp' && allowPagination.current.up === true ){
         // up
-        
+        portal('up');
       }
     }, false);
 
@@ -106,36 +124,57 @@ export default function App() {
     })
 
   }, []);
+  
+  useEffect(() => {
+    if( paginatingList ){
+      // history.block();
+      paginating(false);
+    }
+  }, [paginatingList])
 
   return (
     <>
       <Menu
+        paginating = {paginating}
         isMobile= {isMobile}
         resize= {resize}
       />
       <Switch>
         <Route exact path={Pages.index.url}>
           <IndexPage
+          paginating = {paginating}
             isMobile = {isMobile}
           />
         </Route>
         <Route exact path={Pages.about.url}>
-          <AboutPage />
+          <AboutPage
+            paginating = {paginating}
+          />
         </Route>
         <Route exact path={Pages.contact.url}>
-          <ContactPage />
+          <ContactPage
+            paginating = {paginating}
+          />
         </Route>
         <Route exact path={Pages.projects.url}>
-          <ProjectsPage />
+          <ProjectsPage
+            paginating = {paginating}
+          />
         </Route>
         <Route exact path={Pages.projects.url+'/:projectName'}>
-          <SingleProjectPage />
+          <SingleProjectPage
+            paginating = {paginating}
+          />
         </Route>
         <Route exact path={Pages.character.url}>
-          <CharacterPage />
+          <CharacterPage
+            paginating = {paginating}
+          />
         </Route>
         <Route path="*">
-            <NotFound />
+            <NotFound
+              paginating = {paginating}
+            />
         </Route>
       </Switch>
     </>

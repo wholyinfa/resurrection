@@ -5,11 +5,15 @@ import { breakPoints } from './data';
 import PropTypes, {InferProps} from 'prop-types';
 
 
-export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTypes>) {
+export default function IndexPage({isMobile, paginating}: InferProps<typeof IndexPage.propTypes>) {
     let workHover: gsap.core.Timeline;
     let lifeHover: gsap.core.Timeline;
     let workResurrection: gsap.core.Timeline;
     let lifeResurrection: gsap.core.Timeline;
+
+    useEffect(() => {
+        paginating(false);
+    }, [])
 
     const gradientDeg = {
         default: (t: 'work' | 'life') : string => (t === 'work') ? '45deg' : '-45deg',
@@ -126,5 +130,6 @@ export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTy
     </article>;
 }
 IndexPage.propTypes ={
-    isMobile: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    paginating: PropTypes.func.isRequired
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { breakPoints, PageData, Pages } from './data';
 import Menu from './Menu'
 import AboutPage from './AboutPage';
@@ -57,7 +57,8 @@ export default function App() {
       setIsMobile( window.innerWidth <= breakPoints.dialer );
   }
   const history = useHistory();
-  const [paginatingList, paginating] = useState<boolean>(false);
+  const newPage = useRef<PageData>();
+  const [isPaginating, paginating] = useState<boolean>(false);
   useEffect( () => {
 
     resizePurposes();
@@ -68,27 +69,24 @@ export default function App() {
 
     const portal = (direction: 'up' | 'down') => {
       const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
-      delete paginationMap[i].current;
-
       let targetI;
       if( direction === 'up' ){
         targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
       }else{
         targetI = ( paginationMap[i+1] ) ? i+1 : 0;
       }
-      changePagination(paginationMap[targetI]);
+      newPage.current = paginationMap[targetI];
       history.push(paginationMap[targetI].url);
     };
 
     addEventListener('wheel', (e) => {
+      paginating(true);
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
         // down
         portal('down');
-        paginating(true);
       }else if( allowPagination.current.up === true ){
         // up
         portal('up');
-        paginating(true);
       }
     });
   
@@ -124,18 +122,17 @@ export default function App() {
     })
 
   }, []);
-  
+
+  const location = useLocation();
   useEffect(() => {
-    if( paginatingList ){
-      // history.block();
-      paginating(false);
-    }
-  }, [paginatingList])
+    newPage.current && changePagination(newPage.current);
+    paginating(false);
+  }, [location])
 
   return (
     <>
       <Menu
-        paginating = {paginating}
+        isPaginating = {isPaginating}
         isMobile= {isMobile}
         resize= {resize}
       />

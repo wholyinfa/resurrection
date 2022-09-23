@@ -12,7 +12,7 @@ export default function IndexPage({isMobile, paginating}: InferProps<typeof Inde
     let lifeResurrection: gsap.core.Timeline;
 
     useEffect(() => {
-        paginating(false);
+        
     }, [])
 
     const gradientDeg = {

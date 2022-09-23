@@ -4,7 +4,7 @@ import PropTypes, {InferProps} from 'prop-types';
 export default function AboutPage({paginating}: InferProps<typeof AboutPage.propTypes>) {
 
     useEffect(() => {
-        paginating(false);
+        
     }, [])
     return <h1>I'm about</h1>;
 }

@@ -98,6 +98,7 @@ export default function App() {
           
     addEventListener('touchend', (e) => {
       touchEnd = e.changedTouches[0].screenY;
+      paginating(true);
       if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
         // down
         portal('down');
@@ -108,6 +109,7 @@ export default function App() {
     }, false);
           
     document.addEventListener('keyup', (e) => {
+      paginating(true);
       if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
         // down
         portal('down');
@@ -126,15 +128,18 @@ export default function App() {
   const location = useLocation();
   useEffect(() => {
     newPage.current && changePagination(newPage.current);
-    paginating(false);
+    // paginating(false);
   }, [location])
 
   return (
     <>
       <Menu
+        paginating = {paginating}
         isPaginating = {isPaginating}
+        newPage = {newPage.current}
         isMobile= {isMobile}
         resize= {resize}
+        
       />
       <Switch>
         <Route exact path={Pages.index.url}>

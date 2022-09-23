@@ -48,7 +48,7 @@ interface itemData extends PageData {
 };
 let expansionAnimation: gsap.core.Timeline;
 let repulsionAnimation: gsap.core.Timeline;
-export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTypes>) {
+export default function Menu({isMobile, resize, isPaginating, paginating, newPage} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -286,12 +286,9 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     const manualDrag = useRef<number | false>(false);
     const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
         e.preventDefault();
-       
-        const xy = getXY(Draggable.get('#dialer'));
-        manualDrag.current = -1 * ( ( trueXY.current + menuItemD() * i ) - ( trueXY.current + menuItemD() * Math.floor( newList.current.length / 2 ) ) );
 
-        restoreFromInfinity(xy, xy);
-        xyMemory.current = false;
+        const xy = getXY(Draggable.get('#dialer'));
+        restoreFromInfinity(xy, xy, i);
     }
     const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
         e.code !== 'Tab' && e.preventDefault();
@@ -323,6 +320,54 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         [...endItems.left, ...endItems.right] :
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
+    const applyInfinity = (theXY: number) => {
+        if( itemReset.current ) {
+            let copy = addAll().slice();
+            let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
+            makeInfiniteItems(visibles);
+            newList.current = visibles;
+            copy = addAll();
+            setItems(copy);
+
+            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
+            gsap.set('#dialer', setXOrY(xy));
+            trueXY.current = xy;
+            itemReset.current = false;
+            xyMemory.current = false;
+        }else xyMemory.current = true;
+    }
+    const updateInfinity = (theXY: number) => {
+        let aElements = Array.from(document.querySelectorAll('#dialer a')),
+            firstVis = Math.abs( Math.round( theXY / menuItemD() ) ),
+            visibleItems = aElements.splice(firstVis, 5),
+            hiddenItems = aElements;
+
+        makeVisible(visibleItems);
+        gsap.set('#dialer', {...setXOrY(theXY), ...(trueMobile.current) ? {x: 0} : {y: 0} });
+        trueXY.current = theXY;
+        gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
+    }
+    const restoreFromInfinity = (theXY: number, endXY: number, manual?: number) => {
+        let dur = (theXY === endXY) ? .3 : 0,
+        xyAlgo = ( Math.round(theXY / menuItemD()) * menuItemD() ),
+        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD() * (addAll(true).length/2);
+        const updateXY = () => {
+            trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
+        }
+
+        let currentXY;
+        if ( manual ){
+            currentXY = xy;
+            xy = -1 * ( ( trueXY.current + menuItemD() * manual ) - ( trueXY.current + menuItemD() * Math.floor( newList.current.length / 2 ) ) );
+        }
+        let firstVis = Math.abs(Math.round(xy / menuItemD())),
+            aElements = Array.from(document.querySelectorAll('#dialer a')),
+            visibleItems = aElements.splice(firstVis, 5),
+            relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD()) * dur : dur;
+
+        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+        makeVisible(visibleItems);
+    }
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
         let nullItem: itemData = {
@@ -349,45 +394,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         itemReset.current = true;
         xyMemory.current = false;
     }
-    const restoreFromInfinity = (theXY: number, endXY: number) => {
-        let dur = (theXY === endXY) ? .3 : 0,
-        xyAlgo = ( Math.round(theXY / menuItemD()) * menuItemD() ),
-        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD() * (addAll(true).length/2);
-        const updateXY = () => {
-            trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
-        }
-
-        let currentXY;
-        if ( manualDrag.current !== false ){
-            currentXY = xy;
-            xy = manualDrag.current;
-        }
-        let firstVis = Math.abs(Math.round(xy / menuItemD())),
-            aElements = Array.from(document.querySelectorAll('#dialer a')),
-            visibleItems = aElements.splice(firstVis, 5),
-            relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD()) * dur : dur;
-
-        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
-        makeVisible(visibleItems);
-
-        manualDrag.current = false;
-    }
-    const applyInfinity = (theXY: number) => {
-        if( itemReset.current ) {
-            let copy = addAll().slice();
-            let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
-            makeInfiniteItems(visibles);
-            newList.current = visibles;
-            copy = addAll();
-            setItems(copy);
-
-            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
-            gsap.set('#dialer', setXOrY(xy));
-            trueXY.current = xy;
-            itemReset.current = false;
-            xyMemory.current = false;
-        }else xyMemory.current = true;
-    }
     useEffect(() => {
 
         let xyOnPress: number;
@@ -396,20 +402,12 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
-                applyInfinity( getXY(this) );
                 xyOnPress = trueXY.current;
+                applyInfinity( getXY(this) );
             },
             onDrag: function() {
-                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2),
-                    aElements = Array.from(document.querySelectorAll('#dialer a')),
-                    firstVis = Math.abs( Math.round( xy / menuItemD() ) ),
-                    visibleItems = aElements.splice(firstVis, 5),
-                    hiddenItems = aElements;
-
-                makeVisible(visibleItems);
-                gsap.set('#dialer', {...setXOrY(xy), ...(trueMobile.current) ? {x: 0} : {y: 0} });
-                trueXY.current = xy;
-                gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
+                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
+                updateInfinity(xy);
             },
             onDragEnd: function() {
                 restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
@@ -437,5 +435,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
 Menu.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     resize: PropTypes.bool.isRequired,
-    paginating: PropTypes.func.isRequired
+    isPaginating: PropTypes.bool.isRequired,
+    paginating: PropTypes.func.isRequired,
+    newPage: PropTypes.any
 }

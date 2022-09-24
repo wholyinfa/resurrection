@@ -80,11 +80,12 @@ export default function App() {
     };
 
     addEventListener('wheel', (e) => {
-      paginating(true);
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
+        paginating(true);
         // down
         portal('down');
       }else if( allowPagination.current.up === true ){
+        paginating(true);
         // up
         portal('up');
       }
@@ -98,22 +99,24 @@ export default function App() {
           
     addEventListener('touchend', (e) => {
       touchEnd = e.changedTouches[0].screenY;
-      paginating(true);
       if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
+        paginating(true);
         // down
         portal('down');
       }else if( allowPagination.current.up === true ){
+        paginating(true);
         // up
         portal('up');
       }
     }, false);
           
     document.addEventListener('keyup', (e) => {
-      paginating(true);
       if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
+        paginating(true);
         // down
         portal('down');
       }else if( e.code === 'ArrowUp' && allowPagination.current.up === true ){
+        paginating(true);
         // up
         portal('up');
       }

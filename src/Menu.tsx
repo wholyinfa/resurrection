@@ -81,8 +81,16 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
     }
     const [items, setItems] = useState<itemData[]>(itemList);
     const newList = useRef<itemData[]>(items);
+
+    useEffect( () => {
+        if( isPaginating ){
+            let Dialer = Draggable.get('#dialer');
+            applyInfinity( getXY(Dialer) );
+        }
+    }, [isPaginating]);
     useEffect( () => {
         changePagination(newList.current[2]);
+        paginating(false);
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -281,9 +289,15 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         if( visibleItems.length > 0 ){
             makeVisible(visibleItems, true);
         }
+        if( items.filter(t => t.ghost !== false).length === addAll().length ){
+            let Dialer = Draggable.get('#dialer');
+            let theXY = getXY(Dialer);
+            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
+            gsap.set('#dialer', setXOrY(xy));
+            trueXY.current = xy;
+        }
     }, [items]);
 
-    const manualDrag = useRef<number | false>(false);
     const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
         e.preventDefault();
 
@@ -306,6 +320,7 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
     const xyMemory = useRef<boolean>(false);
     const isSnapping = useRef<false | gsap.core.Tween>(false);
     const addAll = ( excess?: boolean ) => {
+        makeInfiniteItems(newList.current);
         interface arg{
             left: itemData[];
             main: itemData[];
@@ -324,14 +339,10 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         if( itemReset.current ) {
             let copy = addAll().slice();
             let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
-            makeInfiniteItems(visibles);
             newList.current = visibles;
             copy = addAll();
             setItems(copy);
 
-            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
-            gsap.set('#dialer', setXOrY(xy));
-            trueXY.current = xy;
             itemReset.current = false;
             xyMemory.current = false;
         }else xyMemory.current = true;
@@ -402,8 +413,8 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
-                xyOnPress = trueXY.current;
                 applyInfinity( getXY(this) );
+                xyOnPress = trueXY.current;
             },
             onDrag: function() {
                 let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
@@ -413,12 +424,14 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
                 restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
             },
             onRelease: function() {
-                if( xyOnPress === trueXY.current &&
-                    isSnapping.current &&
-                    this.pointerEvent.target.localName !== 'a'
-                    ){
-                        const oldVars: gsap.TweenVars = isSnapping.current.vars;
-                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                console.log(xyOnPress,trueXY.current);
+                if( xyOnPress === trueXY.current && this.pointerEvent.target.localName !== 'a' ){
+                    if( isSnapping.current ){
+                            const oldVars: gsap.TweenVars = isSnapping.current.vars;
+                            isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                    }else{
+                        restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
+                    }
                 }
             }
         });

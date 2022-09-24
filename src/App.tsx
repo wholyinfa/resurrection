@@ -76,10 +76,10 @@ export default function App() {
         targetI = ( paginationMap[i+1] ) ? i+1 : 0;
       }
       newPage.current = paginationMap[targetI];
-      history.push(paginationMap[targetI].url);
+      // history.push(paginationMap[targetI].url);
     };
 
-    addEventListener('wheel', (e) => {
+    /* addEventListener('wheel', (e) => {
       if( e.deltaY >= 0 && allowPagination.current.down === true ){
         paginating(true);
         // down
@@ -89,7 +89,7 @@ export default function App() {
         // up
         portal('up');
       }
-    });
+    }); */
   
     let touchStart: number;
     let touchEnd: number;

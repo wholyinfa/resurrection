@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, ReactComponentElement } from "react
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
-import { changePagination, titleConversion } from "./App";
+import { titleConversion } from "./App";
 import { PageData, Pages } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
@@ -48,7 +48,32 @@ interface itemData extends PageData {
 };
 let expansionAnimation: gsap.core.Timeline;
 let repulsionAnimation: gsap.core.Timeline;
-export default function Menu({isMobile, resize, isPaginating, paginating, newPage} : InferProps<typeof Menu.propTypes>) {
+interface paginationMap extends PageData {
+  current?: boolean;
+}
+let paginationMap: paginationMap[] = [
+  Pages.index,
+  Pages.about,
+  Pages.character,
+  Pages.projects,
+  Pages.contact,
+];
+export const changePagination = (newPage: PageData) => {
+  paginationMap = paginationMap.map( item => {
+    let newItem = item;
+    
+    if( item.text === newPage.text ){
+      newItem = {
+        ...newItem,
+        current: true
+      }
+    }else if( typeof item.current !== 'undefined' ){
+      delete newItem.current;
+    }
+    return newItem;
+  });
+}
+export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -81,16 +106,11 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
     }
     const [items, setItems] = useState<itemData[]>(itemList);
     const newList = useRef<itemData[]>(items);
-
+    /* useEffect( () => {
+        // if( isPaginating ) applyInfinity();
+    }, [isPaginating]); */
     useEffect( () => {
-        if( isPaginating ){
-            let Dialer = Draggable.get('#dialer');
-            applyInfinity( getXY(Dialer) );
-        }
-    }, [isPaginating]);
-    useEffect( () => {
-        changePagination(newList.current[2]);
-        paginating(false);
+        changePagination(activePage.pageData);
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -281,7 +301,7 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         gsap.set("#dialer a", {width: menuItemW});
         gsap.set("#dialer", dialerProps());
         document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
-        items.filter(item => item.ghost === false ).length > 0 && gsap.set('#dialer', setXOrY(0));
+        items.filter(item => item.url !== '' ).length === 5 && gsap.set('#dialer', setXOrY(0));
 
         let aElements = Array.from(document.querySelectorAll('#dialer a'));
         let firstVis = items.findIndex( item => typeof item.ghost === 'undefined');
@@ -292,9 +312,18 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         if( items.filter(t => t.ghost !== false).length === addAll().length ){
             let Dialer = Draggable.get('#dialer');
             let theXY = getXY(Dialer);
-            let xy = ( xyMemory.current ) ? theXY : theXY - menuItemD() * (addAll(true).length/2);
+            let xy = theXY - menuItemD() * (addAll(true).length/2);
             gsap.set('#dialer', setXOrY(xy));
             trueXY.current = xy;
+            // console.log(xy);
+        }
+        if( isPaginating.current ){
+            // let aElements = Array.from(document.querySelectorAll('#dialer a'));
+            let i = addAll().findIndex(t => typeof t.ghost === 'undefined' && t.url === newPage.current!.url);
+            const xy = getXY(Draggable.get('#dialer'));
+            restoreFromInfinity(xy, xy, i); 
+            isPaginating.current = false;
+            console.log(xy);
         }
     }, [items]);
 
@@ -335,7 +364,7 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         [...endItems.left, ...endItems.right] :
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
-    const applyInfinity = (theXY: number) => {
+    const applyInfinity = () => {
         if( itemReset.current ) {
             let copy = addAll().slice();
             let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
@@ -376,7 +405,7 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
             visibleItems = aElements.splice(firstVis, 5),
             relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD()) * dur : dur;
 
-        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
+        isSnapping.current = gsap.to('#dialer', {ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
     }
     const doAfterAdjustment = (firstVis: number) => {
@@ -398,13 +427,23 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
         newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
         setItems(copy);
 
-        history.push(newList.current[2].url);
+        !isPaginating.current && history.push(newList.current[2].url);
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
         itemReset.current = true;
         xyMemory.current = false;
     }
+    interface upNdown{
+      up: boolean;
+      down: boolean;
+    }
+    const allowPagination = useRef<upNdown>({
+      up: true,
+      down: true
+    });
+    const newPage = useRef<PageData>();
+    const isPaginating = useRef<boolean>(false);
     useEffect(() => {
 
         let xyOnPress: number;
@@ -413,7 +452,7 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
-                applyInfinity( getXY(this) );
+                applyInfinity();
                 xyOnPress = trueXY.current;
             },
             onDrag: function() {
@@ -424,7 +463,6 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
                 restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
             },
             onRelease: function() {
-                console.log(xyOnPress,trueXY.current);
                 if( xyOnPress === trueXY.current && this.pointerEvent.target.localName !== 'a' ){
                     if( isSnapping.current ){
                             const oldVars: gsap.TweenVars = isSnapping.current.vars;
@@ -433,6 +471,31 @@ export default function Menu({isMobile, resize, isPaginating, paginating, newPag
                         restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
                     }
                 }
+            }
+        });
+        
+        const portal = (direction: 'up' | 'down') => {
+            const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
+            let targetI;
+            if( direction === 'up' ){
+            targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
+            }else{
+            targetI = ( paginationMap[i+1] ) ? i+1 : 0;
+            }
+            newPage.current = paginationMap[targetI];
+            itemReset.current && applyInfinity();
+            // history.push(paginationMap[targetI].url);
+        };
+
+        addEventListener('wheel', (e) => {
+            if( e.deltaY >= 0 && allowPagination.current.down === true ){
+            isPaginating.current = true;
+            // down
+            portal('down');
+            }else if( allowPagination.current.up === true ){
+            isPaginating.current = true;
+            // up
+            portal('up');
             }
         });
     },[])

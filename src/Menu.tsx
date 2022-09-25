@@ -309,21 +309,21 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         if( visibleItems.length > 0 ){
             makeVisible(visibleItems, true);
         }
+        let xy;
         if( items.filter(t => t.ghost !== false).length === addAll().length ){
             let Dialer = Draggable.get('#dialer');
             let theXY = getXY(Dialer);
-            let xy = theXY - menuItemD() * (addAll(true).length/2);
+            xy = theXY - menuItemD() * (addAll(true).length/2);
             gsap.set('#dialer', setXOrY(xy));
             trueXY.current = xy;
-            // console.log(xy);
         }
-        if( isPaginating.current ){
-            // let aElements = Array.from(document.querySelectorAll('#dialer a'));
-            let i = addAll().findIndex(t => typeof t.ghost === 'undefined' && t.url === newPage.current!.url);
-            const xy = getXY(Draggable.get('#dialer'));
-            restoreFromInfinity(xy, xy, i); 
+        console.log(infinityApplied.current, isPaginating.current);
+        if( infinityApplied.current && isPaginating.current ){
             isPaginating.current = false;
-            console.log(xy);
+            let aElements = document.querySelector('#dialer');
+            let i = addAll().findIndex(t => typeof t.ghost === 'undefined' && t.url === newPage.current!.url);
+            if ( typeof xy === 'undefined' ) xy = trueXY.current;
+            restoreFromInfinity(xy, xy, i); 
         }
     }, [items]);
 
@@ -345,7 +345,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
 
     const history = useHistory();
     const trueXY = useRef<number>(0);
-    const itemReset = useRef<boolean>(true);
+    const infinityApplied = useRef<boolean>();
     const xyMemory = useRef<boolean>(false);
     const isSnapping = useRef<false | gsap.core.Tween>(false);
     const addAll = ( excess?: boolean ) => {
@@ -365,15 +365,19 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         [...endItems.left, ...endItems.main, ...endItems.right];
     }
     const applyInfinity = () => {
-        if( itemReset.current ) {
+        if( !infinityApplied.current ) {
             let copy = addAll().slice();
             let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
             newList.current = visibles;
             copy = addAll();
             setItems(copy);
 
-            itemReset.current = false;
-            xyMemory.current = false;
+            infinityApplied.current = true;
+            xyMemory.current = ( isPaginating.current ) ? true : false;
+            allowPagination.current = {
+                up: false,
+                down: false
+            }
         }else xyMemory.current = true;
     }
     const updateInfinity = (theXY: number) => {
@@ -394,7 +398,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         const updateXY = () => {
             trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
         }
-
         let currentXY;
         if ( manual ){
             currentXY = xy;
@@ -425,14 +428,18 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             return newItem;
         });
         newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
-        setItems(copy);
+        setItems(newList.current);
 
         !isPaginating.current && history.push(newList.current[2].url);
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
-        itemReset.current = true;
+        infinityApplied.current = false;
         xyMemory.current = false;
+        allowPagination.current = {
+            up: true,
+            down: true
+        }
     }
     interface upNdown{
       up: boolean;
@@ -444,6 +451,18 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     });
     const newPage = useRef<PageData>();
     const isPaginating = useRef<boolean>(false);
+    const portal = (direction: 'up' | 'down') => {
+        const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
+        let targetI;
+        if( direction === 'up' ){
+        targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
+        }else{
+        targetI = ( paginationMap[i+1] ) ? i+1 : 0;
+        }
+        newPage.current = paginationMap[targetI];
+        isPaginating.current = true;
+        applyInfinity();
+    };
     useEffect(() => {
 
         let xyOnPress: number;
@@ -473,29 +492,14 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
                 }
             }
         });
-        
-        const portal = (direction: 'up' | 'down') => {
-            const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
-            let targetI;
-            if( direction === 'up' ){
-            targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
-            }else{
-            targetI = ( paginationMap[i+1] ) ? i+1 : 0;
-            }
-            newPage.current = paginationMap[targetI];
-            itemReset.current && applyInfinity();
-            // history.push(paginationMap[targetI].url);
-        };
-
         addEventListener('wheel', (e) => {
             if( e.deltaY >= 0 && allowPagination.current.down === true ){
-            isPaginating.current = true;
             // down
-            portal('down');
+            console.log(isPaginating.current);
+            !isPaginating.current && portal('down');
             }else if( allowPagination.current.up === true ){
-            isPaginating.current = true;
             // up
-            portal('up');
+            !isPaginating.current && portal('up');
             }
         });
     },[])

@@ -181,66 +181,72 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         target: Element;
     }
     const [repellents, setRepellents] = useState<Repel[]>([]);
-    const repulsion = (): Repel[] => {
+    const undergo = (Phase?: 1 | 2 | 3) => {
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain'];
         let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`)),
             phase3: Repel[] = [];
+        let phase1: Element[] = [], phase2: Element[] = [];
+        targets.map(t => {
+            if( t.clientWidth !== windowW ) phase1.push(t);
+        });
+        
+        phase1.map(t => {
+            let trueParent = t.parentElement;
+            
+            if( trueParent && trueParent.scrollWidth < windowW ){
+                let grandParent = trueParent.parentElement;
+                for( let i = 0; i <= 100000; i++ ){
+                    if( grandParent )
+                    if( grandParent.scrollWidth >= windowW ){
+                        phase2.push(trueParent);
+                        break;
+                    }else{
+                        grandParent = grandParent.parentElement;
+                    }
+                }
+            }else phase2.push(t);
+        });
+        
+        
+        phase2.map( (t, i) => {
+            let match = phase2.filter( tt => t === tt );
+            if( match.length !== 1 ) phase2.splice(i, 1);
+        });
+
+        const dialer = Object(document.querySelector('#dialer'));
+        const dialerW = dialer.clientWidth;
+        const dialerH = dialer.clientHeight;
+        const arrowsW = Object(document.querySelector('#expansionArrow')).clientWidth;
+        const gapL = dialerW + arrowsW;
+        const dialerT = dialer.getBoundingClientRect().top;
+        const freeG = 50;
+
+        phase2.map(t => {
+            const bound = Object(t).getBoundingClientRect();
+            if( bound.left <= gapL + freeG &&
+                ( bound.top + bound.height >= dialerT - freeG && bound.top <= dialerT + dialerH + freeG )
+            ){
+                phase3.push({
+                    gap: gapL + freeG - bound.left,
+                    left: bound.left,
+                    target: t
+                });
+            }
+        });
+
+        return phase3;
+    }
+    const repulsion = (): Repel[] => {
+        let targetReps: Repel[] = [];
 
         repellents.map(t => {
             gsap.set(t.target, {clearProps: 'all'})
         })
 
         if( isMobile ){
-            let phase1: Element[] = [], phase2: Element[] = [];
-            targets.map(t => {
-                if( t.clientWidth !== windowW ) phase1.push(t);
-            });
-            
-            phase1.map(t => {
-                let trueParent = t.parentElement;
-                
-                if( trueParent && trueParent.scrollWidth < windowW ){
-                    let grandParent = trueParent.parentElement;
-                    for( let i = 0; i <= 100000; i++ ){
-                        if( grandParent )
-                        if( grandParent.scrollWidth >= windowW ){
-                            phase2.push(trueParent);
-                            break;
-                        }else{
-                            grandParent = grandParent.parentElement;
-                        }
-                    }
-                }else phase2.push(t);
-            });
-            
-            phase2.map( (t, i) => {
-                let match = phase2.filter( tt => t === tt );
-                if( match.length !== 1 ) phase2.splice(i, 1);
-            });
-
-            const dialer = Object(document.querySelector('#dialer'));
-            const dialerW = dialer.clientWidth;
-            const dialerH = dialer.clientHeight;
-            const arrowsW = Object(document.querySelector('#expansionArrow')).clientWidth;
-            const gapL = dialerW + arrowsW;
-            const dialerT = dialer.getBoundingClientRect().top;
-            const freeG = 50;
-
-            phase2.map(t => {
-                const bound = Object(t).getBoundingClientRect();
-                if( bound.left <= gapL + freeG &&
-                    ( bound.top + bound.height >= dialerT - freeG && bound.top <= dialerT + dialerH + freeG )
-                ){
-                    phase3.push({
-                        gap: gapL + freeG - bound.left,
-                        left: bound.left,
-                        target: t
-                    });
-                }
-            });
-
-            setRepellents(phase3);
+            targetReps = undergo();
+            setRepellents(targetReps);
         }else{
             setRepellents([]);
         }
@@ -248,12 +254,12 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         const dur = expansionAnimation._dur;
         const ease = expansionAnimation._first._ease;
         repulsionAnimation = gsap.timeline({paused: true});
-        phase3.length && phase3.map(t => {
+        targetReps.length && targetReps.map(t => {
             repulsionAnimation.fromTo( t.target,
                 {x: 0}, {x: t.gap, duration: dur, ease: ease}
             , '<');
         })
-        return phase3;
+        return targetReps;
     }
     useEffect(() => {
         trueMobile.current = isMobile;
@@ -503,6 +509,11 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             }
         });
     },[])
+
+    const dissipate = () => {
+    }
+
+    dissipate();
 
     return <MenuDOM
         items= {items}

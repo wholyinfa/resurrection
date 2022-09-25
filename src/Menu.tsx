@@ -301,7 +301,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         gsap.set("#dialer a", {width: menuItemW});
         gsap.set("#dialer", dialerProps());
         document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
-        items.filter(item => item.url !== '' ).length === 5 && gsap.set('#dialer', setXOrY(0));
+        !infinityApplied.current && gsap.set('#dialer', setXOrY(0));
 
         let aElements = Array.from(document.querySelectorAll('#dialer a'));
         let firstVis = items.findIndex( item => typeof item.ghost === 'undefined');
@@ -309,15 +309,16 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         if( visibleItems.length > 0 ){
             makeVisible(visibleItems, true);
         }
+    
         let xy;
-        if( items.filter(t => t.ghost !== false).length === addAll().length ){
+        if( items.length === addAll().length ){
             let Dialer = Draggable.get('#dialer');
             let theXY = getXY(Dialer);
-            xy = theXY - menuItemD() * (addAll(true).length/2);
+            xy = - menuItemD() * (addAll(true).length/2);
             gsap.set('#dialer', setXOrY(xy));
             trueXY.current = xy;
         }
-        console.log(infinityApplied.current, isPaginating.current);
+        
         if( infinityApplied.current && isPaginating.current ){
             isPaginating.current = false;
             let aElements = document.querySelector('#dialer');
@@ -417,7 +418,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             text: '',
             title: '',
             url: '',
-            ghost: false
+            ghost: true
         };
         copy = copy.map( (item, i) => {
             let newItem: itemData = {...item};
@@ -495,7 +496,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         addEventListener('wheel', (e) => {
             if( e.deltaY >= 0 && allowPagination.current.down === true ){
             // down
-            console.log(isPaginating.current);
             !isPaginating.current && portal('down');
             }else if( allowPagination.current.up === true ){
             // up

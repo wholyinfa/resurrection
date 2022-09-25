@@ -49,14 +49,30 @@ interface itemData extends PageData {
 let expansionAnimation: gsap.core.Timeline;
 let repulsionAnimation: gsap.core.Timeline;
 interface paginationMap extends PageData {
+  launchList: string,
   current?: boolean;
 }
 let paginationMap: paginationMap[] = [
-  Pages.index,
-  Pages.about,
-  Pages.character,
-  Pages.projects,
-  Pages.contact,
+  {
+    ...Pages.index,
+    launchList: '#overTakers, .breathingFragment, .work > *, .life > *'
+    },
+  {
+    ...Pages.about,
+    launchList: ''
+    },
+  {
+    ...Pages.character,
+    launchList: ''
+    },
+  {
+    ...Pages.projects,
+    launchList: ''
+    },
+  {
+    ...Pages.contact,
+    launchList: ''
+    },
 ];
 export const changePagination = (newPage: PageData) => {
   paginationMap = paginationMap.map( item => {
@@ -111,6 +127,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     }, [isPaginating]); */
     useEffect( () => {
         changePagination(activePage.pageData);
+        assemble();
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -181,10 +198,10 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         target: Element;
     }
     const [repellents, setRepellents] = useState<Repel[]>([]);
-    const undergo = (Phase?: 1 | 2 | 3) => {
+    const undergo = () => {
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain'];
-        let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.join(',')})`)),
+        let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.length > 0 && ignore.join(',')})`)),
             phase3: Repel[] = [];
         let phase1: Element[] = [], phase2: Element[] = [];
         targets.map(t => {
@@ -207,7 +224,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
                 }
             }else phase2.push(t);
         });
-        
         
         phase2.map( (t, i) => {
             let match = phase2.filter( tt => t === tt );
@@ -245,7 +261,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         })
 
         if( isMobile ){
-            targetReps = undergo();
+            targetReps = undergo() as Repel[];
             setRepellents(targetReps);
         }else{
             setRepellents([]);
@@ -373,6 +389,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     }
     const applyInfinity = () => {
         if( !infinityApplied.current ) {
+            dissipate();
             let copy = addAll().slice();
             let visibles = copy.filter( item => typeof item.ghost === 'undefined' );
             newList.current = visibles;
@@ -510,10 +527,15 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         });
     },[])
 
-    const dissipate = () => {
+    const paginationSequence = (dissipate?: true) => {
+        const launchList = paginationMap.filter(t => t.current )[0].launchList;
+        const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
+        gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05});
     }
 
-    dissipate();
+    const dissipate = () => paginationSequence(true);
+    const assemble = () =>  paginationSequence();
+
 
     return <MenuDOM
         items= {items}

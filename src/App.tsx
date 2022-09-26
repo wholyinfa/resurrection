@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { breakPoints, PageData, Pages } from './data';
-import Menu from './Menu'
+import Menu, { changePagination, paginationMap } from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
 import ContactPage from './ContactPage';
@@ -13,32 +13,6 @@ import './Stylesheets/style.css';
 
 export const titleConversion = (query: string) => {
   return query.toLowerCase().replaceAll(' ', '-');
-}
-
-interface paginationMap extends PageData {
-  current?: boolean;
-}
-let paginationMap: paginationMap[] = [
-  Pages.index,
-  Pages.about,
-  Pages.character,
-  Pages.projects,
-  Pages.contact,
-];
-export const changePagination = (newPage: PageData) => {
-  paginationMap = paginationMap.map( item => {
-    let newItem = item;
-    
-    if( item.text === newPage.text ){
-      newItem = {
-        ...newItem,
-        current: true
-      }
-    }else if( typeof item.current !== 'undefined' ){
-      delete newItem.current;
-    }
-    return newItem;
-  });
 }
 
 export default function App() {
@@ -56,9 +30,20 @@ export default function App() {
   const resizePurposes = () => {
       setIsMobile( window.innerWidth <= breakPoints.dialer );
   }
-  const history = useHistory();
   const newPage = useRef<PageData>();
-  const [isPaginating, paginating] = useState<boolean>(false);
+  const isPaginating = useRef<boolean>(false);
+  const portal = (direction: 'up' | 'down', applyInfinity: any) => {
+    const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
+    let targetI;
+    if( direction === 'up' ){
+    targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
+    }else{
+    targetI = ( paginationMap[i+1] ) ? i+1 : 0;
+    }
+    newPage.current = paginationMap[targetI];
+    isPaginating.current = true;
+    applyInfinity();
+  };
   useEffect( () => {
 
     resizePurposes();
@@ -66,30 +51,6 @@ export default function App() {
       resizePurposes();
       setResize(p => !p);
     });
-
-    const portal = (direction: 'up' | 'down') => {
-      const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
-      let targetI;
-      if( direction === 'up' ){
-        targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
-      }else{
-        targetI = ( paginationMap[i+1] ) ? i+1 : 0;
-      }
-      newPage.current = paginationMap[targetI];
-      // history.push(paginationMap[targetI].url);
-    };
-
-    /* addEventListener('wheel', (e) => {
-      if( e.deltaY >= 0 && allowPagination.current.down === true ){
-        paginating(true);
-        // down
-        portal('down');
-      }else if( allowPagination.current.up === true ){
-        paginating(true);
-        // up
-        portal('up');
-      }
-    }); */
   
     let touchStart: number;
     let touchEnd: number;
@@ -100,25 +61,17 @@ export default function App() {
     addEventListener('touchend', (e) => {
       touchEnd = e.changedTouches[0].screenY;
       if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
-        paginating(true);
         // down
-        portal('down');
       }else if( allowPagination.current.up === true ){
-        paginating(true);
         // up
-        portal('up');
       }
     }, false);
           
     document.addEventListener('keyup', (e) => {
       if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
-        paginating(true);
         // down
-        portal('down');
       }else if( e.code === 'ArrowUp' && allowPagination.current.up === true ){
-        paginating(true);
         // up
-        portal('up');
       }
     }, false);
 
@@ -128,18 +81,12 @@ export default function App() {
 
   }, []);
 
-  const location = useLocation();
-  useEffect(() => {
-    newPage.current && changePagination(newPage.current);
-    // paginating(false);
-  }, [location])
-
   return (
     <>
       <Menu
-        paginating = {paginating}
+        portal = {portal}
         isPaginating = {isPaginating}
-        newPage = {newPage.current}
+        newPage = {newPage}
         isMobile= {isMobile}
         resize= {resize}
         
@@ -147,39 +94,28 @@ export default function App() {
       <Switch>
         <Route exact path={Pages.index.url}>
           <IndexPage
-          paginating = {paginating}
+            isPaginating = {isPaginating}
+            newPage = {newPage}
             isMobile = {isMobile}
           />
         </Route>
         <Route exact path={Pages.about.url}>
-          <AboutPage
-            paginating = {paginating}
-          />
+          <AboutPage />
         </Route>
         <Route exact path={Pages.contact.url}>
-          <ContactPage
-            paginating = {paginating}
-          />
+          <ContactPage />
         </Route>
         <Route exact path={Pages.projects.url}>
-          <ProjectsPage
-            paginating = {paginating}
-          />
+          <ProjectsPage />
         </Route>
         <Route exact path={Pages.projects.url+'/:projectName'}>
-          <SingleProjectPage
-            paginating = {paginating}
-          />
+          <SingleProjectPage />
         </Route>
         <Route exact path={Pages.character.url}>
-          <CharacterPage
-            paginating = {paginating}
-          />
+          <CharacterPage />
         </Route>
         <Route path="*">
-            <NotFound
-              paginating = {paginating}
-            />
+            <NotFound />
         </Route>
       </Switch>
     </>

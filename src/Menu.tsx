@@ -56,7 +56,7 @@ interface paginationMap extends PageData {
   launchList: string,
   current?: boolean;
 }
-let paginationMap: paginationMap[] = [
+export let paginationMap: paginationMap[] = [
   {
     ...Pages.index,
     launchList: '#overTakers, .breathingFragment, .work > *, .life > *'
@@ -93,7 +93,7 @@ export const changePagination = (newPage: PageData) => {
     return newItem;
   });
 }
-export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTypes>) {
+export default function Menu({isMobile, resize, portal, isPaginating, newPage} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -126,9 +126,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     }
     const [items, setItems] = useState<itemData[]>(itemList);
     const newList = useRef<itemData[]>(items);
-    /* useEffect( () => {
-        // if( isPaginating ) applyInfinity();
-    }, [isPaginating]); */
     useEffect( () => {
         changePagination(activePage.pageData);
         assemble();
@@ -338,8 +335,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
     
         let xy;
         if( items.length === addAll().length ){
-            let Dialer = Draggable.get('#dialer');
-            let theXY = getXY(Dialer);
             xy = - menuItemD() * (addAll(true).length/2);
             gsap.set('#dialer', setXOrY(xy));
             trueXY.current = xy;
@@ -477,20 +472,6 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
       up: true,
       down: true
     });
-    const newPage = useRef<PageData>();
-    const isPaginating = useRef<boolean>(false);
-    const portal = (direction: 'up' | 'down') => {
-        const i = paginationMap.findIndex(t => typeof t.current !== 'undefined' );
-        let targetI;
-        if( direction === 'up' ){
-        targetI = ( paginationMap[i-1] ) ? i-1 : paginationMap.length-1;
-        }else{
-        targetI = ( paginationMap[i+1] ) ? i+1 : 0;
-        }
-        newPage.current = paginationMap[targetI];
-        isPaginating.current = true;
-        applyInfinity();
-    };
     useEffect(() => {
 
         let xyOnPress: number;
@@ -523,10 +504,10 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         addEventListener('wheel', (e) => {
             if( e.deltaY >= 0 && allowPagination.current.down === true ){
             // down
-            !isPaginating.current && portal('down');
+            !isPaginating.current && portal('down', applyInfinity);
             }else if( allowPagination.current.up === true ){
             // up
-            !isPaginating.current && portal('up');
+            !isPaginating.current && portal('up', applyInfinity);
             }
         });
     },[])
@@ -565,9 +546,9 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
 }
 
 Menu.propTypes = {
+    portal: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
     resize: PropTypes.bool.isRequired,
-    isPaginating: PropTypes.bool.isRequired,
-    paginating: PropTypes.func.isRequired,
-    newPage: PropTypes.any
+    isPaginating: PropTypes.any.isRequired,
+    newPage: PropTypes.any.isRequired
 }

@@ -6,7 +6,7 @@ import PropTypes, {InferProps} from 'prop-types';
 import { animProps } from './Menu';
 
 
-export default function IndexPage({isMobile, paginating}: InferProps<typeof IndexPage.propTypes>) {
+export default function IndexPage({isMobile, isPaginating}: InferProps<typeof IndexPage.propTypes>) {
     let workHover: gsap.core.Timeline;
     let lifeHover: gsap.core.Timeline;
     let workResurrection: gsap.core.Timeline;
@@ -57,6 +57,9 @@ export default function IndexPage({isMobile, paginating}: InferProps<typeof Inde
             .to('body', {background: color, duration: dur, ease: ease}, `<`)
             .set('#dialerContainer .shade', {autoAlpha: 1})
             .to(`#overTakers .${type}`, {autoAlpha: 0, duration: dur, ease: ease});
+            timeline.eventCallback('onComplete', () => {
+                console.log('hello');
+            })
             
             if( type === 'work' )
                 workResurrection = timeline;
@@ -124,5 +127,6 @@ export default function IndexPage({isMobile, paginating}: InferProps<typeof Inde
 }
 IndexPage.propTypes ={
     isMobile: PropTypes.bool.isRequired,
-    paginating: PropTypes.func.isRequired
+    isPaginating: PropTypes.any.isRequired,
+    newPage: PropTypes.any.isRequired
 }

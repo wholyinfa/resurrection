@@ -127,8 +127,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
     const [items, setItems] = useState<itemData[]>(itemList);
     const newList = useRef<itemData[]>(items);
     useEffect( () => {
-        changePagination(activePage.pageData);
-        assemble();
+            changePagination(activePage.pageData);
+            assemble();
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -453,7 +453,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
         setItems(newList.current);
 
-        !isPaginating.current && history.push(newList.current[2].url);
+        if ( history.location.pathname !== newList.current[2].url && !isPaginating.current )
+        history.push(newList.current[2].url); else if (items[0].url === newList.current[0].url) assemble();
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
@@ -508,6 +509,17 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             }else if( allowPagination.current.up === true ){
             // up
             !isPaginating.current && portal('up', applyInfinity);
+            }
+        });
+        history.listen((newLocation, action) => {
+            if( action === 'POP' ){
+                const current = paginationMap.filter(t => typeof t.current !== 'undefined' )[0];
+                if ( current.url !== newLocation.pathname ){
+                    const targetI = paginationMap.findIndex(t => t.url === newLocation.pathname );
+                    newPage.current = paginationMap[targetI];
+                    isPaginating.current = true;
+                    applyInfinity();
+                }
             }
         });
     },[])

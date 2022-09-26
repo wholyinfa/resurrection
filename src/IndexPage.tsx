@@ -58,8 +58,9 @@ export default function IndexPage({isMobile, isPaginating}: InferProps<typeof In
             .set('#dialerContainer .shade', {autoAlpha: 1})
             .to(`#overTakers .${type}`, {autoAlpha: 0, duration: dur, ease: ease});
             timeline.eventCallback('onComplete', () => {
-                console.log('hello');
-            })
+                let aElements = Array.from(document.querySelectorAll('#dialer a'));
+                Object(aElements[( type === 'work' ) ? 1 : 3 ]);
+            });
             
             if( type === 'work' )
                 workResurrection = timeline;

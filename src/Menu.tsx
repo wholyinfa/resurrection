@@ -500,7 +500,7 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             edgeResistance: 0.65,
             onPress: function() {
                 applyInfinity();
-                xyOnPress = trueXY.current;
+                xyOnPress = - menuItemD() * (addAll(true).length/2);
             },
             onDrag: function() {
                 let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
@@ -512,8 +512,8 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
             onRelease: function() {
                 if( xyOnPress === trueXY.current && this.pointerEvent.target.localName !== 'a' ){
                     if( isSnapping.current ){
-                            const oldVars: gsap.TweenVars = isSnapping.current.vars;
-                            isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                        const oldVars: gsap.TweenVars = isSnapping.current.vars;
+                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
                     }else{
                         restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
                     }

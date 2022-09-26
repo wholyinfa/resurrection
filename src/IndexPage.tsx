@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import './Stylesheets/index.css';
 import { breakPoints } from './data';
 import PropTypes, {InferProps} from 'prop-types';
+import { animProps } from './Menu';
 
 
 export default function IndexPage({isMobile, paginating}: InferProps<typeof IndexPage.propTypes>) {
@@ -19,31 +20,24 @@ export default function IndexPage({isMobile, paginating}: InferProps<typeof Inde
         default: (t: 'work' | 'life') : string => (t === 'work') ? '45deg' : '-45deg',
         mobile: (t: 'work' | 'life') : string => (t === 'work') ? '180deg' : '0deg',
     }
-    const animProps = {
-        color: (t: 'work' | 'life') : string => (t === 'work') ? 'rgba(26,35,126,1)' : 'rgba(6,78,59,1)',
-        deg: gradientDeg.default,
+    const setHover = (type: 'work' | 'life') => {
+        const timeline = gsap.timeline({paused: true});
+        const color = animProps.color(type);
+        const deg = ( window.innerWidth <= breakPoints.dialer ) ? gradientDeg.mobile(type) : gradientDeg.default(type);
+
+        timeline.fromTo(`#overTakers .${type}`,
+        {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 23%)`},
+        {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 33%)`,
+         ease: 'circ.inOut',
+         duration: .5});
+        
+        if( type === 'work' )
+            workHover = timeline;
+        else
+            lifeHover = timeline;
     }
     useEffect(() => {
-    
-        animProps.deg = ( window.innerWidth <= breakPoints.dialer ) ? gradientDeg.mobile : gradientDeg.default;
   
-
-        const setHover = (type: 'work' | 'life') => {
-            const timeline = gsap.timeline({paused: true});
-            const color = animProps.color(type);
-            const deg = animProps.deg(type);
-
-            timeline.fromTo(`#overTakers .${type}`,
-            {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 23%)`},
-            {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 33%)`,
-             ease: 'circ.inOut',
-             duration: .5});
-            
-            if( type === 'work' )
-                workHover = timeline;
-            else
-                lifeHover = timeline;
-        }
         setHover('work');
         setHover('life');
 
@@ -53,12 +47,11 @@ export default function IndexPage({isMobile, paginating}: InferProps<typeof Inde
             const opposite = (type === 'work') ? '.life' : '.work';
             const dur = .2;
             const ease = 'power4.in';
-            const shadeBg = (deg: 90 | -90) => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${color} 100%)`;
 
             timeline
             .set('#dialerContainer .shade', {autoAlpha: 0})
-            .set('#dialerContainer .shade.R', {background: shadeBg(90)})
-            .set('#dialerContainer .shade.L', {background: shadeBg(-90)})
+            .set('#dialerContainer .shade.R', {background: animProps.shadeBg(90, type)})
+            .set('#dialerContainer .shade.L', {background: animProps.shadeBg(-90, type)})
             .to('#division', {autoAlpha: 0, scale: .8, duration: dur, ease: ease})
             .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
             .to('body', {background: color, duration: dur, ease: ease}, `<`)

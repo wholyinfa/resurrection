@@ -8,6 +8,10 @@ import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
 
+export const animProps = {
+    color: (t: 'work' | 'life' | 'index') : string => (t === 'work') ? 'rgba(26,35,126,1)' :  (t === 'life') ? 'rgba(6,78,59,1)' : 'rgba(0,0,0,1)',
+    shadeBg: (deg: 90 | -90, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
+}
 function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
     return <nav>
         <div id='dialerHandle'></div>
@@ -527,10 +531,25 @@ export default function Menu({isMobile, resize} : InferProps<typeof Menu.propTyp
         });
     },[])
 
+    const Type = useRef<'work' | 'life' | 'index'>('index');
     const paginationSequence = (dissipate?: true) => {
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
         const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
         gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05});
+        if( !dissipate ){
+            const activePageName = activePage.pageData.text.toLowerCase();
+            const type = ( activePageName === 'about' || activePageName === 'character' ) ? 'life' :
+            ( activePageName === 'projects' || activePageName === 'contact' ) ? 'work' : 'index';
+            const bg = ( type === 'life' ) ? animProps.color('life') :
+            ( type === 'work' ) ? animProps.color('work') : animProps.color('index');
+
+            gsap.to('body', {duration: .2, background: bg});
+            if( Type.current !== type ){
+                gsap.fromTo('#dialerContainer .shade.R', {background: animProps.shadeBg(90, Type.current)}, {duration: .2,background: animProps.shadeBg(90, type)})
+                gsap.fromTo('#dialerContainer .shade.L', {background: animProps.shadeBg(-90, Type.current)}, {duration: .2,background: animProps.shadeBg(-90, type)});
+            }
+            Type.current = type;
+        }
     }
 
     const dissipate = () => paginationSequence(true);

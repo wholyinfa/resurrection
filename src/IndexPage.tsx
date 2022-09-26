@@ -4,6 +4,7 @@ import './Stylesheets/index.css';
 import { breakPoints } from './data';
 import PropTypes, {InferProps} from 'prop-types';
 import { animProps } from './Menu';
+import { useHistory } from 'react-router-dom';
 
 
 export default function IndexPage({isMobile, isPaginating}: InferProps<typeof IndexPage.propTypes>) {
@@ -36,6 +37,7 @@ export default function IndexPage({isMobile, isPaginating}: InferProps<typeof In
         else
             lifeHover = timeline;
     }
+    const history = useHistory();
     useEffect(() => {
   
         setHover('work');
@@ -43,23 +45,15 @@ export default function IndexPage({isMobile, isPaginating}: InferProps<typeof In
 
         const setResurrection = (type: 'work' | 'life') => {
             const timeline = gsap.timeline({paused: true});
-            const color = animProps.color(type);
             const opposite = (type === 'work') ? '.life' : '.work';
             const dur = .2;
             const ease = 'power4.in';
 
             timeline
-            .set('#dialerContainer .shade', {autoAlpha: 0})
-            .set('#dialerContainer .shade.R', {background: animProps.shadeBg(90, type)})
-            .set('#dialerContainer .shade.L', {background: animProps.shadeBg(-90, type)})
             .to('#division', {autoAlpha: 0, scale: .8, duration: dur, ease: ease})
             .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
-            .to('body', {background: color, duration: dur, ease: ease}, `<`)
-            .set('#dialerContainer .shade', {autoAlpha: 1})
-            .to(`#overTakers .${type}`, {autoAlpha: 0, duration: dur, ease: ease});
-            timeline.eventCallback('onComplete', () => {
-                let aElements = Array.from(document.querySelectorAll('#dialer a'));
-                Object(aElements[( type === 'work' ) ? 1 : 3 ]);
+            .eventCallback('onComplete', () => {
+                history.replace(( type === 'life' ) ? '/about' : '/projects');
             });
             
             if( type === 'work' )

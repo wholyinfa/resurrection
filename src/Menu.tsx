@@ -512,7 +512,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             }
         });
         history.listen((newLocation, action) => {
-            if( action === 'POP' ){
+            if( action === 'POP' || action === 'REPLACE' ){
                 const current = paginationMap.filter(t => typeof t.current !== 'undefined' )[0];
                 if ( current.url !== newLocation.pathname ){
                     const targetI = paginationMap.findIndex(t => t.url === newLocation.pathname );

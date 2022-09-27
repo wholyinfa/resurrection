@@ -68,7 +68,7 @@
             }
             #myName{
                 $letterSpacing: 50px;
-                width: auto;
+                width: 310px;
                 margin: 0 auto;
                 position: relative;
                 transform: inherit;
@@ -76,7 +76,6 @@
                 word-break: normal;
                 letter-spacing: $letterSpacing;
                 line-height: normal;
-                margin-right: -$letterSpacing;
             }
         }
     }

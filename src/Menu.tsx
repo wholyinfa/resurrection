@@ -304,7 +304,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         .fromTo('#expansionArrow .R', {rotate: setP('45deg', '-45deg')}, {rotate: setP('-45deg', '45deg'), ...setP({x: -daWidth}, {y: -daWidth/2}), ...properties}, '<');
         if( trueMobile.current )
             expansionAnimation
-            .fromTo('#expansionArrow', {x: expW(20)}, {x: expW(menuItemW-10), ...properties}, '<');
+            .fromTo('#expansionArrow', {x: expW(0)}, {x: expW(menuItemW-10), ...properties}, '<');
         
         expandDialer(dialerExpansion, true);
         repulsion();

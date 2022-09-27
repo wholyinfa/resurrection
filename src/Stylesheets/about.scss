@@ -34,3 +34,20 @@
         }
     }
 }
+@media only screen and (max-width: 1366px) {
+    #aboutPage{
+        $contentGap: 30px;
+        section{
+            max-width: 450px;
+            .breathingFragment{
+                @include breathingFragment(130px);
+                margin-right: -$contentGap;
+            }
+            #myName{
+                $fontSize: 80px;
+                font-size: $fontSize;
+                line-height: $fontSize + 20;
+            }
+        }
+    }
+}

@@ -37,6 +37,7 @@ body {
 }
 
 .title {
+  height: 100px;
   width: 100%;
   text-align: center;
   padding: 75px 0 150px 0;
@@ -46,7 +47,9 @@ body {
 .title h1 {
   font-size: 100px;
   font-family: latoMedium;
-  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   letter-spacing: 55px;
   padding-left: 55px;
   display: inline-block;
@@ -79,4 +82,28 @@ body {
 
 #aboutPage h1::after {
   content: "ABOUT";
+}
+
+@media only screen and (max-width: 1366px) {
+  .title {
+    padding-bottom: 100px;
+  }
+  .title div {
+    transform: translate(-50%, -15%);
+    font-size: 300px;
+    letter-spacing: 100px;
+    padding-left: 100px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .title {
+    padding-top: 50px;
+    padding-bottom: 75px;
+  }
+  .title div {
+    transform: translate(-50%, 0%);
+    font-size: 180px;
+    letter-spacing: 50px;
+    padding-left: 50px;
+  }
 }/*# sourceMappingURL=style.css.map */

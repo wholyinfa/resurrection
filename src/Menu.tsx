@@ -201,7 +201,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
     const [repellents, setRepellents] = useState<Repel[]>([]);
     const undergo = () => {
         const windowW = window.innerWidth;
-        const ignore: string[] = ['.treeBrain'];
+        const ignore: string[] = ['.treeBrain', '.title div'];
         let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.length > 0 && ignore.join(',')})`)),
             phase3: Repel[] = [];
         let phase1: Element[] = [], phase2: Element[] = [];

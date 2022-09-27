@@ -46,15 +46,19 @@ body{
 }
 
 .title{
+    $fontSize: 100px;
+    height: $fontSize;
     width: 100%;
     text-align: center;
     padding: 75px 0 150px 0;
     position: relative;
     overflow: hidden;
     h1{
-        font-size: 100px;
+        font-size: $fontSize;
         font-family: latoMedium;
-        margin: 0 auto;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
         letter-spacing: 55px;
         padding-left: 55px;
         display: inline-block;
@@ -90,5 +94,32 @@ body{
 #aboutPage{
     h1::after{
         content: 'ABOUT';
+    }
+}
+
+@media only screen and (max-width: 1366px) {
+    .title{
+        padding-bottom: 100px;
+        div{
+            transform: translate(-50%, -15%);
+            font-size: 300px;
+            $spacing: 100px;
+            letter-spacing: $spacing;
+            padding-left: $spacing;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .title{
+        padding-top: 50px;
+        padding-bottom: 75px;
+        div{
+            transform: translate(-50%, 0%);
+            font-size: 180px;
+            $spacing: 50px;
+            letter-spacing: $spacing;
+            padding-left: $spacing;
+        }
     }
 }

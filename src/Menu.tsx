@@ -179,20 +179,25 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             expansionAnimation.reversed(!expansionAnimation.reversed());
             if( instant ){
                 expansionAnimation.progress(1);
-                repulsionAnimation.progress(1);
+                // repulsionAnimation.progress(1);
+                repAnimations.map(a => a.progress(1))
+                console.log(repAnimations);
             }
             else{
                 expansionAnimation.play();
-                repulsionAnimation.play();
+                // repulsionAnimation.play();
+                repAnimations.map(a => a.play())
             }
         }else{
             if( instant ){
                 expansionAnimation.progress(0);
-                repulsionAnimation && repulsionAnimation.progress(0);
+                repAnimations.map(a => a.progress(0));
+                // repulsionAnimation && repulsionAnimation.progress(0);
             }
             else{
                 expansionAnimation.reverse();
-                repulsionAnimation && repulsionAnimation.reverse();
+                repAnimations.map(a => a.reverse());
+                // repulsionAnimation && repulsionAnimation.reverse();
 
             }
         }
@@ -258,6 +263,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
 
         return phase3;
     }
+    const [repAnimations, setRepAnimations] = useState<gsap.core.Tween[]>([]);
     const repulsion = (): Repel[] => {
         let targetReps: Repel[] = [];
 
@@ -279,7 +285,20 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             repulsionAnimation.fromTo( t.target,
                 {x: 0}, {x: t.gap, duration: dur, ease: ease}
             , '<');
-        })
+        });
+        const animationArray:gsap.core.Tween[] = [];
+        targetReps.length && targetReps.map(t => {
+            animationArray.push(gsap.fromTo( t.target,
+                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true}
+            ));
+        });
+        // if( repAnimations.length !== targetReps.length ){
+            setRepAnimations(animationArray);
+        // }else{
+
+        // }
+        // setRepAnimations()
+        // console.log(targetReps[0].target._gsap.id, repulsionAnimation.getChildren()[0].targets()[0]._gsap.id);
         return targetReps;
     }
     useEffect(() => {
@@ -513,6 +532,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             // up
             !infinityApplied.current && !isPaginating.current && portal('up', applyInfinity);
             }
+        });
+        addEventListener('scroll', (e) => {
+            
         });
         history.listen((newLocation, action) => {
             if( action === 'POP' || action === 'REPLACE' ){

@@ -129,6 +129,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
     useEffect( () => {
             changePagination(activePage.pageData);
             assemble();
+            allowPagination.current = {
+                up: true,
+                down: true
+            }
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -460,11 +464,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         isSnapping.current = false;
         infinityApplied.current = false;
         xyMemory.current = false;
-        console.log(newPage);
-        allowPagination.current = {
-            up: true,
-            down: true
-        }
     }
     interface upNdown{
       up: boolean;
@@ -504,10 +503,13 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             }
         });
         addEventListener('wheel', (e) => {
-            if( e.deltaY >= 0 && allowPagination.current.down === true ){
+            const scrollY = Math.round(window.scrollY);
+            const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
+            if( scrollY === maxY && e.deltaY >= 0 && allowPagination.current.down === true ){
             // down
             !isPaginating.current && portal('down', applyInfinity);
-            }else if( allowPagination.current.up === true ){
+            }
+            if( scrollY === 0 && e.deltaY < 0 && allowPagination.current.up === true ){
             // up
             !isPaginating.current && portal('up', applyInfinity);
             }

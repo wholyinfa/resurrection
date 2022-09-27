@@ -51,3 +51,50 @@
         }
     }
 }
+@media only screen and (max-width: 900px) {
+    #aboutPage{
+        $contentGap: 30px;
+        section{
+            max-width: 100%;
+            margin: 0;
+            padding: 0 50px;
+            .breathingFragment{
+                position: relative;
+                transform: inherit;
+                left: auto;
+                right: auto;
+                margin: 0 auto 2em auto;
+                display: block;
+            }
+            #myName{
+                $letterSpacing: 50px;
+                width: auto;
+                margin: 0 auto;
+                position: relative;
+                transform: inherit;
+                font-size: 70px;
+                word-break: normal;
+                letter-spacing: $letterSpacing;
+                line-height: normal;
+                margin-right: -$letterSpacing;
+            }
+        }
+    }
+}
+@media only screen and (max-width: 428px) {
+    #aboutPage{
+        section{
+            padding: 0 50px;
+            p
+            .breathingFragment{
+            }
+            #myName{
+                width: auto;
+                $letterSpacing: 30px;
+                font-size: 50px;
+                letter-spacing: $letterSpacing;
+                margin-right: -$letterSpacing;
+            }
+        }
+    }
+}

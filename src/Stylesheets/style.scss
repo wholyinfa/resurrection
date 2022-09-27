@@ -44,3 +44,51 @@ body{
     white-space: nowrap !important;
     width: 1px !important;
 }
+
+.title{
+    width: 100%;
+    text-align: center;
+    padding: 75px 0 150px 0;
+    position: relative;
+    overflow: hidden;
+    h1{
+        font-size: 100px;
+        font-family: latoMedium;
+        margin: 0 auto;
+        letter-spacing: 55px;
+        padding-left: 55px;
+        display: inline-block;
+    }
+    h1::after{
+        $gap: 7px;
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 100px;
+        font-family: latoMedium;
+        margin: 0 auto;
+        letter-spacing: 55px;
+        padding-top: $gap;
+        padding-left: 50px - $gap;
+        display: inline-block;
+        opacity: .13;
+    }
+    div{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -20%);
+        font-size: 400px;
+        $spacing: 300px;
+        letter-spacing: $spacing;
+        padding-left: $spacing;
+        opacity: .06;
+        font-family: latoMedium;
+    }
+}
+#aboutPage{
+    h1::after{
+        content: 'ABOUT';
+    }
+}

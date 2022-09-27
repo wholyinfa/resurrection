@@ -34,4 +34,49 @@ body {
   position: absolute !important;
   white-space: nowrap !important;
   width: 1px !important;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+  padding: 75px 0 150px 0;
+  position: relative;
+  overflow: hidden;
+}
+.title h1 {
+  font-size: 100px;
+  font-family: latoMedium;
+  margin: 0 auto;
+  letter-spacing: 55px;
+  padding-left: 55px;
+  display: inline-block;
+}
+.title h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 100px;
+  font-family: latoMedium;
+  margin: 0 auto;
+  letter-spacing: 55px;
+  padding-top: 7px;
+  padding-left: 43px;
+  display: inline-block;
+  opacity: 0.13;
+}
+.title div {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  font-size: 400px;
+  letter-spacing: 300px;
+  padding-left: 300px;
+  opacity: 0.06;
+  font-family: latoMedium;
+}
+
+#aboutPage h1::after {
+  content: "ABOUT";
 }/*# sourceMappingURL=style.css.map */

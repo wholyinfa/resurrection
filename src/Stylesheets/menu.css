@@ -36,6 +36,12 @@ body {
   width: 1px !important;
 }
 
+.title h1 {
+  font-size: 100px;
+  font-family: latoMedium;
+  margin: 0 auto;
+}
+
 nav {
   width: 100%;
   position: fixed;

@@ -25,11 +25,14 @@ body{
     font-size: 16px;
 }
 
-.breathingFragment{
-    $width: 180px;
+@mixin breathingFragment($Width: 180px){
+    $width: $Width;
     $height: $width / 1.241379310344828;
     width: $width;
     height: $height;
+}
+.breathingFragment{
+    @include breathingFragment();
 }
 
 .noPeaky{

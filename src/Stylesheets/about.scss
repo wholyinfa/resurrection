@@ -1,0 +1,36 @@
+@import 'style.scss';
+#aboutPage{
+    section{
+        position: relative;
+        margin: 0 auto;
+        max-width: 750px;
+        $contentGap: 50px;
+        $gap: 20%;
+        font-family: latoLight;
+        > * {
+            margin: 0 auto;
+        }
+        h2, p{
+            margin: 1em 0;
+        }
+        #myName{
+            $fontSize: 100px;
+            width: 70px;
+            font-size: $fontSize;
+            word-break: break-all;
+            line-height: $fontSize + 20;
+            margin-left: -$contentGap;
+            position: absolute;
+            left: 0;
+            text-align: center;
+            transform: translateX(-100%);
+            font-family: latoMedium;
+        }
+        .breathingFragment{
+            position: absolute;
+            right: 0;
+            margin-right: -$contentGap;
+            transform: translateX(100%);
+        }
+    }
+}

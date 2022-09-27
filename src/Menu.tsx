@@ -460,6 +460,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         isSnapping.current = false;
         infinityApplied.current = false;
         xyMemory.current = false;
+        console.log(newPage);
         allowPagination.current = {
             up: true,
             down: true

@@ -36,12 +36,102 @@ body {
   width: 1px !important;
 }
 
+.title {
+  height: 100px;
+  width: 100%;
+  text-align: center;
+  padding: 75px 0 150px 0;
+  position: relative;
+  overflow: hidden;
+}
 .title h1 {
   font-size: 100px;
   font-family: latoMedium;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  letter-spacing: 55px;
+  padding-left: 55px;
+  display: inline-block;
+}
+.title h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 100px;
+  font-family: latoMedium;
   margin: 0 auto;
+  letter-spacing: 55px;
+  padding-top: 7px;
+  padding-left: 43px;
+  display: inline-block;
+  opacity: 0.13;
+}
+.title div {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  font-size: 400px;
+  letter-spacing: 300px;
+  padding-left: 300px;
+  opacity: 0.06;
+  font-family: latoMedium;
 }
 
+#aboutPage h1::after {
+  content: "ABOUT";
+}
+
+@media only screen and (max-width: 1366px) {
+  .title {
+    padding-bottom: 100px;
+  }
+  .title div {
+    transform: translate(-50%, -15%);
+    font-size: 300px;
+    letter-spacing: 100px;
+    padding-left: 100px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .title {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  .title div {
+    transform: translate(-50%, -16%);
+    font-size: 180px;
+    letter-spacing: 50px;
+    padding-left: 50px;
+  }
+  .title h1 {
+    padding-left: 35px;
+  }
+  .title h1, .title h1::after {
+    font-size: 50px;
+    letter-spacing: 24px;
+  }
+  .title h1::after {
+    padding-left: 24px;
+    padding-top: 5px;
+  }
+}
+@media only screen and (max-width: 428px) {
+  .title {
+    height: 50px;
+    overflow: visible;
+  }
+  .title div {
+    width: 210px;
+    transform: translate(-50%, -10%);
+    font-size: 80px;
+    word-wrap: break-word;
+    letter-spacing: 40px;
+    padding-left: 40px;
+  }
+}
 nav {
   width: 100%;
   position: fixed;

@@ -48,6 +48,7 @@ body {
   font-size: 100px;
   font-family: latoMedium;
   position: absolute;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   letter-spacing: 55px;
@@ -72,7 +73,7 @@ body {
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -20%);
+  transform: translate(-50%, -25%);
   font-size: 400px;
   letter-spacing: 300px;
   padding-left: 300px;

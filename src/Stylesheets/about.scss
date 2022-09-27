@@ -13,6 +13,13 @@
         h2, p{
             margin: 1em 0;
         }
+        h2{
+            font-size: 24px;
+            font-family: latoMedium;
+        }
+        p{
+            font-size: 24px;
+        }
         #myName{
             $fontSize: 100px;
             width: 70px;
@@ -84,9 +91,6 @@
     #aboutPage{
         section{
             padding: 0 50px;
-            p
-            .breathingFragment{
-            }
             #myName{
                 width: auto;
                 $letterSpacing: 30px;

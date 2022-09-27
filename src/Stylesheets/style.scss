@@ -115,9 +115,36 @@ body{
         padding-top: 50px;
         padding-bottom: 75px;
         div{
-            transform: translate(-50%, 0%);
+            transform: translate(-50%, -16%);
             font-size: 180px;
             $spacing: 50px;
+            letter-spacing: $spacing;
+            padding-left: $spacing;
+        }
+        h1{
+            padding-left: 35px;
+        }
+        h1, h1::after{
+            font-size: 50px;
+            letter-spacing: 24px;
+        }
+        h1::after{
+            padding-left: 24px;
+            padding-top: 5px;
+        }
+    }
+}
+
+@media only screen and (max-width: 428px) {
+    .title{
+        height: 50px;
+        overflow: visible;
+        div{
+            width: 210px;
+            transform: translate(-50%, -10%);
+            font-size: 80px;
+            word-wrap: break-word;
+            $spacing: 40px;
             letter-spacing: $spacing;
             padding-left: $spacing;
         }

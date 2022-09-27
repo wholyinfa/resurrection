@@ -101,9 +101,34 @@ body {
     padding-bottom: 75px;
   }
   .title div {
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, -16%);
     font-size: 180px;
     letter-spacing: 50px;
     padding-left: 50px;
+  }
+  .title h1 {
+    padding-left: 35px;
+  }
+  .title h1, .title h1::after {
+    font-size: 50px;
+    letter-spacing: 24px;
+  }
+  .title h1::after {
+    padding-left: 24px;
+    padding-top: 5px;
+  }
+}
+@media only screen and (max-width: 428px) {
+  .title {
+    height: 50px;
+    overflow: visible;
+  }
+  .title div {
+    width: 210px;
+    transform: translate(-50%, -10%);
+    font-size: 80px;
+    word-wrap: break-word;
+    letter-spacing: 40px;
+    padding-left: 40px;
   }
 }/*# sourceMappingURL=style.css.map */

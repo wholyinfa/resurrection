@@ -507,11 +507,11 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
             if( scrollY === maxY && e.deltaY >= 0 && allowPagination.current.down === true ){
             // down
-            !isPaginating.current && portal('down', applyInfinity);
+            !infinityApplied.current && !isPaginating.current && portal('down', applyInfinity);
             }
             if( scrollY === 0 && e.deltaY < 0 && allowPagination.current.up === true ){
             // up
-            !isPaginating.current && portal('up', applyInfinity);
+            !infinityApplied.current && !isPaginating.current && portal('up', applyInfinity);
             }
         });
         history.listen((newLocation, action) => {

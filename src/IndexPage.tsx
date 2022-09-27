@@ -7,7 +7,7 @@ import { animProps } from './Menu';
 import { useHistory } from 'react-router-dom';
 
 
-export default function IndexPage({isMobile, isPaginating}: InferProps<typeof IndexPage.propTypes>) {
+export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTypes>) {
     let workHover: gsap.core.Timeline;
     let lifeHover: gsap.core.Timeline;
     let workResurrection: gsap.core.Timeline;

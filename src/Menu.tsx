@@ -51,7 +51,7 @@ interface itemData extends PageData {
     ghost?: boolean | undefined;
 };
 let expansionAnimation: gsap.core.Timeline;
-let repulsionAnimation: gsap.core.Timeline;
+let repulsionAnimation: gsap.core.Timeline = gsap.timeline({paused: true});
 interface paginationMap extends PageData {
   launchList: string,
   current?: boolean;
@@ -174,30 +174,46 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         height: menuItemH
     };
     const expandDialer = (toggle: boolean, instant?: boolean) => {
+        const repelled = Array.from(document.getElementsByClassName('repelled'));
+        const dispelled = Array.from(document.getElementsByClassName('dispelled'));
+        gsap.getTweensOf(dispelled).map(t => {
+            const vars = t.vars;
+            const target = Object(t)._targets[0];
+
+            if( !t.reversed() ){
+                t.progress(1).reverse().resume();
+                t.eventCallback('onReverseComplete', () => {
+                    t.kill();
+                    target.classList.remove('dispelled');
+                    target.classList.remove('repelled');
+                });
+            }
+        });
+
+
         if( toggle ){
             repulsion();
             expansionAnimation.reversed(!expansionAnimation.reversed());
             if( instant ){
                 expansionAnimation.progress(1);
-                // repulsionAnimation.progress(1);
-                repAnimations.map(a => a.progress(1))
-                console.log(repAnimations);
+                repulsionAnimation.progress(1);
+                // repAnimations.map(a => a.progress(1))
             }
             else{
                 expansionAnimation.play();
-                // repulsionAnimation.play();
-                repAnimations.map(a => a.play())
+                repulsionAnimation.play();
+                // repAnimations.map(a => a.play())
             }
         }else{
             if( instant ){
                 expansionAnimation.progress(0);
-                repAnimations.map(a => a.progress(0));
-                // repulsionAnimation && repulsionAnimation.progress(0);
+                // repAnimations.map(a => a.progress(0));
+                repulsionAnimation && repulsionAnimation.progress(0);
             }
             else{
                 expansionAnimation.reverse();
-                repAnimations.map(a => a.reverse());
-                // repulsionAnimation && repulsionAnimation.reverse();
+                // repAnimations.map(a => a.reverse());
+                repulsionAnimation && repulsionAnimation.reverse();
 
             }
         }
@@ -263,7 +279,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
 
         return phase3;
     }
+    const [oldRepAnimations, setOldRepAnimations] = useState<gsap.core.Tween[]>([]);
     const [repAnimations, setRepAnimations] = useState<gsap.core.Tween[]>([]);
+    const [repDifference, setRepDifference] = useState<gsap.core.Tween[]>([]);
     const repulsion = (): Repel[] => {
         let targetReps: Repel[] = [];
 
@@ -280,23 +298,73 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         
         const dur = expansionAnimation._dur;
         const ease = expansionAnimation._first._ease;
-        repulsionAnimation = gsap.timeline({paused: true});
+        /* repulsionAnimation = gsap.timeline({paused: true});
+        targetReps.length && targetReps.map(t => {
+            repulsionAnimation.fromTo( t.target,
+                {x: 0}, {x: t.gap, duration: dur, ease: ease}
+            , '<');
+        }); */
+        const animationArray:gsap.core.Tween[] = [];
+        targetReps.length && targetReps.map(t => {
+            if( Array.from(t.target.classList).filter(c => c === 'repelled').length === 0 ){
+            animationArray.push(gsap.fromTo( t.target,
+                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true}
+            ));
+                t.target.classList.add('repelled');
+            }
+        });
+        const repelled = Array.from(document.getElementsByClassName('repelled'));
+        repelled.map(t => {
+            let matchExists = false;
+            for (let i = 0; i < targetReps.length; i++) {
+                if (Object(t)._gsap.id === Object(targetReps[i].target)._gsap.id) {
+                    matchExists = true;
+                    break;
+                }
+            }
+
+            if( !matchExists ) t.classList.add('dispelled');
+        });
+
+        // repulsionAnimation = gsap.timeline({paused: true});
         targetReps.length && targetReps.map(t => {
             repulsionAnimation.fromTo( t.target,
                 {x: 0}, {x: t.gap, duration: dur, ease: ease}
             , '<');
         });
-        const animationArray:gsap.core.Tween[] = [];
-        targetReps.length && targetReps.map(t => {
-            animationArray.push(gsap.fromTo( t.target,
-                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true}
-            ));
-        });
-        // if( repAnimations.length !== targetReps.length ){
+        if( repAnimations.length === 0 ){
+            // Initiation Phase
             setRepAnimations(animationArray);
-        // }else{
+            setOldRepAnimations(animationArray);
+        }else{
+            const newList:gsap.core.Tween[] = animationArray;
+            const oldList:gsap.core.Tween[] = repAnimations;
+            const difference:gsap.core.Tween[] = [];
+            
+            /* newList.map( t => {
+                let matchExists = false;
+                for (let i = 0; i < oldRepAnimations.length; i++) {
+                    if (Object(t.targets()[0])._gsap.id === Object(oldRepAnimations[i].targets()[0])._gsap.id) {
+                        matchExists = true;
+                        break;
+                    }
+                }
+                
+                if( !matchExists ) {
+                    difference.push(t);
+                }
+                
+            });
+            console.log(difference);
+            
+            setRepDifference(difference);
+            
+            setOldRepAnimations(oldList); */
 
-        // }
+            setRepAnimations(newList);
+
+            
+        }
         // setRepAnimations()
         // console.log(targetReps[0].target._gsap.id, repulsionAnimation.getChildren()[0].targets()[0]._gsap.id);
         return targetReps;

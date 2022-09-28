@@ -189,13 +189,27 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         });
         const magnetize = (reverse?: boolean, instant?: true) => {
             let repelled = repAnimations.current;
-            repelled.map(t => {
-                if( instant ){
-                    if( !reverse ) t.progress(1);
-                    else t.progress(0);
+            repelled.map( (t, i) => {
+                if ( t.data && typeof t.data.easy !== undefined ) {
+                    if( !reverse ) t.reversed(!t.reversed()).play().eventCallback('onComplete', () => {
+                        const newL = repAnimations.current;
+                        newL[i].data = undefined;
+                        repAnimations.current = newL;
+                    });
+                    else t.progress(1).reverse().eventCallback('onReverseComplete', () => {
+                        const newL = repAnimations.current;
+                        newL[i].data = undefined;
+                        repAnimations.current = newL;
+                        // t.data = {};
+                    });
                 }else{
-                    if( !reverse ) t.reversed(!t.reversed()).play();
-                    else t.progress(1).reverse();
+                    if( instant ){
+                        if( !reverse ) t.progress(1);
+                        else t.progress(0);
+                    }else{
+                        if( !reverse ) t.reversed(!t.reversed()).play();
+                        else t.progress(1).reverse();
+                    }
                 }
             });
         }
@@ -302,16 +316,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         
         const dur = expansionAnimation._dur;
         const ease = expansionAnimation._first._ease;
-        /* repulsionAnimation = gsap.timeline({paused: true});
-        targetReps.length && targetReps.map(t => {
-            repulsionAnimation.fromTo( t.target,
-                {x: 0}, {x: t.gap, duration: dur, ease: ease}
-            , '<');
-        }); */
         const animationArray:gsap.core.Tween[] = [];
         targetReps.length && targetReps.map((t, i) => {
             animationArray.push(gsap.fromTo( t.target,
-                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true, id: 'r'+[i]}
+                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true, id: 'r'+i}
             ));
             if( Array.from(t.target.classList).filter(c => c === 'repelled').length === 0 ){
                 t.target.classList.add('repelled');
@@ -330,15 +338,25 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             if( !matchExists ) t.classList.add('dispelled');
         });
 
-        // repulsionAnimation = gsap.timeline({paused: true});
-        /* targetReps.length && targetReps.map(t => {
-            repulsionAnimation.fromTo( t.target,
-                {x: 0}, {x: t.gap, duration: dur, ease: ease}
-            , '<');
-        }); */
+        
+        // console.log(gsap.getTweensOf(t.target));
+        if( dialerExpansion ){
+            console.log(animationArray, repAnimations.current);
+            animationArray.map( (t, I) => {
+                let matchExists = false;
+                for (let i = 0; i < repAnimations.current.length; i++) {
+                    if (t.vars.id === repAnimations.current[i].vars.id) {
+                        matchExists = true;
+                        break;
+                    }
+                }
+                    if ( matchExists ) animationArray[I].data = {easy: true};
+                    else animationArray[I].data = undefined;
+            });
+            // console.log(animationArray.filter(t => t.data && t.data.easy === true));
+            // console.log(repAnimations.current, animationArray);
+        }
         repAnimations.current = animationArray;
-        // setRepAnimations()
-        // console.log(targetReps[0].target._gsap.id, repulsionAnimation.getChildren()[0].targets()[0]._gsap.id);
         return targetReps;
     }
     useEffect(() => {
@@ -370,10 +388,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             .fromTo('#expansionArrow', {x: expW(0)}, {x: expW(menuItemW-10), ...properties}, '<');
         
         expandDialer(dialerExpansion, true);
-        repulsion();
     }, [isMobile]);
     useEffect(() => {
-        repulsion();
         expandDialer(dialerExpansion, true);
     }, [resize])
 

@@ -184,6 +184,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
                     t.kill();
                     target.classList.remove('dispelled');
                     target.classList.remove('repelled');
+                    gsap.set(target, {clearProps: 'x'});
                 });
             }
         });
@@ -193,9 +194,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
                 if ( t.data && typeof t.data.easy !== undefined ) {
                     const newL = repAnimations.current;
                     if( !reverse ) t.reversed(!t.reversed()).play().eventCallback('onComplete', () => {
-                        newL[i].data = undefined;
-                        repAnimations.current = newL;
-                    });else t.progress(1).reverse().eventCallback('onReverseComplete', () => {
                         newL[i].data = undefined;
                         repAnimations.current = newL;
                     });
@@ -228,6 +226,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             if( instant ){
                 expansionAnimation.progress(0);
                 magnetize(true, true);
+                if( !trueMobile.current ) cleanRepulsion();
             }
             else{
                 expansionAnimation.reverse();
@@ -298,21 +297,33 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         return phase3;
     }
     const repAnimations = useRef<gsap.core.Tween[]>([]);
-    const repulsion = (): Repel[] => {
+    const cleanRepulsion = () => {
+        if( !trueMobile.current ) {
+            const repelled = Array.from(document.getElementsByClassName('repelled'));
+            if( repelled.length > 0 ){
+                repelled.map(r => {
+                    gsap.killTweensOf(r);
+                    r.classList.remove('repelled');
+                    r.classList.remove('dispelled');
+                    gsap.set(r, {clearProps: 'x'});
+                    setRepellents([]);
+                    repAnimations.current = [];
+                });
+            }
+        }
+    }
+    const repulsion = () => {
+        if( !trueMobile.current ) return cleanRepulsion();
         let targetReps: Repel[] = [];
 
         repellents.map(t => {
-            gsap.set(t.target, {clearProps: 'all'})
+            gsap.set(t.target, {clearProps: 'x'})
         })
 
-        if( isMobile ){
-            const repelled = Array.from(document.getElementsByClassName('repelled'));
-            repelled.map(r => gsap.set(r, {clearProps: 'x'}))
-            targetReps = undergo() as Repel[];
-            setRepellents(targetReps);
-        }else{
-            setRepellents([]);
-        }
+        const repelledd = Array.from(document.getElementsByClassName('repelled'));
+        repelledd.map(r => gsap.set(r, {clearProps: 'x'}))
+        targetReps = undergo() as Repel[];
+        setRepellents(targetReps);
         
         const dur = expansionAnimation._dur;
         const ease = expansionAnimation._first._ease;
@@ -322,10 +333,12 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
                 t.target.classList.remove('repelled');
                 t.target.classList.remove('dispelled');
                 gsap.killTweensOf(t.target);
-                console.log(t.target, t.gap);
             }
             animationArray.push(gsap.fromTo( t.target,
-                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true, id: 'r'+i}
+                {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true, id: 'r'+i,
+            onReverseComplete: () => {
+                gsap.set(t.target, {clearProps: 'x'});
+            }}
             ));
             if( Array.from(t.target.classList).filter(c => c === 'repelled').length === 0 ){
                 t.target.classList.add('repelled');
@@ -578,7 +591,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             !infinityApplied.current && !isPaginating.current && portal('up', applyInfinity);
             }
         });
-        
+
         addEventListener('scroll', (e) => expandDialer(dialerExpansion.current, true));
 
         history.listen((newLocation, action) => {

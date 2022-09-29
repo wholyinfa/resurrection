@@ -191,17 +191,15 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             let repelled = repAnimations.current;
             repelled.map( (t, i) => {
                 if ( t.data && typeof t.data.easy !== undefined ) {
+                    const newL = repAnimations.current;
                     if( !reverse ) t.reversed(!t.reversed()).play().eventCallback('onComplete', () => {
-                        const newL = repAnimations.current;
+                        newL[i].data = undefined;
+                        repAnimations.current = newL;
+                    });else t.progress(1).reverse().eventCallback('onReverseComplete', () => {
                         newL[i].data = undefined;
                         repAnimations.current = newL;
                     });
-                    else t.progress(1).reverse().eventCallback('onReverseComplete', () => {
-                        const newL = repAnimations.current;
-                        newL[i].data = undefined;
-                        repAnimations.current = newL;
-                        // t.data = {};
-                    });
+                    
                 }else{
                     if( instant ){
                         if( !reverse ) t.progress(1);
@@ -308,6 +306,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         })
 
         if( isMobile ){
+            const repelled = Array.from(document.getElementsByClassName('repelled'));
+            repelled.map(r => gsap.set(r, {clearProps: 'x'}))
             targetReps = undergo() as Repel[];
             setRepellents(targetReps);
         }else{
@@ -318,11 +318,18 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         const ease = expansionAnimation._first._ease;
         const animationArray:gsap.core.Tween[] = [];
         targetReps.length && targetReps.map((t, i) => {
+            if( Array.from(t.target.classList).filter(c => c === 'dispelled').length !== 0 ){
+                t.target.classList.remove('repelled');
+                t.target.classList.remove('dispelled');
+                gsap.killTweensOf(t.target);
+                console.log(t.target, t.gap);
+            }
             animationArray.push(gsap.fromTo( t.target,
                 {x: 0}, {x: t.gap, duration: dur, ease: ease, paused: true, id: 'r'+i}
             ));
             if( Array.from(t.target.classList).filter(c => c === 'repelled').length === 0 ){
                 t.target.classList.add('repelled');
+                animationArray[animationArray.length-1].data = {easy: true};
             }
         });
         const repelled = Array.from(document.getElementsByClassName('repelled'));
@@ -338,24 +345,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             if( !matchExists ) t.classList.add('dispelled');
         });
 
-        
-        // console.log(gsap.getTweensOf(t.target));
-        if( dialerExpansion ){
-            console.log(animationArray, repAnimations.current);
-            animationArray.map( (t, I) => {
-                let matchExists = false;
-                for (let i = 0; i < repAnimations.current.length; i++) {
-                    if (t.vars.id === repAnimations.current[i].vars.id) {
-                        matchExists = true;
-                        break;
-                    }
-                }
-                    if ( matchExists ) animationArray[I].data = {easy: true};
-                    else animationArray[I].data = undefined;
-            });
-            // console.log(animationArray.filter(t => t.data && t.data.easy === true));
-            // console.log(repAnimations.current, animationArray);
-        }
         repAnimations.current = animationArray;
         return targetReps;
     }
@@ -387,10 +376,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             expansionAnimation
             .fromTo('#expansionArrow', {x: expW(0)}, {x: expW(menuItemW-10), ...properties}, '<');
         
-        expandDialer(dialerExpansion, true);
+        expandDialer(dialerExpansion.current, true);
     }, [isMobile]);
     useEffect(() => {
-        expandDialer(dialerExpansion, true);
+        expandDialer(dialerExpansion.current, true);
     }, [resize])
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
@@ -437,10 +426,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
     const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
         e.code !== 'Tab' && e.preventDefault();
     }
-    const [dialerExpansion, setDialerExpansion] = useState<boolean>(false);
+    const dialerExpansion = useRef<boolean>(false);
     const handleExpansion = () => {
-        const toggle = !dialerExpansion;
-        setDialerExpansion(toggle);
+        const toggle = !dialerExpansion.current;
+        dialerExpansion.current = toggle;
         expandDialer(toggle, false);
     }
 
@@ -589,9 +578,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             !infinityApplied.current && !isPaginating.current && portal('up', applyInfinity);
             }
         });
-        addEventListener('scroll', (e) => {
-            
-        });
+        
+        addEventListener('scroll', (e) => expandDialer(dialerExpansion.current, true));
+
         history.listen((newLocation, action) => {
             if( action === 'POP' || action === 'REPLACE' ){
                 const current = paginationMap.filter(t => typeof t.current !== 'undefined' )[0];

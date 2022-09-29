@@ -99,6 +99,17 @@ body {
     letter-spacing: 100px;
     padding-left: 100px;
   }
+  #characterPage .title h1 {
+    font-size: 60px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 35px;
+    padding-left: 35px;
+  }
+  #characterPage .title h1::after {
+    font-size: 60px;
+    letter-spacing: 35px;
+  }
 }
 @media only screen and (max-width: 768px) {
   .title {
@@ -122,6 +133,17 @@ body {
     padding-left: 24px;
     padding-top: 5px;
   }
+  #characterPage .title h1 {
+    font-size: 35px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 20px;
+    padding-left: 20px;
+  }
+  #characterPage .title h1::after {
+    font-size: 35px;
+    letter-spacing: 20px;
+  }
 }
 @media only screen and (max-width: 428px) {
   .title {
@@ -135,5 +157,23 @@ body {
     word-wrap: break-word;
     letter-spacing: 40px;
     padding-left: 40px;
+  }
+  #characterPage .title h1 {
+    top: 25%;
+    font-size: 24px;
+    letter-spacing: 10px;
+    padding-left: 10px;
+  }
+  #characterPage .title h1::after {
+    font-size: 24px;
+    letter-spacing: 10px;
+    padding-top: 3px;
+    padding-left: 15px;
+  }
+  #characterPage .title div {
+    width: 220px;
+    font-size: 60px;
+    letter-spacing: 30px;
+    padding-left: 30px;
   }
 }/*# sourceMappingURL=style.css.map */

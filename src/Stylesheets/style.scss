@@ -118,6 +118,23 @@ body{
             padding-left: $spacing;
         }
     }
+    #characterPage{
+        .title{
+            $fontSize: 60px;
+            $letterSpacing: 35px;
+            h1{
+                font-size: $fontSize;
+                top: 20%;
+                left: 50%;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -143,6 +160,23 @@ body{
             padding-top: 5px;
         }
     }
+    #characterPage{
+        .title{
+            $fontSize: 35px;
+            $letterSpacing: 20px;
+            h1{
+                font-size: $fontSize;
+                top: 20%;
+                left: 50%;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 428px) {
@@ -157,6 +191,32 @@ body{
             $spacing: 40px;
             letter-spacing: $spacing;
             padding-left: $spacing;
+        }
+    }
+    #characterPage{
+        .title{
+            $fontSize: 24px;
+            $letterSpacing: 10px;
+            h1{
+                top: 25%;
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                $gap: 3px;
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+                padding-top: $gap;
+                padding-left: 15px;
+            }
+            div{
+                width: 220px;
+                font-size: 60px;
+                $spacing: 30px;
+                letter-spacing: $spacing;
+                padding-left: $spacing;
+            }
         }
     }
 }

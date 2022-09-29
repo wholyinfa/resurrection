@@ -89,6 +89,19 @@ article > .title div {
   content: "CHARACTER";
 }
 
+.card {
+  border-radius: 10px;
+  box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
+  background: rgb(11, 43, 34);
+  background: linear-gradient(-45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+}
+
+.card.reverseLight {
+  box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
+  background: rgb(11, 43, 34);
+  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+}
+
 @media only screen and (max-width: 1366px) {
   article > .title {
     padding-bottom: 100px;
@@ -160,12 +173,12 @@ article > .title div {
   }
   #characterPage > .title h1 {
     top: 25%;
-    font-size: 24px;
+    font-size: 40px;
     letter-spacing: 10px;
     padding-left: 10px;
   }
   #characterPage > .title h1::after {
-    font-size: 24px;
+    font-size: 40px;
     letter-spacing: 10px;
     padding-top: 3px;
     padding-left: 15px;

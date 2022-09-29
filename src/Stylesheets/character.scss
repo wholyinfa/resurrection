@@ -2,12 +2,38 @@
 
 #characterPage{
     .characterDeck{
+        $gap: 50px;
+        $deckW: 350px;
+        $deckH: 600px;
+        .deck.life{
+            width: $deckW + $gap * 5;
+            height: $deckH + $gap * 5;
+            @for $i from 0 through 4 {
+                .card:nth-child(#{$i+1}) {
+                  top: $gap * $i;
+                  right: $gap * $i;
+                }
+              }
+        }
+        .deck.work{
+            width: $deckW + $gap * 6;
+            height: $deckH + $gap * 6;
+            @for $i from 0 through 5 {
+                .card:nth-child(#{$i+1}) {
+                  top: $gap * $i;
+                  left: $gap * $i;
+                }
+              }
+        }
         .deck{
+            position: relative;
             .card{
-                width: 350px;
-                height: 600px;
+                width: $deckW;
+                height:$deckH;
                 text-align: center;
                 padding: 30px;
+                position: absolute;
+                z-index: 1;
                 .icon{
                     height: 150px;
                 }

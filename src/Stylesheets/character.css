@@ -90,7 +90,6 @@ article > .title div {
 }
 
 .card {
-  margin: 2em;
   border-radius: 10px;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
   background: rgb(11, 43, 34);
@@ -191,11 +190,68 @@ article > .title div {
     padding-left: 30px;
   }
 }
+#characterPage .characterDeck .deck.life {
+  width: 600px;
+  height: 850px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(1) {
+  top: 0px;
+  right: 0px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(2) {
+  top: 50px;
+  right: 50px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(3) {
+  top: 100px;
+  right: 100px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(4) {
+  top: 150px;
+  right: 150px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(5) {
+  top: 200px;
+  right: 200px;
+}
+#characterPage .characterDeck .deck.work {
+  width: 650px;
+  height: 900px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(1) {
+  top: 0px;
+  left: 0px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(2) {
+  top: 50px;
+  left: 50px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(3) {
+  top: 100px;
+  left: 100px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(4) {
+  top: 150px;
+  left: 150px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(5) {
+  top: 200px;
+  left: 200px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(6) {
+  top: 250px;
+  left: 250px;
+}
+#characterPage .characterDeck .deck {
+  position: relative;
+}
 #characterPage .characterDeck .deck .card {
   width: 350px;
   height: 600px;
   text-align: center;
   padding: 30px;
+  position: absolute;
+  z-index: 1;
 }
 #characterPage .characterDeck .deck .card .icon {
   height: 150px;

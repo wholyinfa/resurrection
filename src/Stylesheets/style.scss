@@ -107,6 +107,21 @@ article > .title{
     }
 }
 
+.card{
+    margin: 2em;
+    border-radius: 10px;
+    -webkit-box-shadow: 5px 10px 20px 5px rgba(0,0,0,0.4); 
+    box-shadow: 5px 10px 20px 5px rgba(0,0,0,0.4);
+    background: rgb(11,43,34);
+    background: linear-gradient(-45deg, rgba(11,43,34,1) 0%, rgba(43,189,150,1) 100%);
+}
+.card.reverseLight{
+    -webkit-box-shadow: -5px 10px 20px 5px rgba(0,0,0,0.4); 
+    box-shadow: -5px 10px 20px 5px rgba(0,0,0,0.4);
+    background: rgb(11,43,34);
+    background: linear-gradient(45deg, rgba(11,43,34,1) 0%, rgba(43,189,150,1) 100%);
+}
+
 @media only screen and (max-width: 1366px) {
     article > .title{
         padding-bottom: 100px;

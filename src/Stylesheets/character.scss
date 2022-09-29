@@ -1,1 +1,48 @@
 @import './style.scss';
+
+#characterPage{
+    .characterDeck{
+        .deck{
+            .card{
+                width: 350px;
+                height: 600px;
+                text-align: center;
+                padding: 30px;
+                .icon{
+                    height: 150px;
+                }
+                img{
+                    max-width: 200px;
+                    height: 100%;
+                }
+                .title{
+                    font-family: latoMedium;
+                    font-weight: normal;
+                    margin: 20px 0 40px 0;
+                    font-size: 20px;
+                    position: relative;
+                    h2{
+                        font-size: 40px;
+                        margin: -10px 0 0 0;
+                        position: relative;
+                        z-index: 1;
+                    }
+                    span{
+                        @extend h2;
+                        position: absolute;
+                        top: 42%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        color: #000;
+                        z-index: 0;
+                    }
+                }
+                .description{
+                    font-family: latoLight;
+                    font-size: 20px;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}

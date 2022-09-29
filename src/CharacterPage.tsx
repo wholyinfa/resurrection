@@ -18,11 +18,18 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                         <h2 className='title'>{deckType.toUpperCase()}</h2>
                         <div className='deck'>
                             { deck.map( (item: CharacterData, i: number) => {
-                                return <div key={i} className='card'>
-                                    <img src={item.imgSource} />
+                                return <div key={i}
+                                    className={`card ${(deckType === 'life') ? 'reverseLight': ''}`}
+                                >
+                                    <div className='icon'>
+                                        <img src={item.imgSource} />
+                                    </div>
                                     <div className='title'>
                                         THE
-                                        <h2>{item.title}</h2>
+                                        <span>{item.title.toUpperCase()}</span>
+                                        <h2>
+                                            {item.title.toUpperCase()}
+                                        </h2>
                                     </div>
                                     <div className='description'>
                                         {item.description}

@@ -89,6 +89,20 @@ article > .title div {
   content: "CHARACTER";
 }
 
+.card {
+  margin: 2em;
+  border-radius: 10px;
+  box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
+  background: rgb(11, 43, 34);
+  background: linear-gradient(-45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+}
+
+.card.reverseLight {
+  box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
+  background: rgb(11, 43, 34);
+  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+}
+
 @media only screen and (max-width: 1366px) {
   article > .title {
     padding-bottom: 100px;
@@ -160,12 +174,12 @@ article > .title div {
   }
   #characterPage > .title h1 {
     top: 25%;
-    font-size: 24px;
+    font-size: 40px;
     letter-spacing: 10px;
     padding-left: 10px;
   }
   #characterPage > .title h1::after {
-    font-size: 24px;
+    font-size: 40px;
     letter-spacing: 10px;
     padding-top: 3px;
     padding-left: 15px;
@@ -176,4 +190,43 @@ article > .title div {
     letter-spacing: 30px;
     padding-left: 30px;
   }
+}
+#characterPage .characterDeck .deck .card {
+  width: 350px;
+  height: 600px;
+  text-align: center;
+  padding: 30px;
+}
+#characterPage .characterDeck .deck .card .icon {
+  height: 150px;
+}
+#characterPage .characterDeck .deck .card img {
+  max-width: 200px;
+  height: 100%;
+}
+#characterPage .characterDeck .deck .card .title {
+  font-family: latoMedium;
+  font-weight: normal;
+  margin: 20px 0 40px 0;
+  font-size: 20px;
+  position: relative;
+}
+#characterPage .characterDeck .deck .card .title h2, #characterPage .characterDeck .deck .card .title span {
+  font-size: 40px;
+  margin: -10px 0 0 0;
+  position: relative;
+  z-index: 1;
+}
+#characterPage .characterDeck .deck .card .title span {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #000;
+  z-index: 0;
+}
+#characterPage .characterDeck .deck .card .description {
+  font-family: latoLight;
+  font-size: 20px;
+  text-align: left;
 }/*# sourceMappingURL=character.css.map */

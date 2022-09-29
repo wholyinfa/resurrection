@@ -63,7 +63,7 @@ export let paginationMap: paginationMap[] = [
     },
   {
     ...Pages.about,
-    launchList: '.title, section > *'
+    launchList: '.title, section'
     },
   {
     ...Pages.character,
@@ -393,6 +393,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
     }, [isMobile]);
     useEffect(() => {
         expandDialer(dialerExpansion.current, true);
+        dialerSequence(Type.current);
     }, [resize])
 
     const makeVisible = ( theItems: Element[], immediate?: boolean) => {
@@ -607,7 +608,18 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         });
     },[])
 
-    const Type = useRef<'work' | 'life' | 'index'>('index');
+    type SectionType = 'work' | 'life' | 'index';
+    const Type = useRef<SectionType>('index');
+    const dialerSequence = (oldType: SectionType) => {
+        if ( !trueMobile.current ) gsap.fromTo('#dialerContainer', {background: animProps.color(Type.current)}, {duration: .2,background: animProps.color(oldType)});
+        else gsap.set('#dialerContainer', {background: 'transparent'});
+
+        const shadeRDeg =  (trueMobile.current) ? 180 : 90;
+        const shadeLDeg =  (trueMobile.current) ? 0 : -90;
+        gsap.fromTo('#dialerContainer .shade.R', {background: animProps.shadeBg(shadeRDeg, Type.current)}, {duration: .2,background: animProps.shadeBg(shadeRDeg, oldType)})
+        gsap.fromTo('#dialerContainer .shade.L', {background: animProps.shadeBg(shadeLDeg, Type.current)}, {duration: .2,background: animProps.shadeBg(shadeLDeg, oldType)});
+    
+    }
     const paginationSequence = (dissipate?: true) => {
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
         const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
@@ -620,10 +632,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             ( type === 'work' ) ? animProps.color('work') : animProps.color('index');
 
             gsap.to('body', {duration: .2, background: bg});
-            if( Type.current !== type ){
-                gsap.fromTo('#dialerContainer .shade.R', {background: animProps.shadeBg(90, Type.current)}, {duration: .2,background: animProps.shadeBg(90, type)})
-                gsap.fromTo('#dialerContainer .shade.L', {background: animProps.shadeBg(-90, Type.current)}, {duration: .2,background: animProps.shadeBg(-90, type)});
-            }
+            dialerSequence(type);
             Type.current = type;
         }
     }

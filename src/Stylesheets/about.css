@@ -140,6 +140,7 @@ body {
   position: relative;
   margin: 0 auto;
   max-width: 750px;
+  overflow: hidden;
   font-family: latoLight;
 }
 #aboutPage section > * {
@@ -154,6 +155,11 @@ body {
 }
 #aboutPage section p {
   font-size: 20px;
+}
+#aboutPage section #brand {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 80px;
 }
 #aboutPage section #myName {
   width: 70px;
@@ -193,6 +199,9 @@ body {
     max-width: 100%;
     margin: 0;
     padding: 0 50px;
+  }
+  #aboutPage section #brand {
+    position: static;
   }
   #aboutPage section .breathingFragment {
     position: relative;

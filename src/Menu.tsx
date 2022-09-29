@@ -10,7 +10,7 @@ gsap.registerPlugin(Draggable);
 
 export const animProps = {
     color: (t: 'work' | 'life' | 'index') : string => (t === 'work') ? 'rgba(26,35,126,1)' :  (t === 'life') ? 'rgba(6,78,59,1)' : 'rgba(0,0,0,1)',
-    shadeBg: (deg: 90 | -90, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
+    shadeBg: (deg: number, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
 }
 function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
     return <nav>
@@ -63,7 +63,7 @@ export let paginationMap: paginationMap[] = [
     },
   {
     ...Pages.about,
-    launchList: ''
+    launchList: '.title, section > *'
     },
   {
     ...Pages.character,

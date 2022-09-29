@@ -5,6 +5,8 @@
         position: relative;
         margin: 0 auto;
         max-width: 750px;
+        overflow: hidden;
+
         $contentGap: 50px;
         $gap: 20%;
         font-family: latoLight;
@@ -20,6 +22,10 @@
         }
         p{
             font-size: 20px;
+        }
+        #brand{
+            position: sticky;
+            top: 80px;
         }
         #myName{
             $fontSize: 100px;
@@ -66,6 +72,9 @@
             max-width: 100%;
             margin: 0;
             padding: 0 50px;
+            #brand{
+                position: static;
+            }
             .breathingFragment{
                 position: relative;
                 transform: inherit;

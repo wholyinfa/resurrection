@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react';
 import './Stylesheets/about.css';
 import PropTypes, {InferProps} from 'prop-types';
-export default function AboutPage({}: InferProps<typeof AboutPage.propTypes>) {
+
+const BrandContent = () => {
+    return <>
+    <img src={require('./Assets/BreathingFragment.svg')} className='breathingFragment' alt='The main logo | Infa (infamousrocket)' />
+    <div id='myName'>INFA</div>
+    </>;
+}
+export default function AboutPage({isMobile}: InferProps<typeof AboutPage.propTypes>) {
 
     useEffect(() => {
         
@@ -12,10 +19,10 @@ export default function AboutPage({}: InferProps<typeof AboutPage.propTypes>) {
             <div>ABOUT</div>
         </div>
         <section>
-            <div id='brand'>
-                <img src={require('./Assets/BreathingFragment.svg')} className='breathingFragment' alt='The main logo | Infa (infamousrocket)' />
-                <div id='myName'>INFA</div>
-            </div>
+            {
+                (!isMobile) ? <div id='brand'><BrandContent /></div> :
+                <BrandContent />
+            }
             <h2>The INFAmous Rocket ...</h2>
             <p>is a character I've created at the age of 18 and it was for a long time used as my nickname; Now it's my name!</p>
             <p>
@@ -33,5 +40,5 @@ export default function AboutPage({}: InferProps<typeof AboutPage.propTypes>) {
     </article>;
 }
 AboutPage.propTypes ={
-    
+    isMobile: PropTypes.bool.isRequired
 }

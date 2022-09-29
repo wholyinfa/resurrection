@@ -100,7 +100,9 @@ export default function App() {
           />
         </Route>
         <Route exact path={Pages.about.url}>
-          <AboutPage />
+          <AboutPage
+            isMobile = {isMobile}
+          />
         </Route>
         <Route exact path={Pages.contact.url}>
           <ContactPage />

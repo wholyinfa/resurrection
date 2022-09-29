@@ -5,7 +5,15 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
     useEffect(() => {
         
     }, [])
-    return <h1>I'm character</h1>;
+    return <article id='characterPage'>
+        <div className='title'>
+            <h1>CHARACTER</h1>
+            <div>CHARACTER</div>
+        </div>
+        <section>
+
+        </section>
+    </article>;
 }
 CharacterPage.propTypes ={
     

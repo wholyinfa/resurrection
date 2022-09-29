@@ -50,6 +50,7 @@ body{
 
 .title{
     $fontSize: 100px;
+    $letterSpacing: 55px;
     height: $fontSize;
     width: 100%;
     text-align: center;
@@ -63,8 +64,8 @@ body{
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        letter-spacing: 55px;
-        padding-left: 55px;
+        letter-spacing: $letterSpacing;
+        padding-left: $letterSpacing;
         display: inline-block;
     }
     h1::after{
@@ -73,10 +74,10 @@ body{
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 100px;
+        font-size: $fontSize;
         font-family: latoMedium;
         margin: 0 auto;
-        letter-spacing: 55px;
+        letter-spacing: $letterSpacing;
         padding-top: $gap;
         padding-left: 50px - $gap;
         display: inline-block;
@@ -98,6 +99,11 @@ body{
 #aboutPage{
     h1::after{
         content: 'ABOUT';
+    }
+}
+#characterPage{
+    h1::after{
+        content: 'CHARACTER';
     }
 }
 

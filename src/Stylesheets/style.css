@@ -85,6 +85,10 @@ body {
   content: "ABOUT";
 }
 
+#characterPage h1::after {
+  content: "CHARACTER";
+}
+
 @media only screen and (max-width: 1366px) {
   .title {
     padding-bottom: 100px;

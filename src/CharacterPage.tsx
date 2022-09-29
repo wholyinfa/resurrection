@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './Stylesheets/character.css';
 import PropTypes, {InferProps} from 'prop-types';
+import { Character, CharacterData } from './data';
 export default function CharacterPage({}: InferProps<typeof CharacterPage.propTypes>) {
     useEffect(() => {
         
@@ -11,36 +12,27 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
             <div>CHARACTER</div>
         </div>
         <section>
-            <div className='characterDeck life'>
-                <h2 className='title'>LIFE</h2>
-                <div className='deck'>
-                    <div className='card'>
-                        <img src='' />
-                        <div className='title'>
-                            THE
-                            <h2>TITLE</h2>
-                        </div>
-                        <div className='description'>
-                            Some text
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className='characterDeck work'>
-                <h2 className='title'>WORK</h2>
-                <div className='deck'>
-                    <div className='card'>
-                        <img src='' />
-                        <div className='title'>
-                            THE
-                            <h2>TITLE</h2>
-                        </div>
-                        <div className='description'>
-                            Some text
+            {
+                Object.entries(Character).map( ([deckType, deck], i) => {
+                    return  <div key={i} className={`characterDeck ${deckType}`}>
+                        <h2 className='title'>{deckType.toUpperCase()}</h2>
+                        <div className='deck'>
+                            { deck.map( (item: CharacterData, i: number) => {
+                                return <div key={i} className='card'>
+                                    <img src={item.imgSource} />
+                                    <div className='title'>
+                                        THE
+                                        <h2>{item.title}</h2>
+                                    </div>
+                                    <div className='description'>
+                                        {item.description}
+                                    </div>
+                                </div>;
+                            })}
                         </div>
                     </div>
-                </div>
-            </div>
+                })
+            }
         </section>
     </article>;
 }

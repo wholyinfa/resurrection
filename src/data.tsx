@@ -76,7 +76,7 @@ export const Projects: ProjectType[] = [
     },
 ]
 
-interface CharacterData {
+export interface CharacterData {
     imgSource: string;
     title: string;
     description: string;
@@ -87,6 +87,33 @@ interface Character {
 }
 
 export const Character: Character = {
+    life: [
+        {
+            imgSource: require('./Assets/Character/Athlete.svg'),
+            title: 'athlete',
+            description: 'Feeling the hard cold ground as it reflects "POWER!" for each Push-up, hearing the sky yell "HIGHER!" on every Pull-up, fighting the wind, the rain, the snow and the dust while running towards a superior shape of body and mind is worth hustling for repeatedly.',
+        },
+        {
+            imgSource: require('./Assets/Character/Gamer.svg'),
+            title: 'gamer',
+            description: 'Being a mutant hunting monsters, a soldier in an apocalyptic world, an eagle flying over the ancient greece, a survivor in a future with dinosaurs, these are all unknown scenarios to our form of world and games can visualize them making exploring these worlds an amusing yet informative hobby.',
+        },
+        {
+            imgSource: require('./Assets/Character/Dreamer.svg'),
+            title: 'dreamer',
+            description: 'Dreams that are visualized to be real eventually become part of reality, it\'s a matter of how bad one wants it and how hard he is willing to work for it, one should never stop dreaming, this life we know would not expand to this extent without our ancestors\' dreams supporting their hard work.',
+        },
+        {
+            imgSource: require('./Assets/Character/Chef.svg'),
+            title: 'chef',
+            description: 'The process of making good food comes to how passionately it\'s being made, along with passion, patience is key when preparing the hearty meal; In the end the relief of a tasty self-made food after a cooking session washes all the fatigue away, specially if it\' shared with loved ones.',
+        },
+        {
+            imgSource: require('./Assets/Character/Boss.svg'),
+            title: 'boss',
+            description: 'The mentality and the attitude which we choose towards life will have an impact on how our reality is formed. That means that if we believe that we\'re the ones ultimately in control of our life, we\'ll be urged to be more conscious on the thoughts that we have cause they might just be manifested...!',
+        },
+    ],
     work: [
         {
             imgSource: require('./Assets/Character/Coder.svg'),
@@ -119,33 +146,6 @@ export const Character: Character = {
             description: 'I could be considered as an artistic person but I let them shine elsewhere, meaning that I\'m into designing webpages and even enjoy it as I do it, but I long for getting into programming phase, everytime I start designing. That should say a lot:)',
         },
     ],
-    life: [
-        {
-            imgSource: require('./Assets/Character/Athlete.svg'),
-            title: 'athlete',
-            description: 'Feeling the hard cold ground as it reflects "POWER!" for each Push-up, hearing the sky yell "HIGHER!" on every Pull-up, fighting the wind, the rain, the snow and the dust while running towards a superior shape of body and mind is worth hustling for repeatedly.',
-        },
-        {
-            imgSource: require('./Assets/Character/Gamer.svg'),
-            title: 'gamer',
-            description: 'Being a mutant hunting monsters, a soldier in an apocalyptic world, an eagle flying over the ancient greece, a survivor in a future with dinosaurs, these are all unknown scenarios to our form of world and games can visualize them making exploring these worlds an amusing yet informative hobby.',
-        },
-        {
-            imgSource: require('./Assets/Character/Dreamer.svg'),
-            title: 'dreamer',
-            description: 'Dreams that are visualized to be real eventually become part of reality, it\'s a matter of how bad one wants it and how hard he is willing to work for it, one should never stop dreaming, this life we know would not expand to this extent without our ancestors\' dreams supporting their hard work.',
-        },
-        {
-            imgSource: require('./Assets/Character/Chef.svg'),
-            title: 'chef',
-            description: 'The process of making good food comes to how passionately it\'s being made, along with passion, patience is key when preparing the hearty meal; In the end the relief of a tasty self-made food after a cooking session washes all the fatigue away, specially if it\' shared with loved ones.',
-        },
-        {
-            imgSource: require('./Assets/Character/Boss.svg'),
-            title: 'boss',
-            description: 'The mentality and the attitude which we choose towards life will have an impact on how our reality is formed. That means that if we believe that we\'re the ones ultimately in control of our life, we\'ll be urged to be more conscious on the thoughts that we have cause they might just be manifested...!',
-        },
-    ]
 }
 
 export const breakPoints = {

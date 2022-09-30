@@ -1,39 +1,49 @@
+@use 'sass:math';
 @import './style.scss';
 
+$gap: 50;
+$cardW: 350;
+$cardH: 600;
 #characterPage{
     .characterDeck{
-        $gap: 50px;
-        $deckW: 350px;
-        $deckH: 600px;
         .deck.life{
-            width: $deckW + $gap * 5;
-            height: $deckH + $gap * 5;
-            @for $i from 0 through 4 {
+            $childCount: 5;
+            $deckW: $cardW + $gap*2 * $childCount;
+            width: $deckW * 1px;
+            height: $cardH + $gap * $childCount * 1px;
+            margin: 0 auto;
+            @for $i from 0 through $childCount {
                 .card:nth-child(#{$i+1}) {
-                  top: $gap * $i;
-                  right: $gap * $i;
+                 $rigth: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
+                  top: $gap * $i * 1px;
+                  right: $rigth;
                 }
               }
         }
         .deck.work{
-            width: $deckW + $gap * 6;
-            height: $deckH + $gap * 6;
-            @for $i from 0 through 5 {
+            $childCount: 6;
+            $deckW: $cardW + $gap*2 * $childCount;
+            width: $deckW * 1px;
+            height: $cardH + $gap * $childCount * 1px;
+            margin: 0 auto;
+            @for $i from 0 through $childCount {
                 .card:nth-child(#{$i+1}) {
-                  top: $gap * $i;
-                  left: $gap * $i;
+                 $left: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
+                  top: $gap * $i * 1px;
+                  left: $left;
                 }
               }
         }
         .deck{
             position: relative;
             .card{
-                width: $deckW;
-                height:$deckH;
+                width: $cardW * 1px;
+                height: $cardH * 1px;
                 text-align: center;
                 padding: 30px;
                 position: absolute;
                 z-index: 1;
+                box-sizing: border-box;
                 .icon{
                     height: 150px;
                 }
@@ -64,6 +74,8 @@
                     }
                 }
                 .description{
+                    max-height: 250px;
+                    overflow-y: auto;
                     font-family: latoLight;
                     font-size: 20px;
                     text-align: left;

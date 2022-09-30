@@ -17,7 +17,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                     return  <div key={i} className={`characterDeck ${deckType}`}>
                         <h2 className='title'>{deckType.toUpperCase()}</h2>
                         <div className={`deck ${deckType}`}>
-                            { deck.map( (item: CharacterData, i: number) => {
+                            { [...deck].reverse().map( (item: CharacterData, i: number) => {
                                 return <div key={i}
                                     className={`card ${(deckType === 'life') ? 'reverseLight': ''}`}
                                 >

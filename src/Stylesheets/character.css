@@ -191,56 +191,66 @@ article > .title div {
   }
 }
 #characterPage .characterDeck .deck.life {
-  width: 600px;
+  width: 850px;
   height: 850px;
+  margin: 0 auto;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(1) {
   top: 0px;
-  right: 0px;
+  right: 0%;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(2) {
   top: 50px;
-  right: 50px;
+  right: 14.7058823529%;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(3) {
   top: 100px;
-  right: 100px;
+  right: 29.4117647059%;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(4) {
   top: 150px;
-  right: 150px;
+  right: 44.1176470588%;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(5) {
   top: 200px;
-  right: 200px;
+  right: 58.8235294118%;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(6) {
+  top: 250px;
+  right: 73.5294117647%;
 }
 #characterPage .characterDeck .deck.work {
-  width: 650px;
+  width: 950px;
   height: 900px;
+  margin: 0 auto;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(1) {
   top: 0px;
-  left: 0px;
+  left: 0%;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(2) {
   top: 50px;
-  left: 50px;
+  left: 12.6315789474%;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(3) {
   top: 100px;
-  left: 100px;
+  left: 25.2631578947%;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(4) {
   top: 150px;
-  left: 150px;
+  left: 37.8947368421%;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(5) {
   top: 200px;
-  left: 200px;
+  left: 50.5263157895%;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(6) {
   top: 250px;
-  left: 250px;
+  left: 63.1578947368%;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(7) {
+  top: 300px;
+  left: 75.7894736842%;
 }
 #characterPage .characterDeck .deck {
   position: relative;
@@ -252,6 +262,7 @@ article > .title div {
   padding: 30px;
   position: absolute;
   z-index: 1;
+  box-sizing: border-box;
 }
 #characterPage .characterDeck .deck .card .icon {
   height: 150px;
@@ -282,6 +293,8 @@ article > .title div {
   z-index: 0;
 }
 #characterPage .characterDeck .deck .card .description {
+  max-height: 250px;
+  overflow-y: auto;
   font-family: latoLight;
   font-size: 20px;
   text-align: left;

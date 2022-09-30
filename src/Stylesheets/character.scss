@@ -1,12 +1,11 @@
 @use 'sass:math';
 @import './style.scss';
 
-$gap: 50;
 $cardW: 350;
 $cardH: 600;
 $WorkChildCount: 6;
 $LifeChildCount: 5;
-@mixin spreadEqually($childCount, $work: false, $h2W, $gapMultiplier: 2){
+@mixin spreadEqually($childCount, $work: false, $h2W, $gapMultiplier: 2, $gap: 50){
     $deckW: $cardW + $gap*$gapMultiplier * $childCount;
     width: $deckW * 1px;
     height: $cardH + $gap * $childCount * 1px;
@@ -31,6 +30,7 @@ $LifeChildCount: 5;
 }
 #characterPage{
     .characterDeck{
+        text-align: center;
         $h2FontSize: 50px;
         .deck.life{
             @include spreadEqually($LifeChildCount, false, $h2FontSize - 10);
@@ -47,12 +47,14 @@ $LifeChildCount: 5;
         }
         .deck{
             position: relative;
+            display: inline-block;
             > h2{
                 font-size: $h2FontSize;
                 font-family: latoMedium;
                 word-break: break-all;
                 text-align: center;
                 position: absolute;
+                margin: 0;
             }
             .card{
                 width: $cardW * 1px;
@@ -111,7 +113,72 @@ $LifeChildCount: 5;
                 @include spreadEqually($LifeChildCount, false, $h2FontSize - 10, .8);
             }
             .deck.work{
-                @include spreadEqually($WorkChildCount, false, $h2FontSize, .8);
+                @include spreadEqually($WorkChildCount, true, $h2FontSize, .8);
+                margin-bottom: 100px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px){
+    $gap: 15;
+    $cardW: 300;
+    #characterPage{
+        .characterDeck{
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: visible;
+            $h2FontSize: 50px;
+            .deck{
+                > h2{
+                    font-size: $h2FontSize;
+                    font-family: latoMedium;
+                    word-break: normal;
+                    text-align: center;
+                    position: absolute;
+                }
+                .card{
+                    width: $cardW * 1px;
+                }
+            }
+            .deck.life{
+                @include spreadEqually($LifeChildCount, false, $h2FontSize - 10, 1, $gap);
+                left: auto;
+                > h2{
+                    width: auto;
+                    top: -$gap * 1px;
+                    left: 60%;
+                    transform: translate(-50%, -100%);
+                }
+                margin-top: 100px;
+            }
+            .deck.work{
+                @include spreadEqually($WorkChildCount, true, $h2FontSize, 1, $gap);
+                left: auto;
+                > h2{
+                    width: auto;
+                    top: -$gap * 1px;
+                    left: 40%;
+                    transform: translate(-50%, -100%);
+                }
+                margin-top: 150px;
+                margin-bottom: 100px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 428px) {
+    
+    #characterPage{
+        .characterDeck{
+            .deck.life, .deck.work{
+                > h2{
+                    display: inline-block;
+                    position: relative;
+                    left: auto;
+                    transform: translate(-10%, -100%);
+                }
             }
         }
     }

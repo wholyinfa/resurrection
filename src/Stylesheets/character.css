@@ -322,4 +322,81 @@ article > .title div {
   font-family: latoLight;
   font-size: 20px;
   text-align: left;
+}
+
+@media only screen and (max-width: 1366px) {
+  #characterPage .characterDeck .deck.life {
+    width: 550px;
+    height: 850px;
+    margin: 0 auto;
+    left: 35px;
+  }
+  #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
+    width: 40px;
+    left: -30px;
+    top: 50%;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(2) {
+    right: 0%;
+    top: 0px;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(3) {
+    right: 9.0909090909%;
+    top: 50px;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(4) {
+    right: 18.1818181818%;
+    top: 100px;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(5) {
+    right: 27.2727272727%;
+    top: 150px;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(6) {
+    right: 36.3636363636%;
+    top: 200px;
+  }
+  #characterPage .characterDeck .deck.life .card:nth-child(7) {
+    right: 45.4545454545%;
+    top: 250px;
+  }
+  #characterPage .characterDeck .deck.work {
+    width: 590px;
+    height: 900px;
+    margin: 0 auto;
+    left: 40px;
+  }
+  #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
+    width: 50px;
+    left: -30px;
+    top: 50%;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(2) {
+    right: 0%;
+    top: 0px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(3) {
+    right: 8.1355932203%;
+    top: 50px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(4) {
+    right: 16.2711864407%;
+    top: 100px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(5) {
+    right: 24.406779661%;
+    top: 150px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(6) {
+    right: 32.5423728814%;
+    top: 200px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(7) {
+    right: 40.6779661017%;
+    top: 250px;
+  }
+  #characterPage .characterDeck .deck.work .card:nth-child(8) {
+    right: 48.813559322%;
+    top: 300px;
+  }
 }/*# sourceMappingURL=character.css.map */

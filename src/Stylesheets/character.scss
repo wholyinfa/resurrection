@@ -10,6 +10,7 @@ $cardH: 600;
         .deck.life{
             $childCount: 5;
             $deckW: $cardW + $gap*2 * $childCount;
+            $h2W: $h2FontSize - 10;
             width: $deckW * 1px;
             height: $cardH + $gap * $childCount * 1px;
             margin: 0 auto;
@@ -21,31 +22,34 @@ $cardH: 600;
                 }
               }
             > h2{
-                width: $h2FontSize - 10;
+                width: $h2W;
                 left: -30px;
                 top: 50%;
                 transform: translate(-100%, -40%);
             }
+            left: ($h2W + 30) / 2;
         }
         .deck.work{
             $childCount: 6;
             $deckW: $cardW + $gap*2 * $childCount;
+            $h2W: $h2FontSize;
             width: $deckW * 1px;
             height: $cardH + $gap * $childCount * 1px;
-            margin: 100px auto 0 auto;
+            margin: 50px auto 100px auto;
             @for $i from 0 through $childCount {
                 .card:nth-child(#{$i+2}) {
                  $left: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
-                  top: $gap * $i * 1px;
-                  left: $left;
+                  bottom: $gap * $i * 1px;
+                  right: $left;
                 }
               }
               > h2{
                   width: $h2FontSize;
-                  right: -30px;
+                  left: -30px;
                   top: 50%;
-                  transform: translate(100%, -25%);
+                  transform: translate(-100%, -100%);
               }
+              left: ($h2W + 30) / 2;
         }
         .deck{
             position: relative;

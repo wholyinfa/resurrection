@@ -6,6 +6,7 @@ $cardW: 350;
 $cardH: 600;
 #characterPage{
     .characterDeck{
+        $h2FontSize: 50px;
         .deck.life{
             $childCount: 5;
             $deckW: $cardW + $gap*2 * $childCount;
@@ -13,29 +14,48 @@ $cardH: 600;
             height: $cardH + $gap * $childCount * 1px;
             margin: 0 auto;
             @for $i from 0 through $childCount {
-                .card:nth-child(#{$i+1}) {
+                .card:nth-child(#{$i+2}) {
                  $rigth: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
                   top: $gap * $i * 1px;
                   right: $rigth;
                 }
               }
+            > h2{
+                width: $h2FontSize - 10;
+                left: -30px;
+                top: 50%;
+                transform: translate(-100%, -40%);
+            }
         }
         .deck.work{
             $childCount: 6;
             $deckW: $cardW + $gap*2 * $childCount;
             width: $deckW * 1px;
             height: $cardH + $gap * $childCount * 1px;
-            margin: 0 auto;
+            margin: 100px auto 0 auto;
             @for $i from 0 through $childCount {
-                .card:nth-child(#{$i+1}) {
+                .card:nth-child(#{$i+2}) {
                  $left: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
                   top: $gap * $i * 1px;
                   left: $left;
                 }
               }
+              > h2{
+                  width: $h2FontSize;
+                  right: -30px;
+                  top: 50%;
+                  transform: translate(100%, -25%);
+              }
         }
         .deck{
             position: relative;
+            > h2{
+                font-size: $h2FontSize;
+                font-family: latoMedium;
+                word-break: break-all;
+                text-align: center;
+                position: absolute;
+            }
             .card{
                 width: $cardW * 1px;
                 height: $cardH * 1px;

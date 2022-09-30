@@ -5,51 +5,45 @@ $gap: 50;
 $cardW: 350;
 $cardH: 600;
 #characterPage{
+    @mixin spreadEqually($childCount, $work: false, $h2W){
+        $deckW: $cardW + $gap*2 * $childCount;
+        width: $deckW * 1px;
+        height: $cardH + $gap * $childCount * 1px;
+        margin: 0 auto;
+        left: math.div(($h2W + 30), 2);
+        > h2{
+           width: $h2W;
+           left: -30px;
+           top: 50%;
+        }
+        @for $i from 0 through $childCount {
+            .card:nth-child(#{$i+2}) {
+             $right: math.div(( math.div(($deckW - $cardW), $childCount - 1) * ($i)), $deckW) * 100%;
+             right: $right;
+             @if $work{
+                bottom: $gap * $i * 1px;
+             } @else{
+                top: $gap * $i * 1px;
+             }
+            }
+          }
+    }
     .characterDeck{
         $h2FontSize: 50px;
         .deck.life{
             $childCount: 5;
-            $deckW: $cardW + $gap*2 * $childCount;
-            $h2W: $h2FontSize - 10;
-            width: $deckW * 1px;
-            height: $cardH + $gap * $childCount * 1px;
-            margin: 0 auto;
-            @for $i from 0 through $childCount {
-                .card:nth-child(#{$i+2}) {
-                 $rigth: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
-                  top: $gap * $i * 1px;
-                  right: $rigth;
-                }
-              }
+            @include spreadEqually($childCount, false, $h2FontSize - 10);
             > h2{
-                width: $h2W;
-                left: -30px;
-                top: 50%;
                 transform: translate(-100%, -40%);
             }
-            left: ($h2W + 30) / 2;
         }
         .deck.work{
             $childCount: 6;
-            $deckW: $cardW + $gap*2 * $childCount;
-            $h2W: $h2FontSize;
-            width: $deckW * 1px;
-            height: $cardH + $gap * $childCount * 1px;
-            margin: 50px auto 100px auto;
-            @for $i from 0 through $childCount {
-                .card:nth-child(#{$i+2}) {
-                 $left: (( math.div(($deckW - $cardW), $childCount - 1) * ($i)) / $deckW) * 100%;
-                  bottom: $gap * $i * 1px;
-                  right: $left;
-                }
-              }
-              > h2{
-                  width: $h2FontSize;
-                  left: -30px;
-                  top: 50%;
-                  transform: translate(-100%, -100%);
-              }
-              left: ($h2W + 30) / 2;
+            @include spreadEqually($childCount, true, $h2FontSize);
+            margin-bottom: 100px;
+            > h2{
+                transform: translate(-100%, -100%);
+            }
         }
         .deck{
             position: relative;
@@ -107,4 +101,8 @@ $cardH: 600;
             }
         }
     }
+}
+
+@media only screen and (max-width: 1366px){
+
 }

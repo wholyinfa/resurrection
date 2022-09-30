@@ -93,13 +93,11 @@ article > .title div {
   border-radius: 10px;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
   background: rgb(11, 43, 34);
-  background: linear-gradient(-45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
 }
 
 .card.reverseLight {
   box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
-  background: rgb(11, 43, 34);
-  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
 }
 
 @media only screen and (max-width: 1366px) {
@@ -196,74 +194,79 @@ article > .title div {
   margin: 0 auto;
   left: 35px;
 }
-#characterPage .characterDeck .deck.life .card:nth-child(2) {
-  top: 0px;
-  right: 0%;
-}
-#characterPage .characterDeck .deck.life .card:nth-child(3) {
-  top: 50px;
-  right: 14.7058823529%;
-}
-#characterPage .characterDeck .deck.life .card:nth-child(4) {
-  top: 100px;
-  right: 29.4117647059%;
-}
-#characterPage .characterDeck .deck.life .card:nth-child(5) {
-  top: 150px;
-  right: 44.1176470588%;
-}
-#characterPage .characterDeck .deck.life .card:nth-child(6) {
-  top: 200px;
-  right: 58.8235294118%;
-}
-#characterPage .characterDeck .deck.life .card:nth-child(7) {
-  top: 250px;
-  right: 73.5294117647%;
-}
 #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
   width: 40px;
   left: -30px;
   top: 50%;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(2) {
+  right: 0%;
+  top: 0px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(3) {
+  right: 14.7058823529%;
+  top: 50px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(4) {
+  right: 29.4117647059%;
+  top: 100px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(5) {
+  right: 44.1176470588%;
+  top: 150px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(6) {
+  right: 58.8235294118%;
+  top: 200px;
+}
+#characterPage .characterDeck .deck.life .card:nth-child(7) {
+  right: 73.5294117647%;
+  top: 250px;
+}
+#characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
   transform: translate(-100%, -40%);
 }
 #characterPage .characterDeck .deck.work {
   width: 950px;
   height: 900px;
-  margin: 50px auto 100px auto;
+  margin: 0 auto;
   left: 40px;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(2) {
-  bottom: 0px;
-  right: 0%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(3) {
-  bottom: 50px;
-  right: 12.6315789474%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(4) {
-  bottom: 100px;
-  right: 25.2631578947%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(5) {
-  bottom: 150px;
-  right: 37.8947368421%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(6) {
-  bottom: 200px;
-  right: 50.5263157895%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(7) {
-  bottom: 250px;
-  right: 63.1578947368%;
-}
-#characterPage .characterDeck .deck.work .card:nth-child(8) {
-  bottom: 300px;
-  right: 75.7894736842%;
+  margin-bottom: 100px;
 }
 #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
   width: 50px;
   left: -30px;
   top: 50%;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(2) {
+  right: 0%;
+  bottom: 0px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(3) {
+  right: 12.6315789474%;
+  bottom: 50px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(4) {
+  right: 25.2631578947%;
+  bottom: 100px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(5) {
+  right: 37.8947368421%;
+  bottom: 150px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(6) {
+  right: 50.5263157895%;
+  bottom: 200px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(7) {
+  right: 63.1578947368%;
+  bottom: 250px;
+}
+#characterPage .characterDeck .deck.work .card:nth-child(8) {
+  right: 75.7894736842%;
+  bottom: 300px;
+}
+#characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
   transform: translate(-100%, -100%);
 }
 #characterPage .characterDeck .deck {

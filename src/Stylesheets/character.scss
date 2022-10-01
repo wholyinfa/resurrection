@@ -5,6 +5,7 @@ $cardW: 350;
 $cardH: 600;
 $WorkChildCount: 6;
 $LifeChildCount: 5;
+$noneCardElements: 2;
 @mixin spreadEqually($childCount, $work: false, $h2W, $gapMultiplier: 2, $gap: 50){
     $deckW: $cardW + $gap*$gapMultiplier * $childCount;
     width: $deckW * 1px;
@@ -17,7 +18,7 @@ $LifeChildCount: 5;
         top: 50%;
     }
     @for $i from 0 through $childCount {
-        .card:nth-child(#{$i+2}) {
+        .card:nth-child(#{$i+$noneCardElements + 1}) {
             $right: math.div(( math.div(($deckW - $cardW), $childCount - 1) * ($i)), $deckW) * 100%;
             right: $right;
             @if $work{
@@ -64,6 +65,7 @@ $LifeChildCount: 5;
                 position: absolute;
                 z-index: 1;
                 box-sizing: border-box;
+                user-select: none;
                 .icon{
                     height: 150px;
                 }
@@ -101,6 +103,14 @@ $LifeChildCount: 5;
                     text-align: left;
                 }
             }
+        }
+        .slider{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.105);
         }
     }
 }

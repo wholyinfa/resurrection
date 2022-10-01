@@ -93,13 +93,11 @@ article > .title div {
   border-radius: 10px;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
   background: rgb(11, 43, 34);
-  background: linear-gradient(-45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
+  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
 }
 
 .card.reverseLight {
   box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
-  background: rgb(11, 43, 34);
-  background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
 }
 
 @media only screen and (max-width: 1366px) {

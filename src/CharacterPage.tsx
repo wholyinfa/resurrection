@@ -36,7 +36,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                     };
                 },
                 onDrag: function(this) {
-                    shuffle(this);
+                    shuffle(this, this.x);
                 },
                 onDragEnd: function() {
                 },
@@ -45,17 +45,19 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                         pressElm.current.x === this.x &&
                         pressElm.current !== null && pressElm.current.target === findCard(this.pointerEvent.target)
                         ){
-                            // CLICK
+                            const x = -Object(pressElm.current.target).offsetLeft;
+                            gsap.set(slider, {x: x});
+                            shuffle(this, x);
                         }
                 }
             });
-            const shuffle = (deckSlider: Draggable.Vars) => {
+            const shuffle = (deckSlider: Draggable.Vars, x: number) => {
                 const deck = deckSlider.target.parentElement;
                 const type = (deck.classList.contains('life')) ? 'life' :
                              (deck.classList.contains('work')) ? 'work' : '';
                 const cards: Element[] = deck.querySelectorAll('.card');
                 const totalCards = cards.length;
-                const i = (totalCards - 1) - Math.abs(deckSlider.x) / theGap;
+                const i = (totalCards - 1) - Math.abs(x) / theGap;
                 const deadCards = Array.from(cards).splice(i+1, totalCards);
                 const liveCards = Array.from(cards).splice(0, i+1);
 
@@ -94,7 +96,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                 const y = ( type === 'life' ) ? (totalCards - i - 1) * 50 :
                           ( type === 'work' ) ? -((totalCards - i - 1) * 50) : 0
                 visibleCards.map(card => {
-                    gsap.to(card, {x: deckSlider.x, y: y});
+                    gsap.to(card, {x: x, y: y});
                 })
 
             }

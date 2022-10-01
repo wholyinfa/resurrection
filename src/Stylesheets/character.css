@@ -338,7 +338,6 @@ article > .title div {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.105);
 }
 
 @media only screen and (max-width: 1366px) {

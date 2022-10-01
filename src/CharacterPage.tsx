@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import PropTypes, {InferProps} from 'prop-types';
@@ -7,28 +7,89 @@ import './Stylesheets/character.css';
 gsap.registerPlugin(Draggable);
 export default function CharacterPage({}: InferProps<typeof CharacterPage.propTypes>) {
 
+    interface pressAttr {
+        target: HTMLElement | null,
+        x: number
+    } 
+    const pressElm = useRef<pressAttr>({
+        target: null,
+        x: -1
+    });
     useEffect(() => {
         Array.from(document.querySelectorAll('.characterDeck')).map(deck => {
             const maxX = Object(deck.querySelector('.card')).offsetLeft
             const totalCards = deck.querySelectorAll('.card').length;
             const theGap = (maxX / (totalCards-1));
             const slider = deck.querySelector('.slider');
+            const snapPoint = (i: number) => Math.round(i / theGap) * theGap;
             Draggable.create(slider, {
                 type: 'x',
                 trigger: [slider, ...deck.querySelectorAll('.card')],
                 edgeResistance: 1,
                 bounds: {minX: 0, maxX: maxX},
-                liveSnap: (i) => Math.round(i / theGap) * theGap,
+                liveSnap: (i) => snapPoint(i),
                 zIndexBoost: false,
                 onPress: function() {
+                    pressElm.current = {
+                        target: findCard(this.pointerEvent.target),
+                        x: this.x
+                    };
                 },
-                onDrag: function() {
+                onDrag: function(this) {
+                    shuffle(this);
                 },
                 onDragEnd: function() {
                 },
                 onRelease: function() {
+                    if(
+                        pressElm.current.x === this.x &&
+                        pressElm.current !== null && pressElm.current.target === findCard(this.pointerEvent.target)
+                        ){
+                            // CLICK
+                        }
                 }
             });
+            const shuffle = (deckSlider: Draggable.Vars) => {
+                const deck = deckSlider.target.parentElement;
+                const cards: Element[] = deck.querySelectorAll('.card');
+                const totalCards = cards.length;
+                const i = (totalCards - 1) - deckSlider.x / theGap;
+                const deadCards = Array.from(cards).splice(i+1, totalCards);
+                const liveCards = Array.from(cards).splice(0, i+1);
+
+                if( deadCards.length > 0 ){
+                    deadCards.map( card => {
+                        if( !card.classList.contains('hidden') ){
+                            card.classList.add('hidden');
+                        }
+                    });
+                }
+
+                if( liveCards.length > 0 ){
+                    liveCards.map( card => {
+                        if( card.classList.contains('hidden') ){
+                            card.classList.remove('hidden');
+                        }
+                    });
+                }
+
+            }
+            const findCard = (target: HTMLElement) => {
+                let parent = target.parentElement;
+                for( let i = 0; i < 10000; i++ ){
+                    if( target.classList.contains('card') ){
+                        parent = target;
+                        break;
+                    }
+                    if( parent && parent.classList.contains('card') ){
+                        parent = parent;
+                        break;
+                    }else{
+                        parent = parent && parent.parentElement;
+                    }
+                }
+                return parent;
+            }
         })
     }, []);
 

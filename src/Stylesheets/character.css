@@ -227,7 +227,7 @@ article > .title div {
   top: 250px;
 }
 #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
-  transform: translate(-100%, -40%);
+  transform: translate(-100%, -20%);
 }
 #characterPage .characterDeck .deck.work {
   width: 950px;
@@ -270,7 +270,7 @@ article > .title div {
   bottom: 300px;
 }
 #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
-  transform: translate(-100%, -100%);
+  transform: translate(-100%, -85%);
 }
 #characterPage .characterDeck .deck {
   position: relative;

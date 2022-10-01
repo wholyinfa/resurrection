@@ -36,14 +36,14 @@ $noneCardElements: 2;
         .deck.life{
             @include spreadEqually($LifeChildCount, false, $h2FontSize - 10);
             > h2{
-                transform: translate(-100%, -40%);
+                transform: translate(-100%, -20%);
             }
         }
         .deck.work{
             @include spreadEqually($WorkChildCount, true, $h2FontSize);
             margin-bottom: 100px;
             > h2{
-                transform: translate(-100%, -100%);
+                transform: translate(-100%, -85%);
             }
         }
         .deck{

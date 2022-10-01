@@ -26,7 +26,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                 type: 'x',
                 trigger: [slider, ...deck.querySelectorAll('.card')],
                 edgeResistance: 1,
-                bounds: {minX: 0, maxX: maxX},
+                bounds: {minX: 0, maxX: -maxX},
                 liveSnap: (i) => snapPoint(i),
                 zIndexBoost: false,
                 onPress: function() {
@@ -51,27 +51,51 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
             });
             const shuffle = (deckSlider: Draggable.Vars) => {
                 const deck = deckSlider.target.parentElement;
+                const type = (deck.classList.contains('life')) ? 'life' :
+                             (deck.classList.contains('work')) ? 'work' : '';
                 const cards: Element[] = deck.querySelectorAll('.card');
                 const totalCards = cards.length;
-                const i = (totalCards - 1) - deckSlider.x / theGap;
+                const i = (totalCards - 1) - Math.abs(deckSlider.x) / theGap;
                 const deadCards = Array.from(cards).splice(i+1, totalCards);
                 const liveCards = Array.from(cards).splice(0, i+1);
 
+                let freshDead: Element[] = [];
                 if( deadCards.length > 0 ){
                     deadCards.map( card => {
                         if( !card.classList.contains('hidden') ){
                             card.classList.add('hidden');
+                            freshDead.push(card);
                         }
                     });
                 }
 
+                let freshLife: Element[] = [];
                 if( liveCards.length > 0 ){
                     liveCards.map( card => {
                         if( card.classList.contains('hidden') ){
                             card.classList.remove('hidden');
+                            freshLife.push(card);
                         }
                     });
                 }
+
+                if( freshDead.length > 0 ){
+                    freshDead.map(card => {
+                        gsap.to(card, {autoAlpha: 0, scaleX: 0, duration: .2, transformOrigin: 'left'});
+                    });
+                }
+                if( freshLife.length > 0 ){
+                    freshLife.map(card => {
+                        gsap.to(card, {autoAlpha: 1, scaleX: 1, duration: .2, transformOrigin: 'left'});
+                    });
+                }
+
+                const visibleCards = Array.from(cards).filter(card => !card.classList.contains('hidden'));
+                const y = ( type === 'life' ) ? (totalCards - i - 1) * 50 :
+                          ( type === 'work' ) ? -((totalCards - i - 1) * 50) : 0
+                visibleCards.map(card => {
+                    gsap.to(card, {x: deckSlider.x, y: y});
+                })
 
             }
             const findCard = (target: HTMLElement) => {

@@ -38,8 +38,6 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                 onDrag: function(this) {
                     shuffle(this, this.x);
                 },
-                onDragEnd: function() {
-                },
                 onRelease: function() {
                     if(
                         pressElm.current.x === this.x &&
@@ -57,7 +55,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                              (deck.classList.contains('work')) ? 'work' : '';
                 const cards: Element[] = deck.querySelectorAll('.card');
                 const totalCards = cards.length;
-                const i = (totalCards - 1) - Math.abs(x) / theGap;
+                const i = (totalCards - 1) - Math.abs(x / theGap);
                 const deadCards = Array.from(cards).splice(i+1, totalCards);
                 const liveCards = Array.from(cards).splice(0, i+1);
 
@@ -93,8 +91,9 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
                 }
 
                 const visibleCards = Array.from(cards).filter(card => !card.classList.contains('hidden'));
-                const y = ( type === 'life' ) ? (totalCards - i - 1) * 50 :
-                          ( type === 'work' ) ? -((totalCards - i - 1) * 50) : 0
+                const topGap = ( type === 'life' ) ? Object(Array.from(cards)[1]).offsetTop: Object(Array.from(cards)[totalCards-1]).offsetTop;
+                const y = ( type === 'life' ) ? (totalCards - i - 1) * topGap :
+                          ( type === 'work' ) ? -((totalCards - i - 1) * topGap) : 0;
                 visibleCards.map(card => {
                     gsap.to(card, {x: x, y: y});
                 })
@@ -103,7 +102,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
             const findCard = (target: HTMLElement) => {
                 let parent = target.parentElement;
                 for( let i = 0; i < 10000; i++ ){
-                    if( target.classList.contains('card') ){
+                    if( target.classList && target.classList.contains('card') ){
                         parent = target;
                         break;
                     }

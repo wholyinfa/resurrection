@@ -6,8 +6,8 @@ $cardH: 600;
 $WorkChildCount: 6;
 $LifeChildCount: 5;
 $noneCardElements: 2;
-@mixin spreadEqually($childCount, $work: false, $h2W, $gapMultiplier: 2, $gap: 50){
-    $deckW: $cardW + $gap*$gapMultiplier * $childCount;
+@mixin spreadEqually($childCount, $work: false, $h2W, $gapMultiplier: 2, $gap: 50, $cardW: 350){
+    $deckW: $cardW + $gap * $gapMultiplier * ($childCount - 1);
     width: $deckW * 1px;
     height: $cardH + $gap * $childCount * 1px;
     margin: 0 auto;
@@ -151,7 +151,7 @@ $noneCardElements: 2;
                 }
             }
             .deck.life{
-                @include spreadEqually($LifeChildCount, false, $h2FontSize - 10, 1, $gap);
+                @include spreadEqually($LifeChildCount, false, $h2FontSize - 10, 1, $gap, $cardW);
                 left: auto;
                 > h2{
                     width: auto;
@@ -162,7 +162,7 @@ $noneCardElements: 2;
                 margin-top: 100px;
             }
             .deck.work{
-                @include spreadEqually($WorkChildCount, true, $h2FontSize, 1, $gap);
+                @include spreadEqually($WorkChildCount, true, $h2FontSize, 1, $gap, $cardW);
                 left: auto;
                 > h2{
                     width: auto;

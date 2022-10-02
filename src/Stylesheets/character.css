@@ -192,7 +192,7 @@ article > .title div {
   text-align: center;
 }
 #characterPage .characterDeck .deck.life {
-  width: 850px;
+  width: 750px;
   height: 850px;
   margin: 0 auto;
   left: 35px;
@@ -207,30 +207,30 @@ article > .title div {
   top: 0px;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(4) {
-  right: 14.7058823529%;
+  right: 13.3333333333%;
   top: 50px;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(5) {
-  right: 29.4117647059%;
+  right: 26.6666666667%;
   top: 100px;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(6) {
-  right: 44.1176470588%;
+  right: 40%;
   top: 150px;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(7) {
-  right: 58.8235294118%;
+  right: 53.3333333333%;
   top: 200px;
 }
 #characterPage .characterDeck .deck.life .card:nth-child(8) {
-  right: 73.5294117647%;
+  right: 66.6666666667%;
   top: 250px;
 }
 #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
   transform: translate(-100%, -20%);
 }
 #characterPage .characterDeck .deck.work {
-  width: 950px;
+  width: 850px;
   height: 900px;
   margin: 0 auto;
   left: 40px;
@@ -246,27 +246,27 @@ article > .title div {
   bottom: 0px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(4) {
-  right: 12.6315789474%;
+  right: 11.7647058824%;
   bottom: 50px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(5) {
-  right: 25.2631578947%;
+  right: 23.5294117647%;
   bottom: 100px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(6) {
-  right: 37.8947368421%;
+  right: 35.2941176471%;
   bottom: 150px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(7) {
-  right: 50.5263157895%;
+  right: 47.0588235294%;
   bottom: 200px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(8) {
-  right: 63.1578947368%;
+  right: 58.8235294118%;
   bottom: 250px;
 }
 #characterPage .characterDeck .deck.work .card:nth-child(9) {
-  right: 75.7894736842%;
+  right: 70.5882352941%;
   bottom: 300px;
 }
 #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
@@ -342,7 +342,7 @@ article > .title div {
 
 @media only screen and (max-width: 1366px) {
   #characterPage .characterDeck .deck.life {
-    width: 550px;
+    width: 510px;
     height: 850px;
     margin: 0 auto;
     left: 35px;
@@ -357,27 +357,27 @@ article > .title div {
     top: 0px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(4) {
-    right: 9.0909090909%;
+    right: 7.8431372549%;
     top: 50px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(5) {
-    right: 18.1818181818%;
+    right: 15.6862745098%;
     top: 100px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(6) {
-    right: 27.2727272727%;
+    right: 23.5294117647%;
     top: 150px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(7) {
-    right: 36.3636363636%;
+    right: 31.3725490196%;
     top: 200px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(8) {
-    right: 45.4545454545%;
+    right: 39.2156862745%;
     top: 250px;
   }
   #characterPage .characterDeck .deck.work {
-    width: 590px;
+    width: 550px;
     height: 900px;
     margin: 0 auto;
     left: 40px;
@@ -393,27 +393,27 @@ article > .title div {
     bottom: 0px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(4) {
-    right: 8.1355932203%;
+    right: 7.2727272727%;
     bottom: 50px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(5) {
-    right: 16.2711864407%;
+    right: 14.5454545455%;
     bottom: 100px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(6) {
-    right: 24.406779661%;
+    right: 21.8181818182%;
     bottom: 150px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(7) {
-    right: 32.5423728814%;
+    right: 29.0909090909%;
     bottom: 200px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(8) {
-    right: 40.6779661017%;
+    right: 36.3636363636%;
     bottom: 250px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(9) {
-    right: 48.813559322%;
+    right: 43.6363636364%;
     bottom: 300px;
   }
 }
@@ -434,7 +434,7 @@ article > .title div {
     width: 300px;
   }
   #characterPage .characterDeck .deck.life {
-    width: 425px;
+    width: 360px;
     height: 675px;
     margin: 0 auto;
     left: 35px;
@@ -451,23 +451,23 @@ article > .title div {
     top: 0px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(4) {
-    right: 4.4117647059%;
+    right: 4.1666666667%;
     top: 15px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(5) {
-    right: 8.8235294118%;
+    right: 8.3333333333%;
     top: 30px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(6) {
-    right: 13.2352941176%;
+    right: 12.5%;
     top: 45px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(7) {
-    right: 17.6470588235%;
+    right: 16.6666666667%;
     top: 60px;
   }
   #characterPage .characterDeck .deck.life .card:nth-child(8) {
-    right: 22.0588235294%;
+    right: 20.8333333333%;
     top: 75px;
   }
   #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span {
@@ -477,7 +477,7 @@ article > .title div {
     transform: translate(-50%, -100%);
   }
   #characterPage .characterDeck .deck.work {
-    width: 440px;
+    width: 375px;
     height: 690px;
     margin: 0 auto;
     left: 40px;
@@ -495,27 +495,27 @@ article > .title div {
     bottom: 0px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(4) {
-    right: 4.0909090909%;
+    right: 4%;
     bottom: 15px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(5) {
-    right: 8.1818181818%;
+    right: 8%;
     bottom: 30px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(6) {
-    right: 12.2727272727%;
+    right: 12%;
     bottom: 45px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(7) {
-    right: 16.3636363636%;
+    right: 16%;
     bottom: 60px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(8) {
-    right: 20.4545454545%;
+    right: 20%;
     bottom: 75px;
   }
   #characterPage .characterDeck .deck.work .card:nth-child(9) {
-    right: 24.5454545455%;
+    right: 24%;
     bottom: 90px;
   }
   #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {

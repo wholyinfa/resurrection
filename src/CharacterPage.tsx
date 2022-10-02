@@ -71,10 +71,18 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
         }
         return parent;
     }
-    const shuffle = (deckSlider: Draggable.Vars, x: number, theGap: number) => {
+    interface topCard {
+        work: null | Element;
+        life: null | Element;
+    }
+    const deckTopCard = useRef<topCard>({
+        work: null,
+        life: null
+    });
+    const shuffle = (deckSlider: Draggable.Vars, x: number, theGap: number, useMemory?: boolean) => {
         const deck = deckSlider.target.parentElement;
-        const type = (deck.classList.contains('life')) ? 'life' :
-                     (deck.classList.contains('work')) ? 'work' : '';
+        const type = (deck.classList.contains('life')) ? 'life' : 'work';
+        if( useMemory ) x = -Object(deckTopCard.current[type]).offsetLeft;
         const cards: Element[] = deck.querySelectorAll('.card');
         const totalCards = cards.length;
         const i = (totalCards - 1) - Math.abs(x / theGap);
@@ -118,7 +126,8 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
                   ( type === 'work' ) ? -((totalCards - i - 1) * topGap) : 0;
         visibleCards.map(card => {
             gsap.to(card, {x: x, y: y});
-        })
+        });
+        deckTopCard.current[type] = visibleCards[visibleCards.length-1];
 
     }
     const onPress = (t: Draggable.Vars) => {
@@ -147,10 +156,14 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
             const totalCards = deck.querySelectorAll('.card').length;
             const theGap = () => (maxX() / (totalCards-1));
             const slider = deck.querySelector('.slider');
+            const type = (deck.classList.contains('life')) ? 'life' : 'work';
 
-            if( Draggable.get(slider) )
+            if( Draggable.get(slider) ){
             Draggable.get(slider).applyBounds({minX: 0, maxX: -maxX()});
-            else
+            shuffle(Draggable.get(slider), Draggable.get(slider).x, theGap(), true);
+            }
+            else{
+            deckTopCard.current[type] = deck.querySelectorAll('.card')[totalCards-1];
             Draggable.create(slider, {
                 type: 'x',
                 trigger: [slider, ...deck.querySelectorAll('.card')],
@@ -168,6 +181,7 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
                     onRelease(this, slider, theGap());
                 }
             });
+            }
         })
     }
     useEffect(() => {

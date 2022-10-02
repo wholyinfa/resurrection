@@ -5,6 +5,46 @@ import PropTypes, {InferProps} from 'prop-types';
 import { Character, CharacterData } from './data';
 import './Stylesheets/character.css';
 gsap.registerPlugin(Draggable);
+
+const CharacterDOM = () => {
+    return <article id='characterPage'>
+    <div className='title'>
+        <h1>CHARACTER</h1>
+        <div>CHARACTER</div>
+    </div>
+    <section>
+        {
+            Object.entries(Character).map( ([deckType, deck], i) => {
+                return  <div key={i} className={`characterDeck ${deckType}`}>
+                    <div className={`deck ${deckType}`}>
+                    <div className='slider'></div>
+                    <h2 className='title'>{deckType.toUpperCase()}</h2>
+                        { [...deck].reverse().map( (item: CharacterData, i: number) => {
+                            return <div key={i}
+                                className={`card ${(deckType === 'life') ? 'reverseLight': ''}`}
+                            >
+                                <div className='icon'>
+                                    <img src={item.imgSource} />
+                                </div>
+                                <div className='title'>
+                                    THE
+                                    <span>{item.title.toUpperCase()}</span>
+                                    <h2>
+                                        {item.title.toUpperCase()}
+                                    </h2>
+                                </div>
+                                <div className='description'>
+                                    {item.description}
+                                </div>
+                            </div>;
+                        })}
+                    </div>
+                </div>
+            })
+        }
+    </section>
+</article>;
+}
 export default function CharacterPage({}: InferProps<typeof CharacterPage.propTypes>) {
 
     interface pressAttr {
@@ -118,43 +158,7 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
         })
     }, []);
 
-    return <article id='characterPage'>
-        <div className='title'>
-            <h1>CHARACTER</h1>
-            <div>CHARACTER</div>
-        </div>
-        <section>
-            {
-                Object.entries(Character).map( ([deckType, deck], i) => {
-                    return  <div key={i} className={`characterDeck ${deckType}`}>
-                        <div className={`deck ${deckType}`}>
-                        <div className='slider'></div>
-                        <h2 className='title'>{deckType.toUpperCase()}</h2>
-                            { [...deck].reverse().map( (item: CharacterData, i: number) => {
-                                return <div key={i}
-                                    className={`card ${(deckType === 'life') ? 'reverseLight': ''}`}
-                                >
-                                    <div className='icon'>
-                                        <img src={item.imgSource} />
-                                    </div>
-                                    <div className='title'>
-                                        THE
-                                        <span>{item.title.toUpperCase()}</span>
-                                        <h2>
-                                            {item.title.toUpperCase()}
-                                        </h2>
-                                    </div>
-                                    <div className='description'>
-                                        {item.description}
-                                    </div>
-                                </div>;
-                            })}
-                        </div>
-                    </div>
-                })
-            }
-        </section>
-    </article>;
+    return <CharacterDOM />;
 }
 CharacterPage.propTypes ={
     

@@ -55,7 +55,96 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
         target: null,
         x: -1
     });
-    useEffect(() => {
+    const findCard = (target: HTMLElement) => {
+        let parent = target.parentElement;
+        for( let i = 0; i < 10000; i++ ){
+            if( target.classList && target.classList.contains('card') ){
+                parent = target;
+                break;
+            }
+            if( parent && parent.classList.contains('card') ){
+                parent = parent;
+                break;
+            }else{
+                parent = parent && parent.parentElement;
+            }
+        }
+        return parent;
+    }
+    const shuffle = (deckSlider: Draggable.Vars, x: number, theGap: number) => {
+        const deck = deckSlider.target.parentElement;
+        const type = (deck.classList.contains('life')) ? 'life' :
+                     (deck.classList.contains('work')) ? 'work' : '';
+        const cards: Element[] = deck.querySelectorAll('.card');
+        const totalCards = cards.length;
+        const i = (totalCards - 1) - Math.abs(x / theGap);
+        const deadCards = Array.from(cards).splice(i+1, totalCards);
+        const liveCards = Array.from(cards).splice(0, i+1);
+
+        let freshDead: Element[] = [];
+        if( deadCards.length > 0 ){
+            deadCards.map( card => {
+                if( !card.classList.contains('hidden') ){
+                    card.classList.add('hidden');
+                    freshDead.push(card);
+                }
+            });
+        }
+
+        let freshLife: Element[] = [];
+        if( liveCards.length > 0 ){
+            liveCards.map( card => {
+                if( card.classList.contains('hidden') ){
+                    card.classList.remove('hidden');
+                    freshLife.push(card);
+                }
+            });
+        }
+
+        if( freshDead.length > 0 ){
+            freshDead.map(card => {
+                gsap.to(card, {autoAlpha: 0, scaleX: 0, duration: .2, transformOrigin: 'left'});
+            });
+        }
+        if( freshLife.length > 0 ){
+            freshLife.map(card => {
+                gsap.to(card, {autoAlpha: 1, scaleX: 1, duration: .2, transformOrigin: 'left'});
+            });
+        }
+
+        const visibleCards = Array.from(cards).filter(card => !card.classList.contains('hidden'));
+        const topGap = ( type === 'life' ) ? Object(Array.from(cards)[1]).offsetTop: Object(Array.from(cards)[totalCards-1]).offsetTop;
+        const y = ( type === 'life' ) ? (totalCards - i - 1) * topGap :
+                  ( type === 'work' ) ? -((totalCards - i - 1) * topGap) : 0;
+        visibleCards.map(card => {
+            gsap.to(card, {x: x, y: y});
+        })
+
+    }
+    const onPress = (t: Draggable.Vars) => {
+        pressElm.current = {
+            target: findCard(t.pointerEvent.target),
+            x: t.x
+        };
+    }
+    const onDrag = (t: Draggable.Vars, theGap: number) => {
+        shuffle(t, t.x, theGap);
+    }
+    const onRelease = (t: Draggable.Vars, slider: Element | null, theGap: number) => {
+        if(
+            pressElm.current.x === t.x &&
+            pressElm.current !== null && pressElm.current.target === findCard(t.pointerEvent.target)
+            ){
+                const x = -Object(pressElm.current.target).offsetLeft;
+                gsap.set(slider, {x: x});
+                shuffle(t, x, theGap);
+            }
+    }
+    const setupSlider = (update?: boolean) => {
+        if( Draggable.get('.slider') ) {
+            Draggable.get('.slider').kill();
+        };
+
         Array.from(document.querySelectorAll('.characterDeck')).map(deck => {
             const maxX = Object(deck.querySelector('.card')).offsetLeft
             const totalCards = deck.querySelectorAll('.card').length;
@@ -69,97 +158,24 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
                 bounds: {minX: 0, maxX: -maxX},
                 liveSnap: (i) => snapPoint(i),
                 zIndexBoost: false,
-                onPress: function() {
-                    pressElm.current = {
-                        target: findCard(this.pointerEvent.target),
-                        x: this.x
-                    };
+                onPress: function(this) {
+                    onPress(this);
                 },
                 onDrag: function(this) {
-                    shuffle(this, this.x);
+                    onDrag(this, theGap);
                 },
                 onRelease: function() {
-                    if(
-                        pressElm.current.x === this.x &&
-                        pressElm.current !== null && pressElm.current.target === findCard(this.pointerEvent.target)
-                        ){
-                            const x = -Object(pressElm.current.target).offsetLeft;
-                            gsap.set(slider, {x: x});
-                            shuffle(this, x);
-                        }
+                    onRelease(this, slider, theGap);
                 }
             });
-            const shuffle = (deckSlider: Draggable.Vars, x: number) => {
-                const deck = deckSlider.target.parentElement;
-                const type = (deck.classList.contains('life')) ? 'life' :
-                             (deck.classList.contains('work')) ? 'work' : '';
-                const cards: Element[] = deck.querySelectorAll('.card');
-                const totalCards = cards.length;
-                const i = (totalCards - 1) - Math.abs(x / theGap);
-                const deadCards = Array.from(cards).splice(i+1, totalCards);
-                const liveCards = Array.from(cards).splice(0, i+1);
-
-                let freshDead: Element[] = [];
-                if( deadCards.length > 0 ){
-                    deadCards.map( card => {
-                        if( !card.classList.contains('hidden') ){
-                            card.classList.add('hidden');
-                            freshDead.push(card);
-                        }
-                    });
-                }
-
-                let freshLife: Element[] = [];
-                if( liveCards.length > 0 ){
-                    liveCards.map( card => {
-                        if( card.classList.contains('hidden') ){
-                            card.classList.remove('hidden');
-                            freshLife.push(card);
-                        }
-                    });
-                }
-
-                if( freshDead.length > 0 ){
-                    freshDead.map(card => {
-                        gsap.to(card, {autoAlpha: 0, scaleX: 0, duration: .2, transformOrigin: 'left'});
-                    });
-                }
-                if( freshLife.length > 0 ){
-                    freshLife.map(card => {
-                        gsap.to(card, {autoAlpha: 1, scaleX: 1, duration: .2, transformOrigin: 'left'});
-                    });
-                }
-
-                const visibleCards = Array.from(cards).filter(card => !card.classList.contains('hidden'));
-                const topGap = ( type === 'life' ) ? Object(Array.from(cards)[1]).offsetTop: Object(Array.from(cards)[totalCards-1]).offsetTop;
-                const y = ( type === 'life' ) ? (totalCards - i - 1) * topGap :
-                          ( type === 'work' ) ? -((totalCards - i - 1) * topGap) : 0;
-                visibleCards.map(card => {
-                    gsap.to(card, {x: x, y: y});
-                })
-
-            }
-            const findCard = (target: HTMLElement) => {
-                let parent = target.parentElement;
-                for( let i = 0; i < 10000; i++ ){
-                    if( target.classList && target.classList.contains('card') ){
-                        parent = target;
-                        break;
-                    }
-                    if( parent && parent.classList.contains('card') ){
-                        parent = parent;
-                        break;
-                    }else{
-                        parent = parent && parent.parentElement;
-                    }
-                }
-                return parent;
-            }
         })
+    }
+    useEffect(() => {
+        setupSlider();
     }, []);
 
     useEffect(() => {
-        
+        setupSlider();
     }, [resize])
 
     return <CharacterDOM />;

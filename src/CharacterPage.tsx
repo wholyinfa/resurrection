@@ -132,6 +132,7 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
     }
     const onRelease = (t: Draggable.Vars, slider: Element | null, theGap: number) => {
         if(
+            pressElm.current.target !== null &&
             pressElm.current.x === t.x &&
             pressElm.current !== null && pressElm.current.target === findCard(t.pointerEvent.target)
             ){

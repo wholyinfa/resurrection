@@ -37,7 +37,7 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
                     title = {project.title}
                     context = {project.context}
                     url = {project.url}
-                    imgSource = {project.imgSource.mobile}
+                    imgSource = {project.imgSource.preview}
                 />
             })
         }

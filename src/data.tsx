@@ -45,6 +45,7 @@ interface ProjectType {
     context: string;
     url: string;
     imgSource: {
+        preview: string;
         desktop: string;
         tablet: string;
         mobile: string;
@@ -57,9 +58,10 @@ export const Projects: ProjectType[] = [
         context: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Urna molestie at elementum eu facilisis. Tempus imperdiet nulla malesuada pellentesque elit eget. Senectus et netus et malesuada fames ac turpis egestas sed. Consectetur purus ut faucibus pulvinar elementum integer. Rhoncus aenean vel elit scelerisque. Aliquam sem fringilla ut morbi tincidunt augue. Convallis tellus id interdum velit. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed. Nunc pulvinar sapien et ligula. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Consequat pulvinar elementum integer. Rhoncus aeneaus mauris. Consequat mauris nunc cfasffongue nisi vitae sus asdfcipit tel',
         url: 'end',
         imgSource: {
-            desktop: require('./Assets/Desktop.jpg'),
-            tablet: require('./Assets/Tablet.jpg'),
-            mobile: require('./Assets/Mobile.jpg')
+            preview: require('./Assets/Projects/Preview.jpg'),
+            desktop: require('./Assets/Projects/Desktop.jpg'),
+            tablet: require('./Assets/Projects/Tablet.jpg'),
+            mobile: require('./Assets/Projects/Mobile.jpg')
         },
         builtWith: ['ps', 'ai', 'jq', 'html', 'css', 'gsap', 'js'],
     },
@@ -68,9 +70,10 @@ export const Projects: ProjectType[] = [
         context: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Urna molestie at elementum eu facilisis. Tempus imperdiet nulla malesuada pellentesque elit eget. Senectus et netus et malesuada fames ac turpis egestas sed. Consectetur purus ut faucibus pulvinar elementum integer. Rhoncus aenean vel elit scelerisque. Aliquam sem fringilla ut morbi tincidunt augue. Convallis tellus id interdum velit. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed. Nunc pulvinar sapien et ligula. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Consequat pulvinar elementum integer. Rhoncus aeneaus mauris. Consequat mauris nunc cfasffongue nisi vitae sus asdfcipit tel',
         url: 'gvgl',
         imgSource: {
-            desktop: require('./Assets/Desktop.jpg'),
-            tablet: require('./Assets/Tablet.jpg'),
-            mobile: require('./Assets/Mobile.jpg')
+            preview: require('./Assets/Projects/Preview.jpg'),
+            desktop: require('./Assets/Projects/Desktop.jpg'),
+            tablet: require('./Assets/Projects/Tablet.jpg'),
+            mobile: require('./Assets/Projects/Mobile.jpg')
         },
         builtWith: ['xd', 'react','html', 'css', 'sass', 'gsap', 'js', 'ts'],
     },

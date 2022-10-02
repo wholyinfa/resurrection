@@ -140,32 +140,31 @@ export default function CharacterPage({resize}: InferProps<typeof CharacterPage.
                 shuffle(t, x, theGap);
             }
     }
-    const setupSlider = (update?: boolean) => {
-        if( Draggable.get('.slider') ) {
-            Draggable.get('.slider').kill();
-        };
-
+    const setupSlider = () => {
         Array.from(document.querySelectorAll('.characterDeck')).map(deck => {
-            const maxX = Object(deck.querySelector('.card')).offsetLeft
+            const maxX = () => Object(deck.querySelector('.card')).offsetLeft;
             const totalCards = deck.querySelectorAll('.card').length;
-            const theGap = (maxX / (totalCards-1));
+            const theGap = () => (maxX() / (totalCards-1));
             const slider = deck.querySelector('.slider');
-            const snapPoint = (i: number) => Math.round(i / theGap) * theGap;
+
+            if( Draggable.get(slider) )
+            Draggable.get(slider).applyBounds({minX: 0, maxX: -maxX()});
+            else
             Draggable.create(slider, {
                 type: 'x',
                 trigger: [slider, ...deck.querySelectorAll('.card')],
                 edgeResistance: 1,
-                bounds: {minX: 0, maxX: -maxX},
-                liveSnap: (i) => snapPoint(i),
+                bounds: {minX: 0, maxX: -maxX()},
+                liveSnap: (i) => Math.round(i / theGap()) * theGap(),
                 zIndexBoost: false,
                 onPress: function(this) {
                     onPress(this);
                 },
                 onDrag: function(this) {
-                    onDrag(this, theGap);
+                    onDrag(this, theGap());
                 },
                 onRelease: function() {
-                    onRelease(this, slider, theGap);
+                    onRelease(this, slider, theGap());
                 }
             });
         })

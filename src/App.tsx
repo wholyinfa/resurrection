@@ -87,8 +87,8 @@ export default function App() {
         portal = {portal}
         isPaginating = {isPaginating}
         newPage = {newPage}
-        isMobile= {isMobile}
-        resize= {resize}
+        isMobile = {isMobile}
+        resize = {resize}
         
       />
       <Switch>
@@ -114,7 +114,9 @@ export default function App() {
           <SingleProjectPage />
         </Route>
         <Route exact path={Pages.character.url}>
-          <CharacterPage />
+          <CharacterPage
+            resize = {resize}
+          />
         </Route>
         <Route path="*">
             <NotFound />

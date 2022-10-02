@@ -45,7 +45,7 @@ const CharacterDOM = () => {
     </section>
 </article>;
 }
-export default function CharacterPage({}: InferProps<typeof CharacterPage.propTypes>) {
+export default function CharacterPage({resize}: InferProps<typeof CharacterPage.propTypes>) {
 
     interface pressAttr {
         target: HTMLElement | null,
@@ -158,8 +158,12 @@ export default function CharacterPage({}: InferProps<typeof CharacterPage.propTy
         })
     }, []);
 
+    useEffect(() => {
+        
+    }, [resize])
+
     return <CharacterDOM />;
 }
 CharacterPage.propTypes ={
-    
+    resize: PropTypes.bool.isRequired
 }

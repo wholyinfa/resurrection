@@ -203,6 +203,12 @@ article > .title div {
     font-size: 35px;
     letter-spacing: 20px;
   }
+  .charcoalButton {
+    text-decoration: none;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+  }
 }
 @media only screen and (max-width: 428px) {
   article > .title {

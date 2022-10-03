@@ -73,4 +73,12 @@
     margin: 20px;
     font-size: 0.9em;
   }
+}
+@media only screen and (max-width: 768px) {
+  #projectsPage .previewCards {
+    max-width: 90%;
+  }
+  #projectsPage .previewCards > .card {
+    float: inherit;
+  }
 }/*# sourceMappingURL=projects.css.map */

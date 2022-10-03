@@ -89,6 +89,10 @@ article > .title div {
   content: "CHARACTER";
 }
 
+#projectsPage h1::after {
+  content: "PROJECTS";
+}
+
 .card {
   border-radius: 10px;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
@@ -143,6 +147,17 @@ article > .title div {
     font-size: 60px;
     letter-spacing: 35px;
   }
+  #projectsPage > .title h1 {
+    font-size: 80px;
+    top: 10%;
+    left: 50%;
+    letter-spacing: 40px;
+    padding-left: 40px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 80px;
+    letter-spacing: 40px;
+  }
 }
 @media only screen and (max-width: 768px) {
   article > .title {
@@ -177,6 +192,17 @@ article > .title div {
     font-size: 35px;
     letter-spacing: 20px;
   }
+  #projectsPage > .title h1 {
+    font-size: 35px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 20px;
+    padding-left: 20px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 35px;
+    letter-spacing: 20px;
+  }
 }
 @media only screen and (max-width: 428px) {
   article > .title {
@@ -204,6 +230,23 @@ article > .title div {
     padding-left: 15px;
   }
   #characterPage > .title div {
+    width: 220px;
+    font-size: 60px;
+    letter-spacing: 30px;
+    padding-left: 30px;
+  }
+  #projectsPage > .title h1 {
+    font-size: 30px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 15px;
+    padding-left: 15px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 30px;
+    letter-spacing: 15px;
+  }
+  #projectsPage > .title div {
     width: 220px;
     font-size: 60px;
     letter-spacing: 30px;

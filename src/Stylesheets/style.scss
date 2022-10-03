@@ -106,6 +106,11 @@ article > .title{
         content: 'CHARACTER';
     }
 }
+#projectsPage{
+    h1::after{
+        content: 'PROJECTS';
+    }
+}
 
 .card{
     border-radius: 10px;
@@ -167,6 +172,23 @@ article > .title{
             }
         }
     }
+    #projectsPage{
+        > .title{
+            $fontSize: 80px;
+            $letterSpacing: 40px;
+            h1{
+                font-size: $fontSize;
+                top: 10%;
+                left: 50%;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -193,6 +215,23 @@ article > .title{
         }
     }
     #characterPage{
+        > .title{
+            $fontSize: 35px;
+            $letterSpacing: 20px;
+            h1{
+                font-size: $fontSize;
+                top: 20%;
+                left: 50%;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
+            }
+        }
+    }
+    #projectsPage{
         > .title{
             $fontSize: 35px;
             $letterSpacing: 20px;
@@ -241,6 +280,30 @@ article > .title{
                 letter-spacing: $letterSpacing;
                 padding-top: $gap;
                 padding-left: 15px;
+            }
+            div{
+                width: 220px;
+                font-size: 60px;
+                $spacing: 30px;
+                letter-spacing: $spacing;
+                padding-left: $spacing;
+            }
+        }
+    }
+    #projectsPage{
+        > .title{
+            $fontSize: 30px;
+            $letterSpacing: 15px;
+            h1{
+                font-size: $fontSize;
+                top: 20%;
+                left: 50%;
+                letter-spacing: $letterSpacing;
+                padding-left: $letterSpacing;
+            }
+            h1::after{
+                font-size: $fontSize;
+                letter-spacing: $letterSpacing;
             }
             div{
                 width: 220px;

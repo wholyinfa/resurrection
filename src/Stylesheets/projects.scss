@@ -1,10 +1,17 @@
 #projectsPage{
-    section{
+    text-align: center;
+    .previewCards{
+        max-width: 80%;
+        position: relative;
+        margin: 0 0 100px 0;
+        display: inline-block;
         > .card{
             width: 400px;
             height: 625px;
             position: relative;
             z-index: 1;
+            float: left;
+            margin: 0 50px 100px 50px;
             .img{
                 border-radius: 10px;
                 width: 100%;
@@ -24,6 +31,8 @@
                 display: inline-block;
                 position: absolute;
                 bottom: 0;
+                left: 0;
+                text-align: left;
                 > *{
                     position: relative;
                 }

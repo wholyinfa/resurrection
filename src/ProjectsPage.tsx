@@ -30,7 +30,7 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
         <h1>PROJECTS</h1>
         <div>PROJECTS</div>
     </div>
-    <section>
+    <section className='previewCards'>
         {
             Projects.map( (project, i) => {
                 return <Card

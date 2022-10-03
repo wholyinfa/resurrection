@@ -1,10 +1,21 @@
-#projectsPage section > .card {
+#projectsPage {
+  text-align: center;
+}
+#projectsPage .previewCards {
+  max-width: 80%;
+  position: relative;
+  margin: 0 0 100px 0;
+  display: inline-block;
+}
+#projectsPage .previewCards > .card {
   width: 400px;
   height: 625px;
   position: relative;
   z-index: 1;
+  float: left;
+  margin: 0 50px 100px 50px;
 }
-#projectsPage section > .card .img {
+#projectsPage .previewCards > .card .img {
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -17,32 +28,34 @@
   background-position: center;
   opacity: 0.3;
 }
-#projectsPage section > .card .content {
+#projectsPage .previewCards > .card .content {
   margin: 30px;
   font-family: latoMedium;
   display: inline-block;
   position: absolute;
   bottom: 0;
+  left: 0;
+  text-align: left;
 }
-#projectsPage section > .card .content > * {
+#projectsPage .previewCards > .card .content > * {
   position: relative;
 }
-#projectsPage section > .card .content p {
+#projectsPage .previewCards > .card .content p {
   margin: 0;
 }
-#projectsPage section > .card .content .preTitle {
+#projectsPage .previewCards > .card .content .preTitle {
   font-family: latoLight;
   font-size: 20px;
   margin: 0;
 }
-#projectsPage section > .card .content .title {
+#projectsPage .previewCards > .card .content .title {
   font-size: 24px;
   margin: -5px 0 20px 0;
 }
-#projectsPage section > .card .content .description {
+#projectsPage .previewCards > .card .content .description {
   font-size: 20px;
 }
-#projectsPage section > .card .content .charcoalButton {
+#projectsPage .previewCards > .card .content .charcoalButton {
   margin-top: 25px;
   float: right;
 }/*# sourceMappingURL=projects.css.map */

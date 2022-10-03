@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './Stylesheets/projects.css';
 import PropTypes, {InferProps} from 'prop-types';
-import { Projects } from './data';
+import { Pages, Projects } from './data';
 import { Link } from 'react-router-dom';
 
 function Card({title, context, url, imgSource}: InferProps<typeof Card.propTypes>) {
@@ -11,7 +11,7 @@ function Card({title, context, url, imgSource}: InferProps<typeof Card.propTypes
             <p className='preTitle'>Project</p>
             <h2 className='title'>{title}</h2>
             <p className='brief'>{context+'...'}</p>
-            <Link to={url} className='charcoalButton card'>VIEW</Link>
+            <Link to={Pages.projects.url+'/'+url} className='charcoalButton card'>VIEW</Link>
         </div>
     </div>;
 }

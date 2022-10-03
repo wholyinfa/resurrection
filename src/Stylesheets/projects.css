@@ -36,6 +36,7 @@
   bottom: 0;
   left: 0;
   text-align: left;
+  font-size: 1em;
 }
 #projectsPage .previewCards > .card .content > * {
   position: relative;
@@ -45,17 +46,31 @@
 }
 #projectsPage .previewCards > .card .content .preTitle {
   font-family: latoLight;
-  font-size: 20px;
+  font-size: 1.1em;
   margin: 0;
 }
 #projectsPage .previewCards > .card .content .title {
-  font-size: 24px;
+  font-size: 1.5em;
   margin: -5px 0 20px 0;
 }
-#projectsPage .previewCards > .card .content .description {
-  font-size: 20px;
+#projectsPage .previewCards > .card .content .brief {
+  font-size: 1.1em;
 }
 #projectsPage .previewCards > .card .content .charcoalButton {
   margin-top: 25px;
   float: right;
+}
+
+@media only screen and (max-width: 1366px) {
+  #projectsPage .previewCards {
+    max-width: 95%;
+  }
+  #projectsPage .previewCards > .card {
+    width: 300px;
+    margin: 0 25px 100px 25px;
+  }
+  #projectsPage .previewCards > .card .content {
+    margin: 20px;
+    font-size: 0.9em;
+  }
 }/*# sourceMappingURL=projects.css.map */

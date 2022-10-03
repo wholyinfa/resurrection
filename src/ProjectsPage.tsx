@@ -33,10 +33,12 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
     <section className='previewCards'>
         {
             Projects.map( (project, i) => {
+                let brief = project.context.slice(0, 100);
+                brief = brief.slice(0, brief.lastIndexOf(' '));
                 return <Card
                     key = {i}
                     title = {project.title}
-                    context = {project.context.slice(0, 100)}
+                    context = {brief}
                     url = {project.url}
                     imgSource = {project.imgSource.preview}
                 />

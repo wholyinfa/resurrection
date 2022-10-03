@@ -1,10 +1,10 @@
-#projectsPage .card {
+#projectsPage section > .card {
   width: 400px;
   height: 625px;
   position: relative;
   z-index: 1;
 }
-#projectsPage .card .img {
+#projectsPage section > .card .img {
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -17,22 +17,32 @@
   background-position: center;
   opacity: 0.3;
 }
-#projectsPage .card .content {
+#projectsPage section > .card .content {
   margin: 30px;
   font-family: latoMedium;
   display: inline-block;
   position: absolute;
   bottom: 0;
 }
-#projectsPage .card .content .preTitle {
+#projectsPage section > .card .content > * {
+  position: relative;
+}
+#projectsPage section > .card .content p {
+  margin: 0;
+}
+#projectsPage section > .card .content .preTitle {
   font-family: latoLight;
   font-size: 20px;
   margin: 0;
 }
-#projectsPage .card .content .title {
+#projectsPage section > .card .content .title {
   font-size: 24px;
   margin: -5px 0 20px 0;
 }
-#projectsPage .card .content .description {
+#projectsPage section > .card .content .description {
   font-size: 20px;
+}
+#projectsPage section > .card .content .charcoalButton {
+  margin-top: 25px;
+  float: right;
 }/*# sourceMappingURL=projects.css.map */

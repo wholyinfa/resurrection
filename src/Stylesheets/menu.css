@@ -96,6 +96,11 @@ article > .title div {
   background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);
 }
 
+.card.cobalt {
+  background: rgb(7, 12, 88);
+  background: linear-gradient(-45deg, rgb(7, 12, 88) 0%, rgb(7, 12, 88) 50%, rgb(72, 99, 255) 100%);
+}
+
 .card.reverseLight {
   box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
 }

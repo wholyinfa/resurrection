@@ -114,6 +114,10 @@ article > .title{
     background: rgb(11,43,34);
     background: linear-gradient(45deg, rgba(11,43,34,1) 0%, rgba(43,189,150,1) 100%);
 }
+.card.cobalt{
+    background: rgb(7,12,88);
+    background: linear-gradient(-45deg, rgba(7,12,88,1) 0%, rgba(7,12,88,1) 50%, rgba(72,99,255,1) 100%);
+}
 .card.reverseLight{
     -webkit-box-shadow: -5px 10px 20px 5px rgba(0,0,0,0.4); 
     box-shadow: -5px 10px 20px 5px rgba(0,0,0,0.4);

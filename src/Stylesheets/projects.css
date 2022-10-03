@@ -1,1 +1,6 @@
-/*# sourceMappingURL=projects.css.map */
+#projectsPage .card {
+  width: 400px;
+  height: 625px;
+  position: relative;
+  z-index: 1;
+}/*# sourceMappingURL=projects.css.map */

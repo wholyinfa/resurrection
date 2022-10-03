@@ -11,7 +11,7 @@ function Card({title, context, url, imgSource}: InferProps<typeof Card.propTypes
             <p className='preTitle'>Project</p>
             <h2 className='title'>{title}</h2>
             <p className='brief'>{context+'...'}</p>
-            <Link to={url} className='charcoalButton'>VIEW</Link>
+            <Link to={url} className='charcoalButton card'>VIEW</Link>
         </div>
     </div>;
 }

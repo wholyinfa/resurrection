@@ -44,22 +44,6 @@ export default function App() {
     isPaginating.current = true;
     applyInfinity();
   };
-  interface isSubpage {
-      subpage: ProjectType,
-      parent: PageData
-  }
-  let isSubpage = useRef<isSubpage | boolean>(true);
-  isSubpage.current = true;
-  const checkForSubpage = (loc: string) => {
-      Object.values(Projects).filter( entry => {
-          if( Pages.projects.url+'/'+entry.url === loc ){
-              isSubpage.current = {
-                  subpage: entry,
-                  parent: Pages.projects
-              };
-          }
-      } );
-  }
   useEffect( () => {
 
     resizePurposes();
@@ -105,7 +89,6 @@ export default function App() {
         newPage = {newPage}
         isMobile = {isMobile}
         resize = {resize}
-        
       />
       <Switch>
         <Route exact path={Pages.index.url}>
@@ -124,9 +107,7 @@ export default function App() {
           <ContactPage />
         </Route>
         <Route exact path={Pages.projects.url}>
-          <ProjectsPage
-            checkForSubpage = {checkForSubpage}
-          />
+          <ProjectsPage />
         </Route>
         <Route exact path={Pages.projects.url+'/:projectName'}>
           <SingleProjectPage />

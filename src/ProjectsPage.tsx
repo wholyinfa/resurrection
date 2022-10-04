@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './Stylesheets/projects.css';
 import PropTypes, {InferProps} from 'prop-types';
 import { Pages, Projects } from './data';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function Card({title, context, url, imgSource, handleClick}: InferProps<typeof Card.propTypes>) {
     const aURL = Pages.projects.url+'/'+url;
@@ -23,10 +23,12 @@ Card.propTypes ={
     imgSource: PropTypes.string.isRequired,
     handleClick: PropTypes.func.isRequired
 }
-export default function ProjectsPage({checkForSubpage}: InferProps<typeof ProjectsPage.propTypes>) {
+export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propTypes>) {
+    const history = useHistory();
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
         e.preventDefault();
         
+        history.push(url);
     }
     useEffect(() => {
         
@@ -55,5 +57,5 @@ export default function ProjectsPage({checkForSubpage}: InferProps<typeof Projec
 </article>;
 }
 ProjectsPage.propTypes ={
-    checkForSubpage: PropTypes.func.isRequired
+    
 }

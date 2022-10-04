@@ -3,7 +3,7 @@ import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { titleConversion } from "./App";
-import { PageData, Pages } from "./data";
+import { PageData, Pages, Projects, ProjectType } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
@@ -105,14 +105,31 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         pageID: 0,
         pageData: Pages.index
     };
-    Object.values(Pages).filter( (entry, i) => {
-        if( entry.url === titleConversion(location.pathname) ){
-            activePage = {
-                pageID: i,
-                pageData: entry
-            };
+    let isMain = useRef<boolean>(false);
+    const mainStreamCheck = (loc: string) => {
+        let mainStream = false;
+        Object.values(Pages).filter( (entry, i) => {
+            if( entry.url === titleConversion(loc) ){
+                activePage = {
+                    pageID: i,
+                    pageData: entry
+                };
+                mainStream = true;
+            }
+        } );
+        if( !mainStream ){
+            Object.values(Projects).filter( entry => {
+                if( Pages.projects.url+'/'+entry.url === loc ){
+                    activePage = {
+                        pageID: Object.keys(Pages).findIndex(t => t === 'projects'),
+                        pageData: Pages.projects
+                    };
+                }
+            } );
         }
-    } );
+        isMain.current = mainStream;
+    }
+    mainStreamCheck(location.pathname);
     Object.keys(Pages).map( item => {
         itemList.push(Pages[item as keyof Pages]);
     });
@@ -535,7 +552,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
         setItems(newList.current);
 
-        if ( history.location.pathname !== newList.current[2].url && !isPaginating.current )
+        if ( history.location.pathname !== newList.current[2].url && !isPaginating.current && isMain.current )
         history.push(newList.current[2].url); else if (items[0].url === newList.current[0].url) assemble();
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
@@ -599,12 +616,15 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             if( action === 'POP' || action === 'REPLACE' ){
                 const current = paginationMap.filter(t => typeof t.current !== 'undefined' )[0];
                 if ( current.url !== newLocation.pathname ){
+                    mainStreamCheck(newLocation.pathname);
                     const targetI = paginationMap.findIndex(t => t.url === newLocation.pathname );
-                    newPage.current = paginationMap[targetI];
+                    newPage.current = ( isMain.current ) ? paginationMap[targetI] : 
+                        paginationMap.find(t => t.url === activePage.pageData.url );
                     isPaginating.current = true;
                     applyInfinity();
                 }
             }
+
         });
     },[])
 

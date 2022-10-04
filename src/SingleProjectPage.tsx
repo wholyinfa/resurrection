@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { titleConversion } from './App';
 import { Projects } from './data';
@@ -11,8 +11,12 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
     const { projectName }: Param = useParams();
 
     const Project = Projects.filter( entry => titleConversion(entry.url) === projectName )[0];
-    
     if( !Project ) return <NotFound />;
+
+    useEffect(() => {
+        
+    }, []);
+    
     return <h1>{Project.title}</h1>;
 }
 SingleProjectPage.propTypes ={

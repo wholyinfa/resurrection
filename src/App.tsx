@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { breakPoints, PageData, Pages } from './data';
+import { breakPoints, PageData, Pages, Projects, ProjectType } from './data';
 import Menu, { changePagination, paginationMap } from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
@@ -44,6 +44,22 @@ export default function App() {
     isPaginating.current = true;
     applyInfinity();
   };
+  interface isSubpage {
+      subpage: ProjectType,
+      parent: PageData
+  }
+  let isSubpage = useRef<isSubpage | boolean>(true);
+  isSubpage.current = true;
+  const checkForSubpage = (loc: string) => {
+      Object.values(Projects).filter( entry => {
+          if( Pages.projects.url+'/'+entry.url === loc ){
+              isSubpage.current = {
+                  subpage: entry,
+                  parent: Pages.projects
+              };
+          }
+      } );
+  }
   useEffect( () => {
 
     resizePurposes();
@@ -108,7 +124,9 @@ export default function App() {
           <ContactPage />
         </Route>
         <Route exact path={Pages.projects.url}>
-          <ProjectsPage />
+          <ProjectsPage
+            checkForSubpage = {checkForSubpage}
+          />
         </Route>
         <Route exact path={Pages.projects.url+'/:projectName'}>
           <SingleProjectPage />

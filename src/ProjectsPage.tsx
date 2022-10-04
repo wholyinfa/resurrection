@@ -4,14 +4,15 @@ import PropTypes, {InferProps} from 'prop-types';
 import { Pages, Projects } from './data';
 import { Link } from 'react-router-dom';
 
-function Card({title, context, url, imgSource}: InferProps<typeof Card.propTypes>) {
+function Card({title, context, url, imgSource, handleClick}: InferProps<typeof Card.propTypes>) {
+    const aURL = Pages.projects.url+'/'+url;
     return <div className='card cobalt'>
         <div className='img' style={{backgroundImage: `url('${imgSource}')`}} />
         <div className='content'>
             <p className='preTitle'>Project</p>
             <h2 className='title'>{title}</h2>
             <p className='brief'>{context+'...'}</p>
-            <Link to={Pages.projects.url+'/'+url} className='charcoalButton card'>VIEW</Link>
+            <Link onClick={(e) => handleClick(e,aURL)} to={aURL} className='charcoalButton card'>VIEW</Link>
         </div>
     </div>;
 }
@@ -20,8 +21,13 @@ Card.propTypes ={
     context: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     imgSource: PropTypes.string.isRequired,
+    handleClick: PropTypes.func.isRequired
 }
-export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propTypes>) {
+export default function ProjectsPage({checkForSubpage}: InferProps<typeof ProjectsPage.propTypes>) {
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
+        e.preventDefault();
+        
+    }
     useEffect(() => {
         
     }, [])
@@ -41,6 +47,7 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
                     context = {brief}
                     url = {project.url}
                     imgSource = {project.imgSource.preview}
+                    handleClick = {handleClick}
                 />
             })
         }
@@ -48,5 +55,5 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
 </article>;
 }
 ProjectsPage.propTypes ={
-
+    checkForSubpage: PropTypes.func.isRequired
 }

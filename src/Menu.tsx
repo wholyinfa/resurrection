@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, ReactComponentElement } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { titleConversion } from "./App";
-import { PageData, Pages, Projects } from "./data";
+import { PageData, Pages } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
@@ -105,26 +105,14 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         pageID: 0,
         pageData: Pages.index
     };
-    let isSubpage = true;
     Object.values(Pages).filter( (entry, i) => {
         if( entry.url === titleConversion(location.pathname) ){
             activePage = {
                 pageID: i,
                 pageData: entry
             };
-            isSubpage = false;
         }
     } );
-    if( isSubpage ){
-        Object.values(Projects).filter( entry => {
-            if( Pages.projects.url+'/'+entry.url === titleConversion(location.pathname) ){
-                activePage = {
-                    pageID: Object.keys(Pages).indexOf('projects'),
-                    pageData: Pages.projects
-                };
-            }
-        } );
-    }
     Object.keys(Pages).map( item => {
         itemList.push(Pages[item as keyof Pages]);
     });
@@ -437,7 +425,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         
         if( infinityApplied.current && isPaginating.current ){
             isPaginating.current = false;
-            let aElements = document.querySelector('#dialer');
             let i = addAll().findIndex(t => typeof t.ghost === 'undefined' && t.url === newPage.current!.url);
             if ( typeof xy === 'undefined' ) xy = trueXY.current;
             restoreFromInfinity(xy, xy, i); 

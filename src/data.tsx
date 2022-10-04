@@ -40,7 +40,7 @@ export const Pages: Pages = {
     },
 }
 
-interface ProjectType {
+export interface ProjectType {
     title: string;
     context: string;
     url: string;

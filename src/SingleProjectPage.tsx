@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { titleConversion } from './App';
 import { builtWith, Projects } from './data';
 import NotFound from './NotFound';
 import './Stylesheets/singleproject.css';
-import PropTypes, {InferProps} from 'prop-types';
 
-export default function SingleProjectPage({}: InferProps<typeof SingleProjectPage.propTypes>) {
+export default function SingleProjectPage() {
     type Param = {projectName: string};
     const { projectName }: Param = useParams();
 
     const Project = Projects.filter( entry => titleConversion(entry.url) === projectName )[0];
     if( !Project ) return <NotFound />;
-
-    useEffect(() => {
-        
-    }, []);
     
     const tools = (tool: builtWith, alt?: boolean) => {
         const addAlt = (title: string) => (alt) ? `Icon of ${title} as a tool that was used to make this project` : title;
@@ -36,7 +31,7 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
         <section className='post'>
             <h1 className='title'>{Project.title.toUpperCase()}</h1>
             <p className='content'>{Project.context}</p>
-            <Link target={'_blank'} className='charcoalButton card' to={Project.url} >VISIT PROJECT</Link>
+            <div><Link target={'_blank'} className='charcoalButton card' to={Project.url} >VISIT PROJECT</Link></div>
         </section>
         <section className='builtWith'>
             <h2>BUILT WITH</h2>
@@ -57,7 +52,4 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
             <div id='mobile' style={{backgroundImage: `url('${Project.imgSource.mobile}')`}}></div>
         </section>
 </article>;
-}
-SingleProjectPage.propTypes ={
-    
 }

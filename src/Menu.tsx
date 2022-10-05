@@ -105,7 +105,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         pageID: 0,
         pageData: Pages.index
     };
-    let isMain = useRef<boolean>(false);
+    let isMain = useRef<boolean>(true);
     const mainStreamCheck = (loc: string) => {
         let mainStream = false;
         Object.values(Pages).filter( (entry, i) => {
@@ -117,6 +117,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
                 mainStream = true;
             }
         } );
+        return mainStream;
+    }
+    const sideStreamCheck = (loc: string) => {
+        let mainStream = mainStreamCheck(loc);
         if( !mainStream ){
             Object.values(Projects).filter( entry => {
                 if( Pages.projects.url+'/'+entry.url === loc ){
@@ -127,9 +131,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
                 }
             } );
         }
-        isMain.current = mainStream;
+        return mainStream;
     }
-    mainStreamCheck(location.pathname);
+    sideStreamCheck(location.pathname);
     Object.keys(Pages).map( item => {
         itemList.push(Pages[item as keyof Pages]);
     });
@@ -530,9 +534,11 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             visibleItems = aElements.splice(firstVis, 5),
             relativeDuration = currentXY ? (Math.abs(xy - currentXY) / menuItemD()) * dur : dur;
 
+        isMain.current = !(isMain.current === false && sideStreamCheck(location.pathname) === false);
         isSnapping.current = gsap.to('#dialer', {ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
     }
+    const requestedURL = useRef<string>();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
         let nullItem: itemData = {
@@ -559,6 +565,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         isSnapping.current = false;
         infinityApplied.current = false;
         xyMemory.current = false;
+        isMain.current = true;
     }
     interface upNdown{
       up: boolean;
@@ -615,9 +622,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         history.listen((newLocation, action) => {
             if( action === 'POP' || action === 'REPLACE' ){
                 const current = paginationMap.filter(t => typeof t.current !== 'undefined' )[0];
-                if ( current.url !== newLocation.pathname ){
-                    mainStreamCheck(newLocation.pathname);
-                    const targetI = paginationMap.findIndex(t => t.url === newLocation.pathname );
+                const pathname = titleConversion(newLocation.pathname);
+                if ( current.url !== pathname ){
+                    isMain.current = sideStreamCheck(pathname);
+                    const targetI = paginationMap.findIndex(t => t.url === pathname );
                     newPage.current = ( isMain.current ) ? paginationMap[targetI] : 
                         paginationMap.find(t => t.url === activePage.pageData.url );
                     isPaginating.current = true;

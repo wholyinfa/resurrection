@@ -12,6 +12,8 @@ import SingleProjectPage from './SingleProjectPage';
 import './Stylesheets/style.css';
 
 export const titleConversion = (query: string) => {
+  const qLength = query.length;
+  if (qLength > 1 && Array.from(query)[qLength-1] === '/') query = query.substring(0, qLength-1);
   return query.toLowerCase().replaceAll(' ', '-');
 }
 

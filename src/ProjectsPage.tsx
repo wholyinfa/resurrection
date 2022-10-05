@@ -23,12 +23,13 @@ Card.propTypes ={
     imgSource: PropTypes.string.isRequired,
     handleClick: PropTypes.func.isRequired
 }
-export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propTypes>) {
+export default function ProjectsPage({setImposeSequence}: InferProps<typeof ProjectsPage.propTypes>) {
     const history = useHistory();
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
         e.preventDefault();
         
-        history.push(url);
+        const callback = () => history.push(url);
+        setImposeSequence( () => callback);
     }
     useEffect(() => {
         
@@ -57,5 +58,5 @@ export default function ProjectsPage({}: InferProps<typeof ProjectsPage.propType
 </article>;
 }
 ProjectsPage.propTypes ={
-    
+    setImposeSequence: PropTypes.func.isRequired,
 }

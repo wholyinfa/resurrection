@@ -83,6 +83,8 @@ export default function App() {
 
   }, []);
 
+  const [imposeSequence, setImposeSequence] = useState<gsap.Callback | undefined>();
+
   return (
     <>
       <Menu
@@ -91,6 +93,7 @@ export default function App() {
         newPage = {newPage}
         isMobile = {isMobile}
         resize = {resize}
+        imposeSequence = {imposeSequence}
       />
       <Switch>
         <Route exact path={Pages.index.url}>
@@ -109,7 +112,9 @@ export default function App() {
           <ContactPage />
         </Route>
         <Route exact path={Pages.projects.url}>
-          <ProjectsPage />
+          <ProjectsPage
+          setImposeSequence = {setImposeSequence}
+          />
         </Route>
         <Route exact path={Pages.projects.url+'/:projectName'}>
           <SingleProjectPage />

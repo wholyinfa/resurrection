@@ -92,7 +92,7 @@ export const changePagination = (newPage: PageData) => {
     return newItem;
   });
 }
-export default function Menu({isMobile, resize, portal, isPaginating, newPage} : InferProps<typeof Menu.propTypes>) {
+export default function Menu({isMobile, resize, portal, isPaginating, newPage, imposeSequence} : InferProps<typeof Menu.propTypes>) {
 
     const location = useLocation(),
           itemList: itemData[] = [];
@@ -647,10 +647,12 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
         gsap.fromTo('#dialerContainer .shade.L', {background: animProps.shadeBg(shadeLDeg, Type.current)}, {duration: .2,background: animProps.shadeBg(shadeLDeg, oldType)});
     
     }
-    const paginationSequence = (dissipate?: true) => {
+    const paginationSequence = (dissipate?: true, callback?: gsap.Callback | undefined) => {
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
         const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
-        gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05});
+        if ( !callback ) callback = () => {};
+        gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05, onComplete: callback});
+        
         if( !dissipate ){
             const activePageName = activePage.pageData.text.toLowerCase();
             const type = ( activePageName === 'about' || activePageName === 'character' ) ? 'life' :
@@ -663,6 +665,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage} :
             Type.current = type;
         }
     }
+    useEffect(()=> {
+        if ( imposeSequence !== undefined )
+            paginationSequence(true, imposeSequence)
+    }, [imposeSequence])
 
     const dissipate = () => paginationSequence(true);
     const assemble = () =>  paginationSequence();
@@ -681,5 +687,6 @@ Menu.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     resize: PropTypes.bool.isRequired,
     isPaginating: PropTypes.any.isRequired,
-    newPage: PropTypes.any.isRequired
+    newPage: PropTypes.any.isRequired,
+    imposeSequence: PropTypes.any
 }

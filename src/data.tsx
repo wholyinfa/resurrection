@@ -40,6 +40,7 @@ export const Pages: Pages = {
     },
 }
 
+export type builtWith = 'ps' | 'xd' | 'ai' | 'jq' | 'html' | 'react' | 'css' | 'sass' | 'gsap' | 'js' | 'ts';
 export interface ProjectType {
     title: string;
     context: string;

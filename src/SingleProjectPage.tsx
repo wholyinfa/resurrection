@@ -45,6 +45,7 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
         </section>
         <section className='builtWith'>
             <h2>BUILT WITH</h2>
+            <div className='tools'>
                 {
                     Project.builtWith.map( (tool, i) => {
                         return <div key={i}>
@@ -53,6 +54,7 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
                             </div>
                     })
                 }
+            </div>
         </section>
 </article>;
 }

@@ -2,6 +2,7 @@
 
 #singleProjectPage{
     text-align: center;
+    padding-bottom: 100px;
     .post{
         max-width: 800px;
         margin: 100px auto 50px auto;
@@ -22,12 +23,13 @@
         }
     }
     $maxWidth: 1920px;
+    $sideGap: 50px;
     .samples{
         width: 100%;
         max-width: 1920px;
         display: inline-block;
         margin: 0 auto;
-        padding: 0 50px;
+        padding: 0 $sideGap;
         box-sizing: border-box;
         > *{
             margin: 0;
@@ -57,6 +59,37 @@
             width: $width;
             height: 0;
             padding-bottom: ( $width / 0.5566 );
+        }
+    }
+    .builtWith{
+        $yGap: 30px;
+        font-family: latoMedium;
+        max-width: $maxWidth;
+        background: #262F8F;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 50px $sideGap 0 $sideGap;
+        box-sizing: border-box;
+        padding-bottom: $yGap;
+        h2{
+            font-size: 18px;
+            margin: 0;
+            padding: 10px 30px;
+            display: inline-block;
+            background-image: url('./Assets/builtWithBG.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .tools{
+            width: 100%;
+            div{
+                width: 200px;
+                display: inline-block;
+                margin-top: $yGap;
+                h3{
+                    margin: 10px 0 0 0;
+                }
+            }
         }
     }
 }

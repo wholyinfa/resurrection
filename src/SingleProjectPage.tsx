@@ -38,11 +38,6 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
             <p className='content'>{Project.context}</p>
             <Link target={'_blank'} className='charcoalButton card' to={Project.url} >VISIT PROJECT</Link>
         </section>
-        <section className='samples'>
-            <div id='desktop' style={{backgroundImage: `url('${Project.imgSource.desktop}')`}}></div>
-            <div id='tablet' style={{backgroundImage: `url('${Project.imgSource.tablet}')`}}></div>
-            <div id='mobile' style={{backgroundImage: `url('${Project.imgSource.mobile}')`}}></div>
-        </section>
         <section className='builtWith'>
             <h2>BUILT WITH</h2>
             <div className='tools'>
@@ -55,6 +50,11 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
                     })
                 }
             </div>
+        </section>
+        <section className='samples'>
+            <div id='desktop' style={{backgroundImage: `url('${Project.imgSource.desktop}')`}}></div>
+            <div id='tablet' style={{backgroundImage: `url('${Project.imgSource.tablet}')`}}></div>
+            <div id='mobile' style={{backgroundImage: `url('${Project.imgSource.mobile}')`}}></div>
         </section>
 </article>;
 }

@@ -2,10 +2,11 @@
 
 #singleProjectPage{
     text-align: center;
-    padding-bottom: 100px;
+    padding-bottom: 150px;
     .post{
         max-width: 800px;
         margin: 100px auto 50px auto;
+        padding: 0 50px;
         display: inline-block;
         text-align: left;
         h1{
@@ -23,13 +24,13 @@
         }
     }
     $maxWidth: 1920px;
-    $sideGap: 50px;
+    $gap: 50px;
     .samples{
         width: 100%;
         max-width: 1920px;
         display: inline-block;
-        margin: 0 auto;
-        padding: 0 $sideGap;
+        margin: 50px auto 0 auto;
+        padding: 0 50px;
         box-sizing: border-box;
         > *{
             margin: 0;
@@ -67,8 +68,8 @@
         max-width: $maxWidth;
         background: #262F8F;
         border-radius: 10px;
-        display: inline-block;
-        margin: 50px $sideGap 0 $sideGap;
+        display: block;
+        margin: 50px auto 0 auto;
         box-sizing: border-box;
         padding-bottom: $yGap;
         h2{

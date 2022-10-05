@@ -262,11 +262,12 @@ article > .title div {
 }
 #singleProjectPage {
   text-align: center;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
 }
 #singleProjectPage .post {
   max-width: 800px;
   margin: 100px auto 50px auto;
+  padding: 0 50px;
   display: inline-block;
   text-align: left;
 }
@@ -287,7 +288,7 @@ article > .title div {
   width: 100%;
   max-width: 1920px;
   display: inline-block;
-  margin: 0 auto;
+  margin: 50px auto 0 auto;
   padding: 0 50px;
   box-sizing: border-box;
 }
@@ -319,8 +320,8 @@ article > .title div {
   max-width: 1920px;
   background: #262F8F;
   border-radius: 10px;
-  display: inline-block;
-  margin: 50px 50px 0 50px;
+  display: block;
+  margin: 50px auto 0 auto;
   box-sizing: border-box;
   padding-bottom: 30px;
 }

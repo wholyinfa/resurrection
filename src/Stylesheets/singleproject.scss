@@ -1,0 +1,62 @@
+@import './style.scss';
+
+#singleProjectPage{
+    text-align: center;
+    .post{
+        max-width: 800px;
+        margin: 100px auto 50px auto;
+        display: inline-block;
+        text-align: left;
+        h1{
+            margin: 0;
+            font-size: 30px;
+            font-family: latoMedium;
+        }
+        p{
+            margin: 20px 0 30px 0;
+            font-size: 20px;
+            font-family: latoLight;
+        }
+        .charcoalButton{
+            float: right;
+        }
+    }
+    $maxWidth: 1920px;
+    .samples{
+        width: 100%;
+        max-width: 1920px;
+        display: inline-block;
+        margin: 0 auto;
+        padding: 0 50px;
+        box-sizing: border-box;
+        > *{
+            margin: 0;
+            position: relative;
+            float: left;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        #desktop{
+            max-width: $maxWidth;
+            $width: 100%;
+            width: $width;
+            padding-bottom: $width * 0.5625;
+        }
+        $tabletRatio: .64;
+        #tablet{
+            $maxW: $tabletRatio * $maxWidth;
+            $width: $maxW / $maxWidth * 100% ; 
+            max-width: $maxW;
+            width: $width;
+            padding-bottom: ( $width * 1.01 );
+        }
+        #mobile{
+            $maxW: (1 - $tabletRatio) * $maxWidth;
+            $width: $maxW / $maxWidth * 100% ; 
+            max-width: $maxW;
+            width: $width;
+            height: 0;
+            padding-bottom: ( $width / 0.5566 );
+        }
+    }
+}

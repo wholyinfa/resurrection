@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { breakPoints, PageData, Pages, Projects, ProjectType } from './data';
-import Menu, { changePagination, paginationMap } from './Menu'
+import { breakPoints, PageData, Pages } from './data';
+import Menu, { paginationMap } from './Menu'
 import AboutPage from './AboutPage';
 import CharacterPage from './CharacterPage';
 import ContactPage from './ContactPage';

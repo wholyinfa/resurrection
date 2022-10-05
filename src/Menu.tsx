@@ -3,7 +3,7 @@ import { NavLink, useHistory, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { titleConversion } from "./App";
-import { PageData, Pages, Projects, ProjectType } from "./data";
+import { PageData, Pages, Projects } from "./data";
 import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
@@ -51,7 +51,6 @@ interface itemData extends PageData {
     ghost?: boolean | undefined;
 };
 let expansionAnimation: gsap.core.Timeline;
-let repulsionAnimation: gsap.core.Timeline = gsap.timeline({paused: true});
 interface paginationMap extends PageData {
   launchList: string,
   current?: boolean;

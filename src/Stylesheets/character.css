@@ -89,6 +89,10 @@ article > .title div {
   content: "CHARACTER";
 }
 
+#projectsPage h1::after {
+  content: "PROJECTS";
+}
+
 .card {
   border-radius: 10px;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
@@ -103,6 +107,23 @@ article > .title div {
 
 .card.reverseLight {
   box-shadow: -5px 10px 20px 5px rgba(0, 0, 0, 0.4);
+}
+
+.charcoalButton {
+  text-decoration: none;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 20px;
+  background: rgb(26, 35, 126);
+  background: linear-gradient(-45deg, rgb(26, 35, 126) 0%, rgb(21, 68, 227) 100%);
+  border-radius: 5px;
+  display: inline-block;
+  transition: transform 0.1s ease-in-out;
+  transform-origin: 100% 100%;
+}
+
+.charcoalButton:hover {
+  transform: scale(0.9);
 }
 
 @media only screen and (max-width: 1366px) {
@@ -125,6 +146,17 @@ article > .title div {
   #characterPage > .title h1::after {
     font-size: 60px;
     letter-spacing: 35px;
+  }
+  #projectsPage > .title h1 {
+    font-size: 80px;
+    top: 10%;
+    left: 50%;
+    letter-spacing: 40px;
+    padding-left: 40px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 80px;
+    letter-spacing: 40px;
   }
 }
 @media only screen and (max-width: 768px) {
@@ -160,6 +192,23 @@ article > .title div {
     font-size: 35px;
     letter-spacing: 20px;
   }
+  #projectsPage > .title h1 {
+    font-size: 35px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 20px;
+    padding-left: 20px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 35px;
+    letter-spacing: 20px;
+  }
+  .charcoalButton {
+    text-decoration: none;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+  }
 }
 @media only screen and (max-width: 428px) {
   article > .title {
@@ -187,6 +236,23 @@ article > .title div {
     padding-left: 15px;
   }
   #characterPage > .title div {
+    width: 220px;
+    font-size: 60px;
+    letter-spacing: 30px;
+    padding-left: 30px;
+  }
+  #projectsPage > .title h1 {
+    font-size: 30px;
+    top: 20%;
+    left: 50%;
+    letter-spacing: 15px;
+    padding-left: 15px;
+  }
+  #projectsPage > .title h1::after {
+    font-size: 30px;
+    letter-spacing: 15px;
+  }
+  #projectsPage > .title div {
     width: 220px;
     font-size: 60px;
     letter-spacing: 30px;

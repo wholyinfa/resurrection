@@ -346,4 +346,27 @@ article > .title div {
 }
 #singleProjectPage .builtWith .tools div h3 {
   margin: 10px 0 0 0;
+  font-size: 18px;
+}
+#singleProjectPage .builtWith .tools div img {
+  height: 75px;
+}
+
+@media only screen and (max-width: 768px) {
+  #singleProjectPage .samples #tablet {
+    max-width: 100%;
+    width: 100%;
+    padding-bottom: 100%;
+  }
+  #singleProjectPage .samples #mobile {
+    max-width: 100%;
+    width: 100%;
+    padding-bottom: 180%;
+  }
+  #singleProjectPage .builtWith .tools div img {
+    height: 60px;
+  }
+  #singleProjectPage .builtWith .tools div h3 {
+    font-size: 16px;
+  }
 }/*# sourceMappingURL=singleproject.css.map */

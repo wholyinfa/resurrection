@@ -91,6 +91,41 @@
                 margin-top: $yGap;
                 h3{
                     margin: 10px 0 0 0;
+                    font-size: 18px;
+                }
+                img{
+                    height: 75px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #singleProjectPage{
+        .samples{
+            #tablet{
+                $width: 100%; 
+                max-width: $width;
+                width: $width;
+                padding-bottom: 100%;
+            }
+            #mobile{
+                $width: 100%; 
+                max-width: $width;
+                width: $width;
+                padding-bottom: 180%;
+            }
+        }
+        .builtWith{
+            .tools{
+                div{
+                    img{
+                        height: 60px;
+                    }
+                    h3{
+                        font-size: 16px;
+                    }
                 }
             }
         }

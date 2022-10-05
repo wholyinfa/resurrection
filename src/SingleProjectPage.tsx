@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { titleConversion } from './App';
 import { builtWith, Projects } from './data';
 import NotFound from './NotFound';
-import './Stylesheets/projects.css';
+import './Stylesheets/singleproject.css';
 import PropTypes, {InferProps} from 'prop-types';
 
 export default function SingleProjectPage({}: InferProps<typeof SingleProjectPage.propTypes>) {
@@ -32,17 +32,16 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
         if ( tool === 'sass' ) return addAlt('Sass');
         if ( tool === 'gsap' ) return addAlt('GSAP');
     }
-    const alt = (device: 'Desktop' | 'Tablet' | 'Mobile') => `${device} sample of the ${Project.title} project`;
     return <article id='singleProjectPage'>
         <section className='post'>
-            <h1 className='title'>{Project.title}</h1>
+            <h1 className='title'>{Project.title.toUpperCase()}</h1>
             <p className='content'>{Project.context}</p>
-            <Link to={Project.url} >VISIT PROJECT</Link>
+            <Link target={'_blank'} className='charcoalButton card' to={Project.url} >VISIT PROJECT</Link>
         </section>
         <section className='samples'>
-            <img id='desktop' src={Project.imgSource.desktop} alt={alt('Desktop')} />
-            <img id='tablet' src={Project.imgSource.tablet} alt={alt('Tablet')} />
-            <img id='mobile' src={Project.imgSource.mobile} alt={alt('Mobile')} />
+            <div id='desktop' style={{backgroundImage: `url('${Project.imgSource.desktop}')`}}></div>
+            <div id='tablet' style={{backgroundImage: `url('${Project.imgSource.tablet}')`}}></div>
+            <div id='mobile' style={{backgroundImage: `url('${Project.imgSource.mobile}')`}}></div>
         </section>
         <section className='builtWith'>
             <h2>BUILT WITH</h2>

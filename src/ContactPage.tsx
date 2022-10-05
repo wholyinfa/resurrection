@@ -2,9 +2,8 @@ import React from 'react';
 import './Stylesheets/contact.css';
 import PropTypes, {InferProps} from 'prop-types';
 import { Link } from 'react-router-dom';
-export default function ContactPage({}: InferProps<typeof ContactPage.propTypes>) {
 
-    
+function ContactPageDOM () {
     return <article id='contactPage'>
     <div className='title'>
         <h1>CONTACT</h1>
@@ -24,6 +23,10 @@ export default function ContactPage({}: InferProps<typeof ContactPage.propTypes>
             </div>
         </section>
 </article>;
+}
+export default function ContactPage({}: InferProps<typeof ContactPage.propTypes>) {
+    
+    return <ContactPageDOM />;
 }
 ContactPage.propTypes ={
     

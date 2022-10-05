@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { titleConversion } from './App';
 import { Projects } from './data';
 import NotFound from './NotFound';
@@ -17,7 +17,25 @@ export default function SingleProjectPage({}: InferProps<typeof SingleProjectPag
         
     }, []);
     
-    return <h1>{Project.title}</h1>;
+    return <article id='singleProjectPage'>
+        <section className='post'>
+            <h1 className='title'></h1>
+            <p className='content'></p>
+            <Link to={''} >VISIT PROJECT</Link>
+        </section>
+        <section className='samples'>
+            <img id='desktop' src={''} alt={''} />
+            <img id='tablet' src={''} alt={''} />
+            <img id='mobile' src={''} alt={''} />
+        </section>
+        <section className='builtWith'>
+            <h2>BUILT WITH</h2>
+            <div>
+                <img src={''} alt={''} />
+                <h3>TOOL'S NAME</h3>
+            </div>
+        </section>
+</article>;
 }
 SingleProjectPage.propTypes ={
     

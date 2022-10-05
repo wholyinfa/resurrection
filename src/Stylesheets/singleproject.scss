@@ -1,8 +1,10 @@
 @import './style.scss';
 
 #singleProjectPage{
+    width: 100%;
     text-align: center;
     padding-bottom: 150px;
+    overflow-x: hidden;
     .post{
         max-width: 800px;
         margin: 100px auto 50px auto;
@@ -68,10 +70,10 @@
         max-width: $maxWidth;
         background: #262F8F;
         border-radius: 10px;
-        display: block;
-        margin: 50px auto 0 auto;
+        display: inline-block;
+        margin: 50px $gap 0 $gap;
         box-sizing: border-box;
-        padding-bottom: $yGap;
+        padding: 0 $yGap $yGap $yGap;
         h2{
             font-size: 18px;
             margin: 0;

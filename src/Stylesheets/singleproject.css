@@ -261,8 +261,10 @@ article > .title div {
   }
 }
 #singleProjectPage {
+  width: 100%;
   text-align: center;
   padding-bottom: 150px;
+  overflow-x: hidden;
 }
 #singleProjectPage .post {
   max-width: 800px;
@@ -320,10 +322,10 @@ article > .title div {
   max-width: 1920px;
   background: #262F8F;
   border-radius: 10px;
-  display: block;
-  margin: 50px auto 0 auto;
+  display: inline-block;
+  margin: 50px 50px 0 50px;
   box-sizing: border-box;
-  padding-bottom: 30px;
+  padding: 0 30px 30px 30px;
 }
 #singleProjectPage .builtWith h2 {
   font-size: 18px;

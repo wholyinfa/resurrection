@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import gsap from "gsap";
 import './Stylesheets/contact.css';
 import PropTypes, {InferProps} from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -12,15 +13,15 @@ function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.pro
         const element = document.querySelector('#status');
 
         animation
-            .fromTo(element, {autoAlpha: 0}, {autoAlpha: 1})
-            .fromTo(element, {autoAlpha: 1}, {autoAlpha: 0}, '>1')
+            .to(element, {autoAlpha: 1})
+            .to(element, {autoAlpha: 0}, '>1')
             .call(() => {
-                setStatus(false);
+                setStatus(null);
             });
-    }, [])
+    }, []);
 
     return(
-        <div id='status' className={status}>
+        <div id='status' className={`cobalt card ${status}`}>
             <div>
             {
                 (status === 'success') ?
@@ -33,7 +34,7 @@ function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.pro
     )
 }
 SuccessStatus.propTypes ={
-    status: PropTypes.string.isRequired,
+    status: PropTypes.any,
     setStatus: PropTypes.func.isRequired,
 }
 
@@ -46,16 +47,13 @@ function Error({form}: InferProps<typeof Error.propTypes>){
     Object.entries(form).map( (item, i) => {
       if ( item[1] == "" ){
         if( err.length > 0 ) err.push(", ");
-        const finalItem = ( item[0] === 'name' ) ? 'Name':
-                          ( item[0] === 'email' ) ? 'Email':
-                          ( item[0] === 'subject' ) ? 'Betreff':
-                          ( item[0] === 'message' ) ? 'Nachtricht' : '';
-        err.push(<button className='goldPaperButton' key={i} onClick={() => focusOnIt(item[0])}>{finalItem}</button>);
+        err.push(<button className='card charcoalButton' key={i} onClick={() => focusOnIt(item[0])}>{item[0]}</button>);
       };
     });
     
-     err.unshift('Füllen Sie bitte die folgenden Felder aus: ');
-     return <div id="error">{err}</div>;
+     err.unshift('Please fill in the following fields: ');
+
+     return <div id='error'>{err}</div>;
 }
 Error.propTypes ={
     form: PropTypes.any.isRequired,
@@ -68,7 +66,7 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
         <div>CONTACT</div>
     </div>
         <section id='contact' className='card cobalt'>
-            <h2>CONTACT ME</h2>
+            <h2>GET IN TOUCH</h2>
             <form onSubmit={(e) => handleSubmit(e)}>
                 <div>
                 <div className='inputs'>
@@ -79,7 +77,7 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
                 <textarea name='message' onChange={(e) => handleChange(e)} placeholder='You message:' value={formData.message}></textarea>
                 </div>
                 <div className='button'>
-                    <button type='submit' className='charcoalButton'>SEND</button>
+                    <button type='submit' className='card charcoalButton'>SEND</button>
                 {error ? (<Error form= {formData} />) : ''}
                 </div>
             </form>
@@ -101,9 +99,9 @@ ContactPageDOM.propTypes ={
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
     formData: PropTypes.any.isRequired,
-    status: PropTypes.string.isRequired,
+    status: PropTypes.any,
     setStatus: PropTypes.func.isRequired,
-    error: PropTypes.any.isRequired,
+    error: PropTypes.any,
 }
 
 export default function ContactPage() {
@@ -123,7 +121,7 @@ export default function ContactPage() {
             [name]: value
         }));
     }
-    const [status, setStatus] = useState<string>('');
+    const [status, setStatus] = useState<string | null>(null);
     const [error, setError] = useState<null | number>(null);
     const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();

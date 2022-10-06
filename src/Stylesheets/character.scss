@@ -138,6 +138,8 @@ $noneCardElements: 2;
             overflow-x: hidden;
             overflow-y: visible;
             $h2FontSize: 50px;
+            padding-left: 50px;
+            box-sizing: border-box;
             .deck{
                 > h2{
                     font-size: $h2FontSize;

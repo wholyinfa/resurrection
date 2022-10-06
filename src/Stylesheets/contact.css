@@ -10,7 +10,7 @@
   height: -moz-fit-content;
   height: fit-content;
   position: relative;
-  margin: 0 auto;
+  margin-left: 50px;
   border-radius: 5px;
   place-self: center;
 }
@@ -99,6 +99,7 @@
   padding: 10px 20px;
 }
 #contactPage .socialMedia {
+  min-width: 220px;
   font-family: latoMedium;
   background: #262F8F;
   border-radius: 10px;

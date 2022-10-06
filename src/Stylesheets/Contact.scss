@@ -7,7 +7,7 @@
         text-align: center;
         height: fit-content;
         position: relative;
-        margin: 0 auto;
+        margin-left: 50px;
         border-radius: 5px;
         place-self: center;
         h2{
@@ -99,6 +99,7 @@
     $gap: 50px;
     .socialMedia{
         $yGap: 20px;
+        min-width: 220px;
         font-family: latoMedium;
         background: #262F8F;
         border-radius: 10px;

@@ -80,9 +80,13 @@
 @media only screen and (max-width: 768px) {
     #projectsPage{
         .previewCards{
-            max-width: 90%;
+            width: 100%;
+            max-width: 100%;
+            padding-left: 50px;
+            box-sizing: border-box;
             > .card{
                 float: inherit;
+                margin: 50px auto;
             }
         }
     }

@@ -130,7 +130,7 @@
     min-width: 250px;
     max-width: 350px;
   }
-  #contactPage #contact h1 {
+  #contactPage #contact h2 {
     font-size: 30px;
   }
   #contactPage #contact form {
@@ -159,5 +159,13 @@
   }
   #contactPage #socialMedia h2 {
     font-size: 22px;
+  }
+}
+@media only screen and (max-width: 550px) {
+  #contactPage #contact {
+    max-width: 250px;
+  }
+  #contactPage #contact form {
+    padding: 30px 0 0 0;
   }
 }/*# sourceMappingURL=Contact.css.map */

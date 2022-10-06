@@ -149,11 +149,11 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     const newList = useRef<itemData[]>(items);
     useEffect( () => {
             changePagination(activePage.current.pageData);
-            assemble();
             allowPagination.current = {
                 up: true,
                 down: true
             }
+            assemble();
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -558,13 +558,14 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         setItems(newList.current);
 
         if ( history.location.pathname !== newList.current[2].url && !isPaginating.current && isMain.current )
-        history.push(newList.current[2].url); else if (activePage.current.pageData.url === newList.current[2].url) assemble();
+        history.push(newList.current[2].url); else if (pageOnPress.current && pageOnPress.current.url === newList.current[2].url) assemble();
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
         infinityApplied.current = false;
         xyMemory.current = false;
         isMain.current = true;
+        pageOnPress.current = null;
     }
     interface upNdown{
       up: boolean;
@@ -574,6 +575,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
       up: true,
       down: true
     });
+    const pageOnPress = useRef<PageData | null>(null);
     useEffect(() => {
 
         let xyOnPress: number;
@@ -584,6 +586,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             onPress: function() {
                 applyInfinity();
                 xyOnPress = - menuItemD() * (addAll(true).length/2);
+                pageOnPress.current = activePage.current.pageData;
             },
             onDrag: function() {
                 let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
@@ -638,20 +641,21 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     type SectionType = 'work' | 'life' | 'index';
     const Type = useRef<SectionType>('index');
     const dialerSequence = (oldType: SectionType) => {
-        if ( !trueMobile.current ) gsap.fromTo('#dialerContainer', {background: animProps.color(Type.current)}, {duration: .2,background: animProps.color(oldType)});
+        if ( !trueMobile.current ) gsap.to('#dialerContainer', {duration: .2,background: animProps.color(oldType)});
         else gsap.set('#dialerContainer', {background: 'transparent'});
 
         const shadeRDeg =  (trueMobile.current) ? 180 : 90;
         const shadeLDeg =  (trueMobile.current) ? 0 : -90;
-        gsap.fromTo('#dialerContainer .shade.R', {background: animProps.shadeBg(shadeRDeg, Type.current)}, {duration: .2,background: animProps.shadeBg(shadeRDeg, oldType)})
-        gsap.fromTo('#dialerContainer .shade.L', {background: animProps.shadeBg(shadeLDeg, Type.current)}, {duration: .2,background: animProps.shadeBg(shadeLDeg, oldType)});
+        gsap.to('#dialerContainer .shade.R', {duration: .2,background: animProps.shadeBg(shadeRDeg, oldType)})
+        gsap.to('#dialerContainer .shade.L', {duration: .2,background: animProps.shadeBg(shadeLDeg, oldType)});
     
     }
     const paginationSequence = (dissipate?: true, callback?: gsap.Callback | undefined) => {
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
         const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
         if ( !callback ) callback = () => {};
-        gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05, onComplete: callback});
+        gsap.set(targets, {autoAlpha: (dissipate) ? 1 : 0});
+        gsap.to(targets, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05, onComplete: callback});
         
         if( !dissipate ){
             const activePageName = activePage.current.pageData.text.toLowerCase();

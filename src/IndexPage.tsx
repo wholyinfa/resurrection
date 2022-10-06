@@ -83,9 +83,6 @@ export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTy
         }
     }
 
-    const applyResurrection = () => {
-
-    }
     const resurrecting = useRef<boolean>(false);
     const handleClick = (type?: 'life' | 'work') => {
         resurrecting.current = true;

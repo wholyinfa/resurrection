@@ -12,7 +12,7 @@ export const animProps = {
     color: (t: 'work' | 'life' | 'index') : string => (t === 'work') ? 'rgba(26,35,126,1)' :  (t === 'life') ? 'rgba(6,78,59,1)' : 'rgba(0,0,0,1)',
     shadeBg: (deg: number, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
 }
-function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
+function MenuDOM({items, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
     return <nav>
         <div id='dialerHandle'></div>
         <div id='dialerContainer'>
@@ -25,7 +25,6 @@ function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: Infe
                 className={ item.ghost ? 'ghost' : '' }
                 key={i}
                 to={item.url}
-                onClick={(e) => handleClick(e, i)}
                 onKeyDown={(e) => handleKeyDownClick(e)}
                 >
                     {item.text}
@@ -42,7 +41,6 @@ function MenuDOM({items, handleClick, handleKeyDownClick, handleExpansion}: Infe
 }
 MenuDOM.propTypes = {
     items: PropTypes.array.isRequired,
-    handleClick: PropTypes.func.isRequired,
     handleKeyDownClick: PropTypes.func.isRequired,
     handleExpansion: PropTypes.func.isRequired,
 }
@@ -448,12 +446,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         }
     }, [items]);
 
-    const handleClick = (e:React.MouseEvent<HTMLAnchorElement, MouseEvent>, i: number) => {
-        e.preventDefault();
-
-        const xy = getXY(Draggable.get('#dialer'));
-        restoreFromInfinity(xy, xy, i);
-    }
     const handleKeyDownClick = (e:React.KeyboardEvent<HTMLAnchorElement>) => {
         e.code !== 'Tab' && e.preventDefault();
     }
@@ -596,6 +588,13 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                         restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
                     }
                 }
+                else{
+                    this.pointerEvent.preventDefault();
+                    const i = Array.from(this.pointerEvent.target.parentElement.childNodes).findIndex( t => t === this.pointerEvent.target);
+
+                    const xy = getXY(Draggable.get('#dialer'));
+                    restoreFromInfinity(xy, xy, i);
+                }
             }
         });
 
@@ -714,7 +713,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
 
     return <MenuDOM
         items= {items}
-        handleClick= {handleClick}
         handleKeyDownClick= {handleKeyDownClick}
         handleExpansion= {handleExpansion}
     />;

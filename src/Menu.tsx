@@ -617,11 +617,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 portal('down', applyInfinity);
         }
         addEventListener('wheel', (e) => {
-            const scrollY = Math.round(window.scrollY);
-            const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
-            if( scrollY === maxY && e.deltaY >= 0 )
+            if( e.deltaY >= 0 )
                 stream('down');
-            if( scrollY === 0 && e.deltaY < 0 )
+            else
                 stream('up');
         });
         let touchStart: number;

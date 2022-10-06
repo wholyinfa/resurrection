@@ -1,11 +1,13 @@
 #projectsPage {
   text-align: center;
+  display: grid;
 }
 #projectsPage .previewCards {
   max-width: 80%;
   position: relative;
-  margin: 0 0 100px 0;
+  margin: 0;
   display: inline-block;
+  place-self: center;
 }
 #projectsPage .previewCards > .card {
   width: 400px;

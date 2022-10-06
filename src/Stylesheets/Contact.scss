@@ -1,5 +1,6 @@
 #contactPage{
     text-align: center;
+    display: grid;
     #contact{
         width: 825px;
         padding: 25px;
@@ -8,6 +9,7 @@
         position: relative;
         margin: 0 auto;
         border-radius: 5px;
+        place-self: center;
         h2{
             margin: 0;
             color: #fff;
@@ -104,6 +106,7 @@
         margin: 50px $gap 0 $gap;
         box-sizing: border-box;
         padding: 0 $yGap $yGap $yGap;
+        place-self: center;
         h2{
             font-size: 18px;
             margin: 0 0 $yGap 0;

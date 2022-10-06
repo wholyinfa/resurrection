@@ -15,6 +15,16 @@ body {
   color: #fff;
   margin: 0;
   font-size: 16px;
+  overflow-x: hidden;
+}
+
+main, main article {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+main article {
+  padding-bottom: 100px;
+  box-sizing: border-box;
 }
 
 .breathingFragment {
@@ -117,6 +127,7 @@ article > .title div {
   font-size: 20px;
   background: rgb(26, 35, 126);
   background: linear-gradient(-45deg, rgb(26, 35, 126) 0%, rgb(21, 68, 227) 100%);
+  border: 0;
   border-radius: 5px;
   display: inline-block;
   transition: transform 0.1s ease-in-out;
@@ -124,6 +135,7 @@ article > .title div {
 }
 
 .charcoalButton:hover {
+  cursor: pointer;
   transform: scale(0.9);
 }
 
@@ -259,9 +271,6 @@ article > .title div {
     letter-spacing: 30px;
     padding-left: 30px;
   }
-}
-#aboutPage {
-  padding-bottom: 50px;
 }
 #aboutPage section {
   position: relative;

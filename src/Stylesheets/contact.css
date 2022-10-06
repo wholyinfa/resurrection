@@ -1,4 +1,7 @@
-#contact {
+#contactPage {
+  text-align: center;
+}
+#contactPage #contact {
   width: 825px;
   padding: 25px;
   text-align: center;
@@ -9,24 +12,24 @@
   margin: 0 auto;
   border-radius: 5px;
 }
-#contact h2 {
+#contactPage #contact h2 {
   margin: 0;
   color: #fff;
   font-size: 40px;
   font-family: latoMedium;
 }
-#contact form {
+#contactPage #contact form {
   padding: 25px;
   display: inline-block;
   font-family: latoLight;
 }
-#contact form .inputs {
+#contactPage #contact form .inputs {
   float: left;
 }
-#contact form > div {
+#contactPage #contact form > div {
   display: inline-block;
 }
-#contact form input, #contact form textarea {
+#contactPage #contact form input, #contactPage #contact form textarea {
   font-family: latoLight;
   width: 350px;
   height: 50px;
@@ -38,10 +41,10 @@
   border: none;
   display: block;
 }
-#contact form .inputs input:not(:first-child), #contact form .inputs textarea:not(:first-child) {
+#contactPage #contact form .inputs input:not(:first-child), #contactPage #contact form .inputs textarea:not(:first-child) {
   margin-top: 25px;
 }
-#contact form textarea {
+#contactPage #contact form textarea {
   min-width: 350px;
   max-width: 350px;
   min-height: 200px;
@@ -52,21 +55,21 @@
   margin-left: 25px;
   padding: 15px 20px;
 }
-#contact form input:focus-visible, #contact form textarea:focus-visible {
+#contactPage #contact form input:focus-visible, #contactPage #contact form textarea:focus-visible {
   border: 2px solid #fff;
   outline: none !important;
 }
-#contact form .button {
+#contactPage #contact form .button {
   display: block;
   width: auto;
   height: auto;
   margin: 25px auto -25px auto;
   position: relative;
 }
-#contact form .button button {
+#contactPage #contact form .button button {
   position: relative;
 }
-#contact #status {
+#contactPage #contact #status {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -76,7 +79,7 @@
   visibility: hidden;
   z-index: 69;
 }
-#contact #status > div {
+#contactPage #contact #status > div {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -84,12 +87,36 @@
   font-size: 22px;
   color: #fff;
 }
-#contact #error {
+#contactPage #contact #error {
   margin-top: 20px;
   font-family: latoMedium;
   color: #fff;
 }
-#contact #error .charcoalButton {
+#contactPage #contact #error .charcoalButton {
   font-size: 14px;
   padding: 10px 20px;
+}
+#contactPage .socialMedia {
+  font-family: latoMedium;
+  background: #262F8F;
+  border-radius: 10px;
+  display: inline-block;
+  margin: 50px 50px 0 50px;
+  box-sizing: border-box;
+  padding: 0 20px 20px 20px;
+}
+#contactPage .socialMedia h2 {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+  padding: 10px 30px;
+  display: inline-block;
+  background-image: url("./Assets/builtWithBG.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+#contactPage .socialMedia .links {
+  width: 100%;
+}
+#contactPage .socialMedia .links a {
+  padding: 0 10px;
 }/*# sourceMappingURL=Contact.css.map */

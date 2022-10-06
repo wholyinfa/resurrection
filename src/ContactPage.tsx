@@ -90,8 +90,10 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
         </section>
         <section className='socialMedia'>
         <h2>I'M ALSO ON</h2>
-            <Link to={'https://www.linkedin.com/in/alihadadi'} ><img src={require('./Assets/LinkedIn.svg')} alt='My LinkedIn profile | Infa' /></Link>
-            <Link to={'https://github.com/wholyinfa'} ><img src={require('./Assets/GitHub.svg')} alt='My GitHub profile | Infa' /></Link>
+        <div className='links'>
+            <Link target={'_blank'} to={{pathname: 'https://www.linkedin.com/in/alihadadi'}} ><img src={require('./Assets/LinkedIn.svg')} alt='My LinkedIn profile | Infa' /></Link>
+            <Link target={'_blank'} to={{pathname: 'https://github.com/wholyinfa'}} ><img src={require('./Assets/GitHub.svg')} alt='My GitHub profile | Infa' /></Link>
+        </div>
         </section>
 </article>;
 }

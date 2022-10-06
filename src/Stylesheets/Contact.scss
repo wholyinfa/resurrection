@@ -1,95 +1,123 @@
-
-#contact{
-    width: 825px;
-    padding: 25px;
+#contactPage{
     text-align: center;
-    height: fit-content;
-    position: relative;
-    margin: 0 auto;
-    border-radius: 5px;
-    h2{
-        margin: 0;
-        color: #fff;
-        font-size: 40px;
-        font-family: latoMedium;
-    }
-    form{
+    #contact{
+        width: 825px;
         padding: 25px;
-        display: inline-block;
-        font-family: latoLight;
-        .inputs{
-            float: left;
-        }
-        > div{
-            display: inline-block;
-        }
-        input{
-            font-family: latoLight;
-            width: 350px;
-            height: 50px;
-            font-size: 16px;
-            padding: 15px 20px;
+        text-align: center;
+        height: fit-content;
+        position: relative;
+        margin: 0 auto;
+        border-radius: 5px;
+        h2{
+            margin: 0;
             color: #fff;
-            background: #00000030;
-            box-sizing: border-box;
-            border: none;
-            display: block;
+            font-size: 40px;
+            font-family: latoMedium;
         }
-        .inputs input:not(:first-child){
-            margin-top: 25px;
-        }
-        textarea{
-            @extend input;
-            min-width: 350px;
-            max-width: 350px;
-            min-height: 200px;
-            width: 350px;
-            float: left;
-            margin-top: 0;
-            height: 100%;
-            margin-left: 25px;
-            padding: 15px 20px;
-        }
-        input:focus-visible, textarea:focus-visible{
-            border: 2px solid #fff;
-            outline: none !important;
-        }
-        .button{
-            display: block;
-            width: auto;
-            height: auto;
-            margin: 25px auto -25px auto;
-            position: relative;
-            button{
+        form{
+            padding: 25px;
+            display: inline-block;
+            font-family: latoLight;
+            .inputs{
+                float: left;
+            }
+            > div{
+                display: inline-block;
+            }
+            input{
+                font-family: latoLight;
+                width: 350px;
+                height: 50px;
+                font-size: 16px;
+                padding: 15px 20px;
+                color: #fff;
+                background: #00000030;
+                box-sizing: border-box;
+                border: none;
+                display: block;
+            }
+            .inputs input:not(:first-child){
+                margin-top: 25px;
+            }
+            textarea{
+                @extend input;
+                min-width: 350px;
+                max-width: 350px;
+                min-height: 200px;
+                width: 350px;
+                float: left;
+                margin-top: 0;
+                height: 100%;
+                margin-left: 25px;
+                padding: 15px 20px;
+            }
+            input:focus-visible, textarea:focus-visible{
+                border: 2px solid #fff;
+                outline: none !important;
+            }
+            .button{
+                display: block;
+                width: auto;
+                height: auto;
+                margin: 25px auto -25px auto;
                 position: relative;
+                button{
+                    position: relative;
+                }
+            }
+        }
+        #status{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 69;
+            > div{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 22px;
+                color: #fff;
+            }
+        }
+        #error{
+            margin-top: 20px;
+            font-family: latoMedium;
+            color: #fff;
+            .charcoalButton{
+                font-size: 14px;
+                padding: 10px 20px;
             }
         }
     }
-    #status{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        opacity: 0;
-        visibility: hidden;
-        z-index: 69;
-        > div{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            color: #fff;
-        }
-    }
-    #error{
-        margin-top: 20px;
+    $gap: 50px;
+    .socialMedia{
+        $yGap: 20px;
         font-family: latoMedium;
-        color: #fff;
-        .charcoalButton{
-            font-size: 14px;
-            padding: 10px 20px;
+        background: #262F8F;
+        border-radius: 10px;
+        display: inline-block;
+        margin: 50px $gap 0 $gap;
+        box-sizing: border-box;
+        padding: 0 $yGap $yGap $yGap;
+        h2{
+            font-size: 18px;
+            margin: 0 0 $yGap 0;
+            padding: 10px 30px;
+            display: inline-block;
+            background-image: url('./Assets/builtWithBG.svg');
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .links{
+            width: 100%;
+            a{
+                padding: 0 10px;
+            }
         }
     }
 }

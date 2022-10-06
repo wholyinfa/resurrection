@@ -136,12 +136,14 @@ article > .title{
     font-size: 20px;
     background: rgb(26,35,126);
     background: linear-gradient(-45deg, rgba(26,35,126,1) 0%, rgba(21,68,227,1) 100%);
+    border: 0;
     border-radius: 5px;
     display: inline-block;
     transition: transform .1s ease-in-out;
     transform-origin: 100% 100%;
 }
 .charcoalButton:hover{
+    cursor: pointer;
     transform: scale(.9);
 }
 

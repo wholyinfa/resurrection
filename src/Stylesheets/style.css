@@ -117,6 +117,7 @@ article > .title div {
   font-size: 20px;
   background: rgb(26, 35, 126);
   background: linear-gradient(-45deg, rgb(26, 35, 126) 0%, rgb(21, 68, 227) 100%);
+  border: 0;
   border-radius: 5px;
   display: inline-block;
   transition: transform 0.1s ease-in-out;
@@ -124,6 +125,7 @@ article > .title div {
 }
 
 .charcoalButton:hover {
+  cursor: pointer;
   transform: scale(0.9);
 }
 

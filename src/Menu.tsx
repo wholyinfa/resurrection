@@ -154,6 +154,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 down: true
             }
             assemble();
+            
+            dialerExpansion.current && expandDialer(true, true);
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -236,7 +238,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             repulsion();
             expansionAnimation.reversed(!expansionAnimation.reversed());
             if( instant ){
-                expansionAnimation.progress(1);
+                expansionAnimation.progress(1).pause();
                 magnetize(false, true);
             }
             else{
@@ -245,7 +247,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             }
         }else{
             if( instant ){
-                expansionAnimation.progress(0);
+                expansionAnimation.progress(0).pause();
                 magnetize(true, true);
                 if( !trueMobile.current ) cleanRepulsion();
             }
@@ -537,7 +539,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         isSnapping.current = gsap.to('#dialer', {ease: 'power2.inOut', duration: relativeDuration, ...setXOrY(xy), onUpdate: updateXY, onComplete: doAfterAdjustment, onCompleteParams: [firstVis] });
         makeVisible(visibleItems);
     }
-    const requestedURL = useRef<string>();
     const doAfterAdjustment = (firstVis: number) => {
         let copy = addAll().slice();
         let nullItem: itemData = {

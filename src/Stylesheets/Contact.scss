@@ -4,8 +4,8 @@
     padding: 25px;
     text-align: center;
     height: fit-content;
-    place-self: center;
     position: relative;
+    margin: 0 auto;
     border-radius: 5px;
     h2{
         margin: 0;
@@ -71,6 +71,9 @@
         position: absolute;
         top: 0;
         left: 0;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 69;
         > div{
             position: absolute;
             top: 50%;
@@ -84,5 +87,9 @@
         margin-top: 20px;
         font-family: latoMedium;
         color: #fff;
+        .charcoalButton{
+            font-size: 14px;
+            padding: 10px 20px;
+        }
     }
 }

@@ -5,8 +5,8 @@
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  place-self: center;
   position: relative;
+  margin: 0 auto;
   border-radius: 5px;
 }
 #contact h2 {
@@ -72,6 +72,9 @@
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 69;
 }
 #contact #status > div {
   position: absolute;
@@ -85,4 +88,8 @@
   margin-top: 20px;
   font-family: latoMedium;
   color: #fff;
+}
+#contact #error .charcoalButton {
+  font-size: 14px;
+  padding: 10px 20px;
 }/*# sourceMappingURL=Contact.css.map */

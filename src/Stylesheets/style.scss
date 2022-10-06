@@ -123,6 +123,11 @@ article > .title{
         content: 'PROJECTS';
     }
 }
+#contactPage{
+    h1::after{
+        content: 'CONTACT';
+    }
+}
 
 .card{
     border-radius: 10px;
@@ -187,7 +192,7 @@ article > .title{
             }
         }
     }
-    #projectsPage{
+    #projectsPage, #contactPage{
         > .title{
             $fontSize: 80px;
             $letterSpacing: 40px;
@@ -246,7 +251,7 @@ article > .title{
             }
         }
     }
-    #projectsPage{
+    #projectsPage, #contactPage{
         > .title{
             $fontSize: 35px;
             $letterSpacing: 20px;
@@ -311,7 +316,7 @@ article > .title{
             }
         }
     }
-    #projectsPage{
+    #projectsPage, #contactPage{
         > .title{
             $fontSize: 30px;
             $letterSpacing: 15px;
@@ -332,6 +337,13 @@ article > .title{
                 $spacing: 30px;
                 letter-spacing: $spacing;
                 padding-left: $spacing;
+            }
+        }
+    }
+    #contactPage{
+        > .title{
+            div{
+                width: 230px;
             }
         }
     }

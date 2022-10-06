@@ -261,32 +261,34 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain', '.title div'];
         let targets: Element[] = Array.from(document.querySelectorAll(`main *:not(nav, nav *,${ignore.length > 0 && ignore.join(',')})`)),
-            phase3: Repel[] = [];
-        let phase1: Element[] = [], phase2: Element[] = [];
+            phase1: Element[] = [], phase2: Element[] = [], phase3: Element[] = [], phase4: Repel[] = [];
         targets.map(t => {
-            if( t.clientWidth !== windowW ) phase1.push(t);
+            if( t.clientWidth < windowW ) phase1.push(t);
         });
         
         phase1.map(t => {
             let trueParent = t.parentElement;
             
-            if( trueParent && trueParent.scrollWidth < windowW ){
+            if( trueParent && trueParent.clientWidth < windowW ){
                 let grandParent = trueParent.parentElement;
                 for( let i = 0; i <= 100000; i++ ){
                     if( grandParent )
-                    if( grandParent.scrollWidth >= windowW ){
+                    if( grandParent.clientWidth >= windowW ){
                         phase2.push(trueParent);
                         break;
                     }else{
+                        trueParent = grandParent;
                         grandParent = grandParent.parentElement;
                     }
                 }
-            }else phase2.push(t);
+            }else 
+                phase2.push(t);
         });
         
-        phase2.map( (t, i) => {
-            let match = phase2.filter( tt => t === tt );
-            if( match.length !== 1 ) phase2.splice(i, 1);
+        phase2.slice().map( (t, i) => {
+            let match = phase3.filter( tt => t === tt );
+            if( match.length === 0 )
+                phase3.push(t);
         });
 
         const dialer = Object(document.querySelector('#dialer'));
@@ -297,20 +299,19 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         const dialerT = dialer.getBoundingClientRect().top;
         const freeG = 50;
 
-        phase2.map(t => {
+        phase3.map(t => {
             const bound = Object(t).getBoundingClientRect();
             if( bound.left <= gapL + freeG &&
                 ( bound.top + bound.height >= dialerT - freeG && bound.top <= dialerT + dialerH + freeG )
             ){
-                phase3.push({
+                phase4.push({
                     gap: gapL + freeG - bound.left,
                     left: bound.left,
                     target: t
                 });
             }
         });
-
-        return phase3;
+        return phase4;
     }
     const repAnimations = useRef<gsap.core.Tween[]>([]);
     const cleanRepulsion = () => {

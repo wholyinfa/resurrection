@@ -95,6 +95,7 @@ article > .title div {
 
 .card {
   border-radius: 10px;
+  font-family: latoMedium;
   box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.4);
   background: rgb(11, 43, 34);
   background: linear-gradient(45deg, rgb(11, 43, 34) 0%, rgb(43, 189, 150) 100%);

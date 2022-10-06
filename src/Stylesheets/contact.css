@@ -1,1 +1,88 @@
-/*# sourceMappingURL=Contact.css.map */
+#contact {
+  width: 825px;
+  padding: 25px;
+  text-align: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  place-self: center;
+  position: relative;
+  border-radius: 5px;
+}
+#contact h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 40px;
+  font-family: latoMedium;
+}
+#contact form {
+  padding: 25px;
+  display: inline-block;
+  font-family: latoLight;
+}
+#contact form .inputs {
+  float: left;
+}
+#contact form > div {
+  display: inline-block;
+}
+#contact form input, #contact form textarea {
+  font-family: latoLight;
+  width: 350px;
+  height: 50px;
+  font-size: 16px;
+  padding: 15px 20px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.1882352941);
+  box-sizing: border-box;
+  border: none;
+  display: block;
+}
+#contact form .inputs input:not(:first-child), #contact form .inputs textarea:not(:first-child) {
+  margin-top: 25px;
+}
+#contact form textarea {
+  min-width: 350px;
+  max-width: 350px;
+  min-height: 200px;
+  width: 350px;
+  float: left;
+  margin-top: 0;
+  height: 100%;
+  margin-left: 25px;
+  padding: 15px 20px;
+}
+#contact form input:focus-visible, #contact form textarea:focus-visible {
+  border: 2px solid #fff;
+  outline: none !important;
+}
+#contact form .button {
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 25px auto -25px auto;
+  position: relative;
+}
+#contact form .button button {
+  position: relative;
+}
+#contact #status {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#contact #status > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 22px;
+  color: #fff;
+}
+#contact #error {
+  margin-top: 20px;
+  font-family: latoMedium;
+  color: #fff;
+}/*# sourceMappingURL=Contact.css.map */

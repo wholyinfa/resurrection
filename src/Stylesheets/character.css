@@ -620,6 +620,9 @@ article > .title div {
   }
 }
 @media only screen and (max-width: 428px) {
+  #characterPage section {
+    margin-top: 50px;
+  }
   #characterPage .characterDeck .deck.life > h2, #characterPage .characterDeck .deck .card .title .deck.life > span, #characterPage .characterDeck .deck.work > h2, #characterPage .characterDeck .deck .card .title .deck.work > span {
     display: inline-block;
     position: relative;

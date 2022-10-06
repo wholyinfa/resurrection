@@ -10,7 +10,7 @@
   height: -moz-fit-content;
   height: fit-content;
   position: relative;
-  margin-left: 50px;
+  margin: 50px 50px 100px 50px;
   border-radius: 5px;
   place-self: center;
 }

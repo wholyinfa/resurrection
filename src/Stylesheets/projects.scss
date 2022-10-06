@@ -4,7 +4,7 @@
     .previewCards{
         max-width: 80%;
         position: relative;
-        margin: 0;
+        margin: 100px 0 100px 0;
         display: inline-block;
         place-self: center;
         > .card{
@@ -64,6 +64,7 @@
 @media only screen and (max-width: 1366px) {
     #projectsPage{
         .previewCards{
+            margin-top: 0;
             max-width: 95%;
             > .card{
                 width: 300px;

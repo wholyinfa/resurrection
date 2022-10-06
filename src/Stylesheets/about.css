@@ -25,6 +25,7 @@ main, main article {
 main article {
   padding-bottom: 100px;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .breathingFragment {
@@ -103,6 +104,10 @@ article > .title div {
   content: "PROJECTS";
 }
 
+#contactPage h1::after {
+  content: "CONTACT";
+}
+
 .card {
   border-radius: 10px;
   font-family: latoMedium;
@@ -160,14 +165,14 @@ article > .title div {
     font-size: 60px;
     letter-spacing: 35px;
   }
-  #projectsPage > .title h1 {
+  #projectsPage > .title h1, #contactPage > .title h1 {
     font-size: 80px;
     top: 10%;
     left: 50%;
     letter-spacing: 40px;
     padding-left: 40px;
   }
-  #projectsPage > .title h1::after {
+  #projectsPage > .title h1::after, #contactPage > .title h1::after {
     font-size: 80px;
     letter-spacing: 40px;
   }
@@ -205,14 +210,14 @@ article > .title div {
     font-size: 35px;
     letter-spacing: 20px;
   }
-  #projectsPage > .title h1 {
+  #projectsPage > .title h1, #contactPage > .title h1 {
     font-size: 35px;
     top: 20%;
     left: 50%;
     letter-spacing: 20px;
     padding-left: 20px;
   }
-  #projectsPage > .title h1::after {
+  #projectsPage > .title h1::after, #contactPage > .title h1::after {
     font-size: 35px;
     letter-spacing: 20px;
   }
@@ -254,27 +259,33 @@ article > .title div {
     letter-spacing: 30px;
     padding-left: 30px;
   }
-  #projectsPage > .title h1 {
+  #projectsPage > .title h1, #contactPage > .title h1 {
     font-size: 30px;
     top: 20%;
     left: 50%;
     letter-spacing: 15px;
     padding-left: 15px;
   }
-  #projectsPage > .title h1::after {
+  #projectsPage > .title h1::after, #contactPage > .title h1::after {
     font-size: 30px;
     letter-spacing: 15px;
   }
-  #projectsPage > .title div {
+  #projectsPage > .title div, #contactPage > .title div {
     width: 220px;
     font-size: 60px;
     letter-spacing: 30px;
     padding-left: 30px;
   }
+  #contactPage > .title div {
+    width: 230px;
+  }
+}
+#aboutPage {
+  padding-bottom: 200px;
 }
 #aboutPage section {
   position: relative;
-  margin: 0 auto;
+  margin: 100px auto 0 auto;
   max-width: 750px;
   font-family: latoLight;
 }
@@ -332,7 +343,7 @@ article > .title div {
 @media only screen and (max-width: 900px) {
   #aboutPage section {
     max-width: 100%;
-    margin: 0;
+    margin: 50px auto 0 auto;
     padding: 0 50px;
     overflow: hidden;
   }

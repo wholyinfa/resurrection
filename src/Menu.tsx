@@ -154,7 +154,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 down: true
             }
             assemble();
-            
             dialerExpansion.current && expandDialer(true, true);
     }, [location]);
 
@@ -609,7 +608,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         });
 
         const stream = (direction: 'up' | 'down') => {
-            const scrollY = Math.round(window.scrollY);
+            const scrollY = Math.ceil(window.scrollY);
             const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
 
             if( direction === 'up' )
@@ -641,7 +640,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
               
         addEventListener('touchend', (e) => {
           touchEnd = e.changedTouches[0].screenY;
-          console.log(touchEnd - touchStart <= 0);
           if ( touchEnd - touchStart <= 0 )
             stream('down');
           else

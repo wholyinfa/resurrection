@@ -182,6 +182,9 @@ $noneCardElements: 2;
 @media only screen and (max-width: 428px) {
     
     #characterPage{
+        section{
+            margin-top: 50px;
+        }
         .characterDeck{
             .deck.life, .deck.work{
                 > h2{

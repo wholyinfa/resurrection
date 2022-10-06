@@ -8,10 +8,10 @@ import { useHistory } from 'react-router-dom';
 
 
 export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTypes>) {
-    let workHover: gsap.core.Timeline;
-    let lifeHover: gsap.core.Timeline;
-    let workResurrection: gsap.core.Timeline;
-    let lifeResurrection: gsap.core.Timeline;
+    let workHover: gsap.core.Timeline = gsap.timeline({paused: true});
+    let lifeHover: gsap.core.Timeline = gsap.timeline({paused: true});
+    let workResurrection: gsap.core.Timeline = gsap.timeline({paused: true});
+    let lifeResurrection: gsap.core.Timeline = gsap.timeline({paused: true});
 
     useEffect(() => {
         
@@ -50,7 +50,7 @@ export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTy
             const ease = 'power4.in';
 
             timeline
-            .to('#division', {autoAlpha: 0, scale: .8, duration: dur, ease: ease})
+            .to('#division', {autoAlpha: 0, scale: 0, duration: dur, ease: ease})
             .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
             .eventCallback('onComplete', () => {
                 history.replace(( type === 'life' ) ? '/about' : '/projects');

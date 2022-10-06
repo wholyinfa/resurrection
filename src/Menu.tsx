@@ -149,10 +149,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     const newList = useRef<itemData[]>(items);
     useEffect( () => {
             changePagination(activePage.current.pageData);
-            allowPagination.current = {
-                up: true,
-                down: true
-            }
             assemble();
             dialerExpansion.current && expandDialer(true, true);
     }, [location]);
@@ -500,10 +496,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
 
             infinityApplied.current = true;
             xyMemory.current = ( isPaginating.current ) ? true : false;
-            allowPagination.current = {
-                up: false,
-                down: false
-            }
         }else xyMemory.current = true;
     }
     const updateInfinity = (theXY: number) => {
@@ -608,7 +600,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         });
 
         const stream = (direction: 'up' | 'down') => {
-            const scrollY = Math.ceil(window.scrollY);
+            const scrollY = Math.round(window.scrollY);
             const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
 
             if( direction === 'up' )
@@ -618,7 +610,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             allowPagination.current.up === true &&
                 portal('up', applyInfinity);
             else
-            scrollY === maxY &&
+            ( scrollY === maxY || Math.abs(scrollY - maxY) <= 1 ) &&
             !infinityApplied.current &&
             !isPaginating.current &&
             allowPagination.current.down === true &&
@@ -702,6 +694,15 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             gsap.to('body', {duration: .2, background: bg});
             dialerSequence(type);
             Type.current = type;
+            allowPagination.current = {
+                up: true,
+                down: true
+            }
+        }
+        else
+        allowPagination.current = {
+            up: false,
+            down: false
         }
     }
     useEffect(()=> {

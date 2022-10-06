@@ -100,16 +100,16 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         pageID: number;
         pageData: PageData ;
     }
-    let activePage: activePage = {
+    const activePage = useRef<activePage>({
         pageID: 0,
         pageData: Pages.index
-    };
+    });
     let isMain = useRef<boolean>(true);
     const mainStreamCheck = (loc: string) => {
         let mainStream = false;
         Object.values(Pages).filter( (entry, i) => {
             if( entry.url === titleConversion(loc) ){
-                activePage = {
+                activePage.current = {
                     pageID: i,
                     pageData: entry
                 };
@@ -123,7 +123,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         if( !mainStream ){
             Object.values(Projects).filter( entry => {
                 if( Pages.projects.url+'/'+entry.url === loc ){
-                    activePage = {
+                    activePage.current = {
                         pageID: Object.keys(Pages).findIndex(t => t === 'projects'),
                         pageData: Pages.projects
                     };
@@ -137,8 +137,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         itemList.push(Pages[item as keyof Pages]);
     });
     const theMiddle: number = Math.floor(itemList.length / 2);
-    let roadToCenter: number = ( activePage.pageID < theMiddle ) ? theMiddle - activePage.pageID :
-                               ( activePage.pageID > theMiddle ) ? theMiddle - activePage.pageID + itemList.length  :
+    let roadToCenter: number = ( activePage.current.pageID < theMiddle ) ? theMiddle - activePage.current.pageID :
+                               ( activePage.current.pageID > theMiddle ) ? theMiddle - activePage.current.pageID + itemList.length  :
                        0 ;
     for( let i = 0; i < roadToCenter; i++ ){
         let lastItem: itemData = itemList[itemList.length-1];
@@ -148,7 +148,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     const [items, setItems] = useState<itemData[]>(itemList);
     const newList = useRef<itemData[]>(items);
     useEffect( () => {
-            changePagination(activePage.pageData);
+            changePagination(activePage.current.pageData);
             assemble();
             allowPagination.current = {
                 up: true,
@@ -558,7 +558,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         setItems(newList.current);
 
         if ( history.location.pathname !== newList.current[2].url && !isPaginating.current && isMain.current )
-        history.push(newList.current[2].url); else if (items[0].url === newList.current[0].url) assemble();
+        history.push(newList.current[2].url); else if (activePage.current.pageData.url === newList.current[2].url) assemble();
         trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
 
         isSnapping.current = false;
@@ -626,7 +626,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     isMain.current = sideStreamCheck(pathname);
                     const targetI = paginationMap.findIndex(t => t.url === pathname );
                     newPage.current = ( isMain.current ) ? paginationMap[targetI] : 
-                        paginationMap.find(t => t.url === activePage.pageData.url );
+                        paginationMap.find(t => t.url === activePage.current.pageData.url );
                     isPaginating.current = true;
                     applyInfinity();
                 }
@@ -654,7 +654,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         gsap.fromTo(targets, {autoAlpha: (dissipate) ? 1 : 0}, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05, onComplete: callback});
         
         if( !dissipate ){
-            const activePageName = activePage.pageData.text.toLowerCase();
+            const activePageName = activePage.current.pageData.text.toLowerCase();
             const type = ( activePageName === 'about' || activePageName === 'character' ) ? 'life' :
             ( activePageName === 'projects' || activePageName === 'contact' ) ? 'work' : 'index';
             const bg = ( type === 'life' ) ? animProps.color('life') :

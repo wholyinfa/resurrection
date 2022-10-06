@@ -607,18 +607,54 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 }
             }
         });
+
+        const stream = (direction: 'up' | 'down') => {
+            const scrollY = Math.round(window.scrollY);
+            const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
+
+            if( direction === 'up' )
+            scrollY === 0  &&
+            !infinityApplied.current &&
+            !isPaginating.current &&
+            allowPagination.current.up === true &&
+                portal('up', applyInfinity);
+            else
+            scrollY === maxY &&
+            !infinityApplied.current &&
+            !isPaginating.current &&
+            allowPagination.current.down === true &&
+                portal('down', applyInfinity);
+        }
         addEventListener('wheel', (e) => {
             const scrollY = Math.round(window.scrollY);
             const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
-            if( scrollY === maxY && e.deltaY >= 0 && allowPagination.current.down === true ){
-            // down
-            !infinityApplied.current && !isPaginating.current && portal('down', applyInfinity);
-            }
-            if( scrollY === 0 && e.deltaY < 0 && allowPagination.current.up === true ){
-            // up
-            !infinityApplied.current && !isPaginating.current && portal('up', applyInfinity);
-            }
+            if( scrollY === maxY && e.deltaY >= 0 )
+                stream('down');
+            if( scrollY === 0 && e.deltaY < 0 )
+                stream('up');
         });
+        let touchStart: number;
+        let touchEnd: number;
+        addEventListener('touchstart', (e) => {
+          touchStart = e.changedTouches[0].screenY;
+        }, false); 
+              
+        addEventListener('touchend', (e) => {
+          touchEnd = e.changedTouches[0].screenY;
+          console.log(touchEnd - touchStart <= 0);
+          if ( touchEnd - touchStart <= 0 )
+            stream('down');
+          else
+            stream('up');
+          
+        }, false);
+              
+        document.addEventListener('keyup', (e) => {
+          if( e.code === 'ArrowDown' || e.code === 'Space' )
+            stream('down');
+          else if( e.code === 'ArrowUp' )
+            stream('up');
+        }, false);
 
         addEventListener('scroll', (e) => expandDialer(dialerExpansion.current, true));
 

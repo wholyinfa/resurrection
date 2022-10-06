@@ -53,29 +53,6 @@ export default function App() {
       resizePurposes();
       setResize(p => !p);
     });
-  
-    let touchStart: number;
-    let touchEnd: number;
-    addEventListener('touchstart', (e) => {
-      touchStart = e.changedTouches[0].screenY;
-    }, false); 
-          
-    addEventListener('touchend', (e) => {
-      touchEnd = e.changedTouches[0].screenY;
-      if (  touchEnd - touchStart >= 0 && allowPagination.current.down === true ){
-        // down
-      }else if( allowPagination.current.up === true ){
-        // up
-      }
-    }, false);
-          
-    document.addEventListener('keyup', (e) => {
-      if( ( e.code === 'ArrowDown' || e.code === 'Space' ) && allowPagination.current.down === true ){
-        // down
-      }else if( e.code === 'ArrowUp' && allowPagination.current.up === true ){
-        // up
-      }
-    }, false);
 
     return( () => {
         window.removeEventListener('resize', resizePurposes)

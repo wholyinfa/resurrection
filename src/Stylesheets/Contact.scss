@@ -124,3 +124,45 @@
         }
     }
 }
+
+@media only screen and (max-width: 1366px){
+    #contactPage{
+        #contact{
+            width: 100%;
+            min-width: 250px;
+            max-width: 350px;
+            h1{
+                font-size: 30px;
+            }
+            form{
+                display: block;
+                > div{
+                    width: 100%
+                }
+                .inputs{
+                    float: inherit;
+                    width: 100%;
+                    input{
+                        width: 100%
+                    }
+                }
+                textarea{
+                    min-width: 100%;
+                    max-width: 100%;
+                    width: 100%;
+                    float: inherit;
+                    margin-top: 25px;
+                    margin-left: 0;
+                }
+                .button{
+                    margin-bottom: 0
+                }
+            }
+        }
+        #socialMedia{
+            h2{
+                font-size: 22px;
+            }
+        }
+    }
+}

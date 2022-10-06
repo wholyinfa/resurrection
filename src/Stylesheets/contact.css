@@ -122,4 +122,42 @@
 }
 #contactPage .socialMedia .links a {
   padding: 0 10px;
+}
+
+@media only screen and (max-width: 1366px) {
+  #contactPage #contact {
+    width: 100%;
+    min-width: 250px;
+    max-width: 350px;
+  }
+  #contactPage #contact h1 {
+    font-size: 30px;
+  }
+  #contactPage #contact form {
+    display: block;
+  }
+  #contactPage #contact form > div {
+    width: 100%;
+  }
+  #contactPage #contact form .inputs {
+    float: inherit;
+    width: 100%;
+  }
+  #contactPage #contact form .inputs input, #contactPage #contact form .inputs textarea {
+    width: 100%;
+  }
+  #contactPage #contact form textarea {
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+    float: inherit;
+    margin-top: 25px;
+    margin-left: 0;
+  }
+  #contactPage #contact form .button {
+    margin-bottom: 0;
+  }
+  #contactPage #socialMedia h2 {
+    font-size: 22px;
+  }
 }/*# sourceMappingURL=Contact.css.map */

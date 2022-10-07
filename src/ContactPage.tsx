@@ -48,28 +48,34 @@ SuccessStatus.propTypes ={
     setStatus: PropTypes.func.isRequired,
 }
 
-function Error({form}: InferProps<typeof Error.propTypes>){
-    if ( !Object.values(form).filter(value => value == "").length ) return <></>;
-  
-    let err = [];
+function Error({form, checkForErrors}: InferProps<typeof Error.propTypes>){
+    const errorType = checkForErrors();
+    if ( errorType === 0 ) return <></>;
+
+    let err: any[] = [];
     const focusOnIt = (inputName: string) => document.getElementsByName(inputName)[0].focus();
     
-    Object.entries(form).map( (item, i) => {
+    errorType === 1 && Object.entries(form).map( (item, i) => {
       if ( item[1] == "" ){
         if( err.length > 0 ) err.push(", ");
         err.push(<button className='card charcoalButton' key={i} onClick={() => focusOnIt(item[0])}>{item[0]}</button>);
       };
     });
     
-     err.unshift('Please fill in the following fields: ');
+    err.unshift(
+        (errorType === 2) ?
+        'Please enter a valid email address.':
+        'Please fill in the following fields: '
+    );
 
      return <div id='error'>{err}</div>;
 }
 Error.propTypes ={
     form: PropTypes.any.isRequired,
+    checkForErrors: PropTypes.func.isRequired
 }
 
-function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, setStatus, recaptcha}: InferProps<typeof ContactPageDOM.propTypes>) {
+function ContactPageDOM ({handleSubmit, handleChange, formData, error, checkForErrors, status, setStatus, recaptcha}: InferProps<typeof ContactPageDOM.propTypes>) {
     return <article id='contactPage'>
         <div className='title'>
             <h1>CONTACT</h1>
@@ -93,7 +99,7 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
                     size='invisible'
                 />
                 <button type='submit' className='card charcoalButton'>SEND</button>
-                {error ? (<Error form= {formData} />) : ''}
+                {error ? (<Error checkForErrors = {checkForErrors} form = {formData} />) : ''}
                 </div>
             </form>
             { ( status ) ?
@@ -119,7 +125,8 @@ ContactPageDOM.propTypes ={
     status: PropTypes.any,
     setStatus: PropTypes.func.isRequired,
     error: PropTypes.any,
-    recaptcha: PropTypes.any.isRequired
+    checkForErrors: PropTypes.func.isRequired,
+    recaptcha: PropTypes.any.isRequired,
 }
 
 export default function ContactPage() {
@@ -141,13 +148,37 @@ export default function ContactPage() {
     const recaptcha = useRef();
     const [status, setStatus] = useState<string | null>(null);
     const [error, setError] = useState<null | number>(null);
+    
+    /**
+     * 0: when no errors are found
+     * 
+     * 1: when the fields are empty
+     * 
+     * 2: when the email field doesn't contain a valid email address
+     */
+    type errorTypes = 0 | 1 | 2;
+    const checkForErrors = () : errorTypes => {
+        let isError = Object.values(formData).filter(value => value == "").length;
+        let errorType: errorTypes = 0;
+        const match = formData.email.toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+        if( isError > 0 ) 
+            errorType = 1;
+        if( isError === 0 )
+            errorType = ( match === null ) ? 2 : 0;
+
+        return errorType;
+    }
     const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         if( !recaptcha.current || status !== null ) return;
 
-        const isError = Object.values(formData).filter(value => value == "").length;
-        setError( isError ? 1 : 0 );
-        if ( isError ) return;
+        const errorType = checkForErrors();
+        setError( errorType );
+        if ( errorType !== 0 ) return;
             
         const today = new Date();
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -184,6 +215,7 @@ export default function ContactPage() {
         status = {status}
         setStatus = {setStatus}
         error = {error}
+        checkForErrors = {checkForErrors}
         recaptcha = {recaptcha}
     />;
 }

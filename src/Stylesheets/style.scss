@@ -163,6 +163,9 @@ article > .title{
     cursor: pointer;
     transform: scale(.9);
 }
+.grecaptcha-badge{
+    visibility: hidden;
+}
 
 @media only screen and (max-width: 1366px) {
     article > .title{

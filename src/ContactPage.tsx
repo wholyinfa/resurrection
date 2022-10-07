@@ -4,7 +4,8 @@ import './Stylesheets/contact.css';
 import PropTypes, {InferProps} from 'prop-types';
 import { Link } from 'react-router-dom';
 import emailjs from 'emailjs-com';
-import cred from './topsecret.js'
+import cred from './topsecret.js';
+import ReCaptcha from "react-google-recaptcha";
 
 
 function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.propTypes>) {
@@ -27,9 +28,9 @@ function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.pro
             <div>
             {
                 (status === 'success') ?
-                'GESENDET!'
+                'SENT!'
                 :
-                'FEHLGESCHLAGEN!'
+                'FAILED!'
             }
             </div>
         </div>
@@ -61,17 +62,16 @@ Error.propTypes ={
     form: PropTypes.any.isRequired,
 }
 
-function ContactPageDOM ({form, handleSubmit, handleChange, formData, error, status, setStatus}: InferProps<typeof ContactPageDOM.propTypes>) {
+function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, setStatus, recaptcha}: InferProps<typeof ContactPageDOM.propTypes>) {
     return <article id='contactPage'>
-    <div className='title'>
-        <h1>CONTACT</h1>
-        <div>CONTACT</div>
-    </div>
+        <div className='title'>
+            <h1>CONTACT</h1>
+            <div>CONTACT</div>
+        </div>
         <section id='contact' className='card cobalt'>
             <h2>GET IN TOUCH</h2>
-            <form ref={form} onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)}>
                 <div>
-                <input type='hidden' name='date' />
                 <div className='inputs'>
                     <input type='text' name='name' onChange={(e) => handleChange(e)} placeholder='Name:' value={formData.name} />
                     <input type='text' name='email' onChange={(e) => handleChange(e)} placeholder='Email Address:' value={formData.email} />
@@ -80,7 +80,12 @@ function ContactPageDOM ({form, handleSubmit, handleChange, formData, error, sta
                 <textarea name='message' onChange={(e) => handleChange(e)} placeholder='You message:' value={formData.message}></textarea>
                 </div>
                 <div className='button'>
-                    <button type='submit' className='card charcoalButton'>SEND</button>
+                <ReCaptcha
+                    ref={recaptcha}
+                    sitekey={cred.G_SITEKEY}
+                    size='invisible'
+                />
+                <button type='submit' className='card charcoalButton'>SEND</button>
                 {error ? (<Error form= {formData} />) : ''}
                 </div>
             </form>
@@ -98,16 +103,16 @@ function ContactPageDOM ({form, handleSubmit, handleChange, formData, error, sta
             <Link target={'_blank'} to={{pathname: 'https://github.com/wholyinfa'}} ><img src={require('./Assets/GitHub.svg')} alt='My GitHub profile | Infa' /></Link>
         </div>
         </section>
-</article>;
+    </article>;
 }
 ContactPageDOM.propTypes ={
-    form: PropTypes.any.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
     formData: PropTypes.any.isRequired,
     status: PropTypes.any,
     setStatus: PropTypes.func.isRequired,
     error: PropTypes.any,
+    recaptcha: PropTypes.any.isRequired
 }
 
 export default function ContactPage() {
@@ -126,11 +131,13 @@ export default function ContactPage() {
             [name]: value
         }));
     }
-    const form = useRef<HTMLFormElement | string>('');
+    const recaptcha = useRef();
     const [status, setStatus] = useState<string | null>(null);
     const [error, setError] = useState<null | number>(null);
-    const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
+        if( !recaptcha.current ) return;
+
         const isError = Object.values(formData).filter(value => value == "").length;
         setError( isError ? 1 : 0 );
         if ( isError ) return;
@@ -139,9 +146,21 @@ export default function ContactPage() {
         const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         const dateTime = date+' '+time;
-        Object(form.current).querySelector('[type="hidden"]').value = dateTime;
+    
+        const captchaToken = await Object(recaptcha.current).executeAsync();
+        Object(recaptcha.current).reset();
 
-        emailjs.sendForm(cred.SERVICE_ID, cred.TEMPLATE_ID, form.current, cred.PUBLIC_KEY)
+        const data = {
+            ...formData,
+            'g-recaptcha-response': captchaToken,
+            date: dateTime
+        }
+
+        emailjs.send(
+            cred.SERVICE_ID,
+            cred.TEMPLATE_ID,
+            data,
+            cred.PUBLIC_KEY)
         .then(function() {
             setStatus('success');
         }, function(error) {
@@ -151,12 +170,12 @@ export default function ContactPage() {
     }
     
     return <ContactPageDOM
-        form = {form}
         handleSubmit = {handleSubmit}
         handleChange = {handleChange}
         formData = {formData}
         status = {status}
         setStatus = {setStatus}
         error = {error}
+        recaptcha = {recaptcha}
     />;
 }

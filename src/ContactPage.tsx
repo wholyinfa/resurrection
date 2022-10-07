@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from "gsap";
 import './Stylesheets/contact.css';
 import PropTypes, {InferProps} from 'prop-types';
 import { Link } from 'react-router-dom';
+import emailjs from 'emailjs-com';
+import cred from './topsecret.js'
 
 
 function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.propTypes>) {
@@ -11,7 +13,7 @@ function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.pro
     useEffect(() => {
         const animation = gsap.timeline({default: {duration: .1}});
         const element = document.querySelector('#status');
-
+        
         animation
             .to(element, {autoAlpha: 1})
             .to(element, {autoAlpha: 0}, '>1')
@@ -59,7 +61,7 @@ Error.propTypes ={
     form: PropTypes.any.isRequired,
 }
 
-function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, setStatus}: InferProps<typeof ContactPageDOM.propTypes>) {
+function ContactPageDOM ({form, handleSubmit, handleChange, formData, error, status, setStatus}: InferProps<typeof ContactPageDOM.propTypes>) {
     return <article id='contactPage'>
     <div className='title'>
         <h1>CONTACT</h1>
@@ -67,8 +69,9 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
     </div>
         <section id='contact' className='card cobalt'>
             <h2>GET IN TOUCH</h2>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form ref={form} onSubmit={(e) => handleSubmit(e)}>
                 <div>
+                <input type='hidden' name='date' />
                 <div className='inputs'>
                     <input type='text' name='name' onChange={(e) => handleChange(e)} placeholder='Name:' value={formData.name} />
                     <input type='text' name='email' onChange={(e) => handleChange(e)} placeholder='Email Address:' value={formData.email} />
@@ -98,6 +101,7 @@ function ContactPageDOM ({handleSubmit, handleChange, formData, error, status, s
 </article>;
 }
 ContactPageDOM.propTypes ={
+    form: PropTypes.any.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
     formData: PropTypes.any.isRequired,
@@ -107,7 +111,6 @@ ContactPageDOM.propTypes ={
 }
 
 export default function ContactPage() {
-    
     const [formData, setFormData] = useState(
         {
             name: '',
@@ -123,19 +126,32 @@ export default function ContactPage() {
             [name]: value
         }));
     }
+    const form = useRef<HTMLFormElement | string>('');
     const [status, setStatus] = useState<string | null>(null);
     const [error, setError] = useState<null | number>(null);
     const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-    
         const isError = Object.values(formData).filter(value => value == "").length;
         setError( isError ? 1 : 0 );
         if ( isError ) return;
+            
+        const today = new Date();
+        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        const dateTime = date+' '+time;
+        Object(form.current).querySelector('[type="hidden"]').value = dateTime;
 
-        setStatus('success');
+        emailjs.sendForm(cred.SERVICE_ID, cred.TEMPLATE_ID, form.current, cred.PUBLIC_KEY)
+        .then(function() {
+            setStatus('success');
+        }, function(error) {
+            setStatus('failed');
+            console.log('FAILED...', error);
+        });
     }
     
     return <ContactPageDOM
+        form = {form}
         handleSubmit = {handleSubmit}
         handleChange = {handleChange}
         formData = {formData}

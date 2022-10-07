@@ -15,22 +15,29 @@ function SuccessStatus ({status, setStatus}: InferProps<typeof SuccessStatus.pro
         const animation = gsap.timeline({default: {duration: .1}});
         const element = document.querySelector('#status');
         
-        animation
-            .to(element, {autoAlpha: 1})
-            .to(element, {autoAlpha: 0}, '>1')
-            .call(() => {
-                setStatus(null);
-            });
+        if ( status === 'sending' ) animation
+            .to(element, {autoAlpha: 1});
+        if (status === 'failed' || status === 'success') animation
+        .set(element, {autoAlpha: 1})
+        .to(element, {scale: 1.1}, '>')
+        .to(element, {scale: 1}, '>')
+        .to(element, {autoAlpha: 0}, '+=.666')
+        .eventCallback('onComplete',() => {
+            setStatus(null);
+        });
     }, []);
 
     return(
         <div id='status' className={`cobalt card ${status}`}>
             <div>
             {
+                (status === 'sending') ?
+                'IN PROGRESS...' :
                 (status === 'success') ?
-                'SENT!'
-                :
+                'SENT!' :
+                (status === 'failed') ?
                 'FAILED!'
+                : ''
             }
             </div>
         </div>
@@ -136,7 +143,7 @@ export default function ContactPage() {
     const [error, setError] = useState<null | number>(null);
     const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        if( !recaptcha.current ) return;
+        if( !recaptcha.current || status !== null ) return;
 
         const isError = Object.values(formData).filter(value => value == "").length;
         setError( isError ? 1 : 0 );
@@ -156,6 +163,7 @@ export default function ContactPage() {
             date: dateTime
         }
 
+        setStatus('success');
         emailjs.send(
             cred.SERVICE_ID,
             cred.TEMPLATE_ID,

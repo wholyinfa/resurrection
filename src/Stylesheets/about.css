@@ -144,6 +144,10 @@ article > .title div {
   transform: scale(0.9);
 }
 
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 @media only screen and (max-width: 1366px) {
   article > .title {
     padding-bottom: 100px;
@@ -234,7 +238,7 @@ article > .title div {
     overflow: visible;
   }
   article > .title div {
-    width: 210px;
+    width: 300px;
     transform: translate(-50%, -10%);
     font-size: 80px;
     word-wrap: break-word;

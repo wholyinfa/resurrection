@@ -1,3 +1,4 @@
+@use 'sass:math';
 $primaryBlack: #000;
 $lifeColor: #064E3B;
 $workColor: #1A237E;
@@ -39,7 +40,7 @@ main{
 
 @mixin breathingFragment($Width: 180px){
     $width: $Width;
-    $height: $width / 1.241379310344828;
+    $height: math.div($width, 1.241379310344828);
     width: $width;
     height: $height;
 }

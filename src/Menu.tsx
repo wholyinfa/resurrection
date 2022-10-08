@@ -64,15 +64,15 @@ export let paginationMap: paginationMap[] = [
     },
   {
     ...Pages.character,
-    launchList: ''
+    launchList: 'article > *'
     },
   {
     ...Pages.projects,
-    launchList: ''
+    launchList: 'article > *'
     },
   {
     ...Pages.contact,
-    launchList: ''
+    launchList: 'article > *'
     },
 ];
 export const changePagination = (newPage: PageData) => {
@@ -702,9 +702,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
         const targets = (launchList === '') ? document.querySelectorAll('main > *:not(nav)') : document.querySelectorAll(launchList);
         if ( !callback ) callback = () => {};
-        gsap.set(targets, {autoAlpha: (dissipate) ? 1 : 0});
-        gsap.to(targets, {autoAlpha: (dissipate) ? 0 : 1, duration: .2, stagger: .05, onComplete: callback});
-        
+        gsap.to(targets, {autoAlpha: (dissipate) ? 0 : 1, duration: .1, stagger: .05, onComplete: callback});
+
         if( !dissipate ){
             const activePageName = activePage.current.pageData.text.toLowerCase();
             const type = ( activePageName === 'about' || activePageName === 'character' ) ? 'life' :
@@ -712,6 +711,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             const bg = ( type === 'life' ) ? animProps.color('life') :
             ( type === 'work' ) ? animProps.color('work') : animProps.color('index');
 
+            window.scrollTo({top: 0});
             gsap.to('body', {duration: .2, background: bg});
             dialerSequence(type);
             Type.current = type;

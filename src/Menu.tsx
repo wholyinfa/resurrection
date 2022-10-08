@@ -596,7 +596,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     this.pointerEvent.target.localName === 'a'
                 ){
                     this.pointerEvent.preventDefault();
-                    const i = Array.from(this.pointerEvent.target.parentElement.childNodes).findIndex( t => t === this.pointerEvent.target);
+                    const i = addAll().findIndex( t => typeof t.ghost === 'undefined' && t.url === this.pointerEvent.target.pathname);
 
                     const xy = getXY(Draggable.get('#dialer'));
                     restoreFromInfinity(xy, xy, i);

@@ -13,7 +13,7 @@ export const animProps = {
     shadeBg: (deg: number, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
 }
 function MenuDOM({items, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
-    return <nav>
+    return <nav id='mainMenu'>
         <div id='dialerHandle'></div>
         <div id='dialerContainer'>
             <div className='shade L'></div>
@@ -191,6 +191,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         height: menuItemH
     };
     const expandDialer = (toggle: boolean, instant?: boolean) => {
+        repulsion();
         const dispelled = Array.from(document.getElementsByClassName('dispelled'));
         gsap.getTweensOf(dispelled).map(t => {
             const target = Object(t)._targets[0];
@@ -217,11 +218,16 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     
                 }else{
                     if( instant ){
-                        if( !reverse ) t.progress(1);
-                        else t.progress(0);
+                        if( !reverse ) t.progress(1).pause();
+                        else t.progress(0).pause();
                     }else{
                         if( !reverse ) t.reversed(!t.reversed()).play();
-                        else t.progress(1).reverse();
+                        else {
+                            t.eventCallback('onReverseComplete', () => {
+                                Object(t)._targets[0].classList.remove('repelled');
+                            });
+                            t.progress(1).reverse();
+                        }
                     }
                 }
             });
@@ -229,7 +235,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
 
 
         if( toggle ){
-            repulsion();
             expansionAnimation.reversed(!expansionAnimation.reversed());
             if( instant ){
                 expansionAnimation.progress(1).pause();
@@ -257,7 +262,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         left: number;
         target: Element;
     }
-    const [repellents, setRepellents] = useState<Repel[]>([]);
     const undergo = () => {
         const windowW = window.innerWidth;
         const ignore: string[] = ['.treeBrain', '.title div'];
@@ -292,7 +296,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 phase3.push(t);
         });
 
-        const dialer = Object(document.querySelector('#dialer'));
+        const dialer = Object(document.querySelector('#mainMenu'));
         const dialerW = dialer.clientWidth;
         const dialerH = dialer.clientHeight;
         const arrowsW = Object(document.querySelector('#expansionArrow')).clientWidth;
@@ -324,7 +328,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     r.classList.remove('repelled');
                     r.classList.remove('dispelled');
                     gsap.set(r, {clearProps: 'x'});
-                    setRepellents([]);
                     repAnimations.current = [];
                 });
             }
@@ -334,14 +337,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         if( !trueMobile.current ) return cleanRepulsion();
         let targetReps: Repel[] = [];
 
-        repellents.map(t => {
-            gsap.set(t.target, {clearProps: 'x'})
-        })
-
-        const repelledd = Array.from(document.getElementsByClassName('repelled'));
-        repelledd.map(r => gsap.set(r, {clearProps: 'x'}))
+        const repelledd = Array.from(document.querySelectorAll('.repelled'));
+        repelledd.map(r => gsap.set(r, {clearProps: 'x'}));
         targetReps = undergo() as Repel[];
-        setRepellents(targetReps);
         
         const dur = expansionAnimation._dur;
         const ease = expansionAnimation._first._ease;
@@ -668,7 +666,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             stream('up');
         }, false);
 
-        addEventListener('scroll', (e) => expandDialer(dialerExpansion.current, true));
+        addEventListener('scroll', (e) => dialerExpansion.current && expandDialer(true, true));
 
         history.listen((newLocation, action) => {
             if( action === 'POP' || action === 'REPLACE' ){

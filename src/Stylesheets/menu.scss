@@ -88,8 +88,8 @@ nav{
 @media only screen and (max-width: 900px) {
     nav {
         width: auto;
-        top: 50%;
-        transform: translateY(-50%);
+        top: inherit;
+        bottom: 20%;
         #expansionArrow{
             width: 15px;
             height: 33px;

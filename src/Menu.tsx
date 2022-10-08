@@ -149,6 +149,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             changePagination(activePage.current.pageData);
             assemble();
             dialerExpansion.current && expandDialer(true, true);
+            document.title = activePage.current.pageData.title;
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);

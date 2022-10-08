@@ -563,33 +563,37 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     const pageOnPress = useRef<PageData | null>(null);
     useEffect(() => {
 
-        let xyOnPress: number;
+        let hasDragged: boolean = false;
         Draggable.create("#dialer", {
             type: 'x,y',
             trigger: '#dialerHandle, #dialer',
             edgeResistance: 0.65,
             onPress: function() {
                 applyInfinity();
-                xyOnPress = - menuItemD() * (addAll(true).length/2);
                 pageOnPress.current = activePage.current.pageData;
             },
             onDrag: function() {
                 let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
                 updateInfinity(xy);
+                hasDragged = true;
             },
             onDragEnd: function() {
                 restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
+                hasDragged = false
             },
             onRelease: function() {
-                if( xyOnPress === trueXY.current && this.pointerEvent.target.localName !== 'a' ){
-                    if( isSnapping.current ){
+                if ( hasDragged ) return;
+                if( this.pointerEvent.target.localName !== 'a' ){
+                    if( isSnapping.current && isSnapping.current.isActive() ){
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
                         isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
                     }else{
                         restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
                     }
                 }
-                else{
+                else if(
+                    this.pointerEvent.target.localName === 'a'
+                ){
                     this.pointerEvent.preventDefault();
                     const i = Array.from(this.pointerEvent.target.parentElement.childNodes).findIndex( t => t === this.pointerEvent.target);
 

@@ -292,10 +292,17 @@ nav {
   text-align: center;
   z-index: 369;
 }
+nav #dialer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 nav #dialerContainer {
   position: relative;
+  left: 0;
+  top: 0;
   margin: 0 auto;
-  display: inline-block;
+  display: block;
   overflow: hidden;
 }
 nav #dialerContainer a {
@@ -344,6 +351,7 @@ nav #expansionArrow {
   background: transparent;
   border: 0;
   box-sizing: content-box;
+  color: #fff;
 }
 nav #expansionArrow div {
   content: "";

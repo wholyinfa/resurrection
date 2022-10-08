@@ -178,18 +178,19 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     (trueMobile.current) ? 'y' : 'x';
     const menuItemD = (): number =>
     (trueMobile.current) ? menuItemH : menuItemW;
-    const ghostItems = items.filter(item => typeof item.ghost === 'undefined' || item.ghost === true).length;
     const dialerProps = () : {
         width: number,
         height: number
-    } =>
-    (trueMobile.current) ?
-    { width: menuItemW,
-        height: menuItemH*ghostItems
-    } :
-    { width: menuItemW*ghostItems,
-        height: menuItemH
-    };
+    } => {
+        const allItems = items.length;
+        return (trueMobile.current) ?
+        { width: menuItemW,
+            height: menuItemH*allItems
+        } :
+        { width: menuItemW*allItems,
+            height: menuItemH
+        };
+    }
     const expandDialer = (toggle: boolean, instant?: boolean) => {
         repulsion();
         const dispelled = Array.from(document.getElementsByClassName('dispelled'));
@@ -433,8 +434,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     
         let xy;
         if( items.length === addAll().length ){
-            xy = - menuItemD() * (addAll(true).length/2);
+            xy = - menuItemD() * addAll().findIndex(t => typeof t.ghost === 'undefined');
             gsap.set('#dialer', setXOrY(xy));
+            Draggable.get('#dialer').update();
             trueXY.current = xy;
         }
         
@@ -442,7 +444,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             isPaginating.current = false;
             let i = addAll().findIndex(t => typeof t.ghost === 'undefined' && t.url === newPage.current!.url);
             if ( typeof xy === 'undefined' ) xy = trueXY.current;
-            restoreFromInfinity(xy, xy, i); 
+            restoreFromInfinity(xy, i); 
         }
     }, [items]);
 
@@ -492,21 +494,22 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     }
     const updateInfinity = (theXY: number) => {
         let aElements = Array.from(document.querySelectorAll('#dialer a')),
-            firstVis = Math.abs( Math.round( theXY / menuItemD() ) ),
+            firstVis = Math.abs(Math.round( theXY / menuItemD() )),
             visibleItems = aElements.splice(firstVis, 5),
             hiddenItems = aElements;
 
         makeVisible(visibleItems);
         gsap.set('#dialer', {...setXOrY(theXY), ...(trueMobile.current) ? {x: 0} : {y: 0} });
+        Draggable.get('#dialer').update();
         trueXY.current = theXY;
         gsap.to(hiddenItems, {duration: .2, autoAlpha: 0});
     }
-    const restoreFromInfinity = (theXY: number, endXY: number, manual?: number) => {
-        let dur = (theXY === endXY) ? .3 : 0,
-        xyAlgo = ( Math.round(theXY / menuItemD()) * menuItemD() ),
-        xy = ( xyMemory.current ) ? xyAlgo : xyAlgo - menuItemD() * (addAll(true).length/2);
+    const restoreFromInfinity = (endXY: number, manual?: number) => {
+        let dur =.3,
+        xy = endXY;
         const updateXY = () => {
             trueXY.current = Number(gsap.getProperty('#dialer', xOrYString()));
+            Draggable.get('#dialer').update();
         }
         let currentXY;
         if ( manual ){
@@ -572,12 +575,12 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 pageOnPress.current = activePage.current.pageData;
             },
             onDrag: function() {
-                let xy = ( xyMemory.current ) ? getXY(this) : getXY(this) - menuItemD() * (addAll(true).length/2);
+                let xy = getXY(this) ;
                 updateInfinity(xy);
                 hasDragged = true;
             },
             onDragEnd: function() {
-                restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
+                restoreFromInfinity(Math.round( getXY(this) / menuItemD() ) * menuItemD() );
                 hasDragged = false
             },
             onRelease: function() {
@@ -587,7 +590,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
                         isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
                     }else{
-                        restoreFromInfinity(getXY(this), ( trueMobile.current ) ? this.endY : this.endX);
+                        restoreFromInfinity(Math.round( getXY(this) / menuItemD() ) * menuItemD());
                     }
                 }
                 else if(
@@ -597,7 +600,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     const i = addAll().findIndex( t => typeof t.ghost === 'undefined' && t.url === this.pointerEvent.target.pathname);
 
                     const xy = getXY(Draggable.get('#dialer'));
-                    restoreFromInfinity(xy, xy, i);
+                    restoreFromInfinity(xy, i);
                 }
             }
         });

@@ -626,17 +626,36 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             else
                 stream('up');
         });
-        let touchStart: number;
-        let touchEnd: number;
+        interface touch {
+            y: number,
+            time: number
+        }
+        let touchStart: touch = {
+            y: 0,
+            time: 0
+        };
+        let touchEnd: touch = {
+            y: 0,
+            time: 0
+        };
         addEventListener('touchstart', (e) => {
-          touchStart = e.changedTouches[0].screenY;
+          touchStart = {
+            y: e.changedTouches[0].screenY,
+            time: e.timeStamp
+          };
         }, false); 
               
         addEventListener('touchend', (e) => {
-          touchEnd = e.changedTouches[0].screenY;
-          if ( touchEnd - touchStart <= 0 )
+            touchEnd = {
+                y: e.changedTouches[0].screenY,
+                time: e.timeStamp
+            };
+          const safetyNet = 
+            Math.abs( touchEnd.y - touchStart.y ) >= 50 &&
+            touchEnd.time - touchStart.time <= 200;
+          if ( touchEnd.y - touchStart.y <= 0 && safetyNet )
             stream('down');
-          else
+          else if( safetyNet )
             stream('up');
           
         }, false);

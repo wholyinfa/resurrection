@@ -8,9 +8,10 @@ import PropTypes, {InferProps} from 'prop-types';
 import './Stylesheets/menu.css';
 gsap.registerPlugin(Draggable);
 
+type SectionType = 'work' | 'life' | 'index';
 export const animProps = {
-    color: (t: 'work' | 'life' | 'index') : string => (t === 'work') ? 'rgba(26,35,126,1)' :  (t === 'life') ? 'rgba(6,78,59,1)' : 'rgba(0,0,0,1)',
-    shadeBg: (deg: number, type: 'life' | 'work' | 'index') => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
+    color: (t: SectionType) : string => (t === 'work') ? 'rgba(26,35,126,1)' :  (t === 'life') ? 'rgba(6,78,59,1)' : 'rgba(0,0,0,1)',
+    shadeBg: (deg: number, type: SectionType) => `linear-gradient(${deg}deg, rgba(0,0,0,0) 0%, ${animProps.color(type)} 100%)`,
 }
 function MenuDOM({items, handleKeyDownClick, handleExpansion}: InferProps<typeof MenuDOM.propTypes>) {
     return <nav id='mainMenu'>
@@ -422,8 +423,11 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     useEffect(() => {
         gsap.set("#dialer a", {width: menuItemW});
         gsap.set("#dialer", dialerProps());
-        document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
-        !infinityApplied.current && gsap.set('#dialer', setXOrY(0));
+        document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: .2});
+        if (!infinityApplied.current) {
+            gsap.set('#dialer', setXOrY(0));
+            Draggable.get('#dialer') && Draggable.get('#dialer').update();
+        }
 
         let aElements = Array.from(document.querySelectorAll('#dialer a'));
         let firstVis = items.findIndex( item => typeof item.ghost === 'undefined');
@@ -688,7 +692,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         });
     },[])
 
-    type SectionType = 'work' | 'life' | 'index';
     const Type = useRef<SectionType>('index');
     const dialerSequence = (oldType: SectionType) => {
         if ( !trueMobile.current ) gsap.to('#dialerContainer', {duration: .2,background: animProps.color(oldType)});

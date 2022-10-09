@@ -324,6 +324,7 @@ article > .title div {
   float: left;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
 }
 #singleProjectPage .samples #desktop {
   max-width: 1920px;

@@ -71,10 +71,10 @@ export const Projects: ProjectType[] = [
         url: 'end',
         src: '',
         imgSource: {
-            preview: require('./Assets/Projects/gvgl/Preview.jpg'),
-            desktop: require('./Assets/Projects/gvgl/Desktop.jpg'),
-            tablet: require('./Assets/Projects/gvgl/Tablet.jpg'),
-            mobile: require('./Assets/Projects/gvgl/Mobile.jpg')
+            preview: require('./Assets/Projects/end/Mobile.jpg'),
+            desktop: require('./Assets/Projects/end/Desktop.jpg'),
+            tablet: require('./Assets/Projects/end/Tablet.jpg'),
+            mobile: require('./Assets/Projects/end/Mobile.jpg')
         },
         builtWith: ['ps', 'ai', 'jq', 'html', 'css', 'gsap', 'js'],
     },

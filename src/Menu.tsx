@@ -156,7 +156,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     const infiniteItems = useRef<itemData[]>([]);
     const makeInfiniteItems = ( items :itemData[] ) => {
         infiniteItems.current.splice(0, infiniteItems.current.length);
-        for (let i = 0; i < 20; i++){
+        for (let i = 0; i < 50; i++){
             items.map( item => {
                 let newItem = {...item};
                 newItem.ghost = true;
@@ -421,9 +421,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         gsap.to(theItems[2], {duration: set, autoAlpha: 1, scale: 1.2});  
     }
     useEffect(() => {
-        gsap.set("#dialer a", {width: menuItemW});
+        gsap.set("#dialer a", {width: menuItemW, height: menuItemH});
         gsap.set("#dialer", dialerProps());
-        document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: .2});
+        document.querySelector("#dialer a.ghost") && gsap.set("#dialer a.ghost", {opacity: 0});
         if (!infinityApplied.current) {
             gsap.set('#dialer', setXOrY(0));
             Draggable.get('#dialer') && Draggable.get('#dialer').update();

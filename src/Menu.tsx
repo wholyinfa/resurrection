@@ -610,17 +610,19 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         });
 
         const stream = (direction: 'up' | 'down') => {
-            const scrollY = Math.round(window.scrollY);
-            const maxY = document.getElementsByTagName('html')[0].scrollHeight - window.innerHeight;
+            const target = document.getElementsByTagName('article')[0];
+            const scrollY = Math.round(target.scrollTop);
+            const maxY = target.scrollHeight - window.innerHeight;
 
+            const ruleOverride = (activePage.current.pageData.url === '/') ? true : false;
             if( direction === 'up' )
-            scrollY === 0  &&
+            (scrollY <= 0 || ruleOverride)  &&
             !infinityApplied.current &&
             !isPaginating.current &&
             allowPagination.current.up === true &&
                 portal('up', applyInfinity);
             else
-            ( scrollY === maxY || Math.abs(scrollY - maxY) <= 1 ) &&
+            ( scrollY >= maxY || Math.abs(scrollY - maxY) <= 1  || ruleOverride) &&
             !infinityApplied.current &&
             !isPaginating.current &&
             allowPagination.current.down === true &&

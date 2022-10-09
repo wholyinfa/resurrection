@@ -130,7 +130,13 @@ ContactPageDOM.propTypes ={
 }
 
 export default function ContactPage() {
-    const [formData, setFormData] = useState(
+    interface formType{
+        name: string,
+        email: string,
+        subject: string,
+        message: string
+    }
+    const [formData, setFormData] = useState<formType>(
         {
             name: '',
             email: '',
@@ -146,7 +152,7 @@ export default function ContactPage() {
         }));
     }
     const recaptcha = useRef();
-    const [status, setStatus] = useState<string | null>(null);
+    const [status, setStatus] = useState<'sending' | 'success' | 'failed' | null>(null);
     const [error, setError] = useState<null | number>(null);
     
     /**
@@ -194,7 +200,7 @@ export default function ContactPage() {
             date: dateTime
         }
 
-        setStatus('success');
+        setStatus('sending');
         emailjs.send(
             cred.SERVICE_ID,
             cred.TEMPLATE_ID,
@@ -202,6 +208,12 @@ export default function ContactPage() {
             cred.PUBLIC_KEY)
         .then(function() {
             setStatus('success');
+            setFormData({
+                email: '',
+                message: '',
+                name: '',
+                subject: ''
+            });
         }, function(error) {
             setStatus('failed');
             console.log('FAILED...', error);

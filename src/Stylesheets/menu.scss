@@ -8,7 +8,6 @@ $menuItemD: 152px;
     background: linear-gradient($deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
 }
 nav{
-    
     width: 100%;
     position: fixed;
     top: 0;
@@ -95,7 +94,7 @@ nav{
 }
 @media only screen and (max-width: 900px) {
     nav {
-        width: auto;
+        width: 0;
         top: inherit;
         bottom: 20%;
         #expansionArrow{

@@ -151,6 +151,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             assemble();
             dialerExpansion.current && expandDialer(true, true);
             document.title = activePage.current.pageData.title;
+            document.getElementsByTagName('article')[0].addEventListener('scroll', (e) => dialerExpansion.current && expandDialer(true, true));
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);
@@ -299,8 +300,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         });
 
         const dialer = Object(document.querySelector('#mainMenu'));
-        const dialerW = dialer.clientWidth;
-        const dialerH = dialer.clientHeight;
+        const dialerW = dialer.querySelector('#dialerContainer').clientWidth;
+        const dialerH = dialer.querySelector('#dialerContainer').clientHeight;
         const arrowsW = Object(document.querySelector('#expansionArrow')).clientWidth;
         const gapL = dialerW + arrowsW;
         const dialerT = dialer.getBoundingClientRect().top;
@@ -629,6 +630,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 portal('down', applyInfinity);
         }
         addEventListener('wheel', (e) => {
+            dialerExpansion.current && expandDialer(true, true)
             if( e.deltaY >= 0 )
                 stream('down');
             else
@@ -674,8 +676,6 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
           else if( e.code === 'ArrowUp' )
             stream('up');
         }, false);
-
-        addEventListener('scroll', (e) => dialerExpansion.current && expandDialer(true, true));
 
         history.listen((newLocation, action) => {
             if( action === 'POP' || action === 'REPLACE' ){

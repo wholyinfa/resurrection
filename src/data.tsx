@@ -65,24 +65,28 @@ export const Projects: ProjectType[] = [
         url: 'end',
         src: '',
         imgSource: {
-            preview: require('./Assets/Projects/Preview.jpg'),
-            desktop: require('./Assets/Projects/Desktop.jpg'),
-            tablet: require('./Assets/Projects/Tablet.jpg'),
-            mobile: require('./Assets/Projects/Mobile.jpg')
+            preview: require('./Assets/Projects/gvgl/Preview.jpg'),
+            desktop: require('./Assets/Projects/gvgl/Desktop.jpg'),
+            tablet: require('./Assets/Projects/gvgl/Tablet.jpg'),
+            mobile: require('./Assets/Projects/gvgl/Mobile.jpg')
         },
         builtWith: ['ps', 'ai', 'jq', 'html', 'css', 'gsap', 'js'],
     },
     {
         title: 'Golden Vibes, Golden Life',
         brief: '',
-        context: <></>,
+        context: <>
+        <p>This personal website starts the journey to both a magnificent portfolio and personal blog, along with the start of a new era in front-end development and the User Experience and User Interface design.</p>
+        <p>The initial approach to the making of this project came from the motivation of ending some React and Sass courses along with learning how to properly design webpages using a tool that is meant to be used for this purpose, Adobe Xd.</p>
+        <p>Despite the challenges of working with new skills and tools, the satisfaction of the fluent flow of content and how the simplicity is preserved throughout the most complex parts of the website is what makes this website unique in it's own league.</p>
+        </>,
         url: 'gvgl',
         src: '/gvgl',
         imgSource: {
-            preview: require('./Assets/Projects/Preview.jpg'),
-            desktop: require('./Assets/Projects/Desktop.jpg'),
-            tablet: require('./Assets/Projects/Tablet.jpg'),
-            mobile: require('./Assets/Projects/Mobile.jpg')
+            preview: require('./Assets/Projects/gvgl/Preview.jpg'),
+            desktop: require('./Assets/Projects/gvgl/Desktop.jpg'),
+            tablet: require('./Assets/Projects/gvgl/Tablet.jpg'),
+            mobile: require('./Assets/Projects/gvgl/Mobile.jpg')
         },
         builtWith: ['xd', 'ps', 'react','html', 'css', 'sass', 'gsap', 'js', 'ts'],
     },

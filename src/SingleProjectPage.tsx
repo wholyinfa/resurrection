@@ -31,7 +31,10 @@ export default function SingleProjectPage() {
         <section className='post'>
             <h1 className='title'>{Project.title.toUpperCase()}</h1>
             <div className='content'>{Project.context}</div>
-            <div><Link target={'_blank'} className='charcoalButton card' to={Project.src} >VISIT PROJECT</Link></div>
+            { (Project.src) ?
+                <div><Link target={'_blank'} className='charcoalButton card' to={Project.src} >VISIT PROJECT</Link></div>:
+                ''
+            }
         </section>
         <section className='builtWith'>
             <h2>BUILT WITH</h2>

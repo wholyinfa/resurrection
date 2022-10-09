@@ -61,7 +61,13 @@ export const Projects: ProjectType[] = [
     {
         title: 'Project End',
         brief: '',
-        context: <></>,
+        context: <>
+        <p>Holding the flag as my first portfolio, this project might seem like a try-too-hard attempt to show off some skills as it sacrified normal UX design to give the user the experience of 'FLYING'...! At that, it delivers flawlessly.</p>
+        <p>At that point I haven't seen a website that have achieved what I've achieved in this project without using any engines or libraries other than what could at that time be used to create usual websites without making the website too heavy.</p>
+        <p>It's safe to say that this project not only pushed me and my knowledge to the edge and beyond, it applies the same approach to the tools that were used to create it, making it a bit laggy and heavy on low-end devices; Hence one of the reasons of it being my last portfolio and not the current!</p>
+        <p>When it comes to the World Wide Web and making website, I'm a strong believer in using tools and programming languages, libraries and frameworks that do more by writing less cumbersome chunks of code and are as reusable and efficient, if not more.</p>
+        <p>For this reason I could no longer accept Project End as the first representative of my skills and abilities even thought it's a tank of a showcase!</p>
+        </>,
         url: 'end',
         src: '',
         imgSource: {

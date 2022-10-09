@@ -7,90 +7,65 @@ import { animProps } from './Menu';
 import { useHistory } from 'react-router-dom';
 
 
+let workHover: gsap.core.Timeline;
+let lifeHover: gsap.core.Timeline;
 export default function IndexPage({isMobile}: InferProps<typeof IndexPage.propTypes>) {
-    let workHover: gsap.core.Timeline = gsap.timeline({paused: true});
-    let lifeHover: gsap.core.Timeline = gsap.timeline({paused: true});
-    let workResurrection: gsap.core.Timeline = gsap.timeline({paused: true});
-    let lifeResurrection: gsap.core.Timeline = gsap.timeline({paused: true});
 
-    useEffect(() => {
-        
-    }, [])
-
+    type Type = 'work' | 'life';
     const gradientDeg = {
-        default: (t: 'work' | 'life') : string => (t === 'work') ? '45deg' : '-45deg',
-        mobile: (t: 'work' | 'life') : string => (t === 'work') ? '180deg' : '0deg',
+        default: (t: Type) : string => (t === 'work') ? '45deg' : '-45deg',
+        mobile: (t: Type) : string => (t === 'work') ? '180deg' : '0deg',
     }
-    const setHover = (type: 'work' | 'life') => {
+    const hoverTimeline = (type: Type) => {
         const timeline = gsap.timeline({paused: true});
         const color = animProps.color(type);
-        const deg = ( window.innerWidth <= breakPoints.dialer ) ? gradientDeg.mobile(type) : gradientDeg.default(type);
+        const deg = ( trueMobile.current ) ? gradientDeg.mobile(type) : gradientDeg.default(type);
 
         timeline.fromTo(`#overTakers .${type}`,
         {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 23%)`},
         {background: `linear-gradient(${deg}, ${color} 0%, rgba(0,0,0,0) 33%)`,
          ease: 'circ.inOut',
          duration: .5});
-        
-        if( type === 'work' )
-            workHover = timeline;
-        else
-            lifeHover = timeline;
+
+         return timeline;
     }
-    const history = useHistory();
+    const trueMobile = useRef<boolean>(isMobile);
     useEffect(() => {
-  
-        setHover('work');
-        setHover('life');
+        trueMobile.current = isMobile;
+        workHover = hoverTimeline('work');
+        lifeHover = hoverTimeline('life');
+    }, [isMobile])
 
-        const setResurrection = (type: 'work' | 'life') => {
-            const timeline = gsap.timeline({paused: true});
-            const opposite = (type === 'work') ? '.life' : '.work';
-            const dur = .2;
-            const ease = 'power4.in';
-
-            timeline
-            .to('#division', {autoAlpha: 0, scale: 0, duration: dur, ease: ease})
-            .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
-            .eventCallback('onComplete', () => {
-                history.replace(( type === 'life' ) ? '/about' : '/projects');
-            });
-            
-            if( type === 'work' )
-                workResurrection = timeline;
-            else
-                lifeResurrection = timeline;
-        }
-        setResurrection('life');
-        setResurrection('work');
-
-    }, [isMobile]);
-
-    const handleMouseEnter = (type?: 'life' | 'work') => {
-        if (resurrecting.current) return; 
-        if( type === 'work' ){
-            workHover && workHover.play();
-        }else{
-            lifeHover && lifeHover.play();
+    const hover = (type: Type, reverse?: boolean) => {
+        if (resurrecting.current || trueMobile.current) return; 
+        const targetTimeline = ( type === 'work' ) ? workHover : lifeHover;  
+        if ( reverse ) targetTimeline.reverse();
+        else {
+            targetTimeline.reversed(!targetTimeline.reversed());
+            targetTimeline.play();
         }
     }
-    const handleMouseLeave = (type?: 'life' | 'work') => {
-        if (resurrecting.current) return; 
-        if( type === 'work' ){
-            workHover && workHover.reverse();
-        }else{
-            lifeHover && lifeHover.reverse();
-        }
-    }
+    const handleMouseEnter = (type: Type) => hover(type);
+    const handleMouseLeave = (type: Type) => hover(type, true);
 
+    const history = useHistory();
+    const setResurrection = (type: Type) => {
+        const timeline = gsap.timeline();
+        const opposite = (type === 'work') ? '.life' : '.work';
+        const dur = .2;
+        const ease = 'power4.in';
+
+        timeline
+        .to('#division', {autoAlpha: 0, scale: 0, duration: dur, ease: ease})
+        .to(`#overTakers ${opposite}`, {autoAlpha: 0, duration: dur, ease: ease}, '<')
+        .eventCallback('onComplete', () => {
+            history.replace(( type === 'life' ) ? '/about' : '/projects');
+        });
+    }
     const resurrecting = useRef<boolean>(false);
-    const handleClick = (type?: 'life' | 'work') => {
+    const handleClick = (type: Type) => {
         resurrecting.current = true;
-        if( type === 'work' ){
-            workResurrection.play();
-        }else{
-            lifeResurrection.play();
-        }
+        setResurrection(type);
     }
 
     return <article id='homePage'>

@@ -1,3 +1,5 @@
+import React, { ReactElement } from 'react';
+
 export const defaultTitlePrefix = 'Frontend Web Developer & UI/UX Designer | INFA';
 
 export interface PageData {
@@ -43,8 +45,10 @@ export const Pages: Pages = {
 export type builtWith = 'ps' | 'xd' | 'ai' | 'jq' | 'html' | 'react' | 'css' | 'sass' | 'gsap' | 'js' | 'ts';
 export interface ProjectType {
     title: string;
-    context: string;
+    context: ReactElement;
+    brief: string;
     url: string;
+    src: string;
     imgSource: {
         preview: string;
         desktop: string;
@@ -56,8 +60,10 @@ export interface ProjectType {
 export const Projects: ProjectType[] = [
     {
         title: 'Project End',
-        context: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Urna molestie at elementum eu facilisis. Tempus imperdiet nulla malesuada pellentesque elit eget. Senectus et netus et malesuada fames ac turpis egestas sed. Consectetur purus ut faucibus pulvinar elementum integer. Rhoncus aenean vel elit scelerisque. Aliquam sem fringilla ut morbi tincidunt augue. Convallis tellus id interdum velit. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed. Nunc pulvinar sapien et ligula. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Consequat pulvinar elementum integer. Rhoncus aeneaus mauris. Consequat mauris nunc cfasffongue nisi vitae sus asdfcipit tel',
+        brief: '',
+        context: <></>,
         url: 'end',
+        src: '',
         imgSource: {
             preview: require('./Assets/Projects/Preview.jpg'),
             desktop: require('./Assets/Projects/Desktop.jpg'),
@@ -68,17 +74,25 @@ export const Projects: ProjectType[] = [
     },
     {
         title: 'Golden Vibes, Golden Life',
-        context: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Urna molestie at elementum eu facilisis. Tempus imperdiet nulla malesuada pellentesque elit eget. Senectus et netus et malesuada fames ac turpis egestas sed. Consectetur purus ut faucibus pulvinar elementum integer. Rhoncus aenean vel elit scelerisque. Aliquam sem fringilla ut morbi tincidunt augue. Convallis tellus id interdum velit. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed. Nunc pulvinar sapien et ligula. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Consequat pulvinar elementum integer. Rhoncus aeneaus mauris. Consequat mauris nunc cfasffongue nisi vitae sus asdfcipit tel',
+        brief: '',
+        context: <></>,
         url: 'gvgl',
+        src: '/gvgl',
         imgSource: {
             preview: require('./Assets/Projects/Preview.jpg'),
             desktop: require('./Assets/Projects/Desktop.jpg'),
             tablet: require('./Assets/Projects/Tablet.jpg'),
             mobile: require('./Assets/Projects/Mobile.jpg')
         },
-        builtWith: ['xd', 'react','html', 'css', 'sass', 'gsap', 'js', 'ts'],
+        builtWith: ['xd', 'ps', 'react','html', 'css', 'sass', 'gsap', 'js', 'ts'],
     },
 ]
+Projects.map( (p, i) => {
+    const content = Projects[i].context.props.children;
+    if( content )
+        Projects[i].brief = content[0].props.children.slice(0, 100)
+})
+
 
 export interface CharacterData {
     imgSource: string;

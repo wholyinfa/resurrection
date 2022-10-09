@@ -42,7 +42,7 @@ export default function ProjectsPage({setImposeSequence}: InferProps<typeof Proj
     <section className='previewCards'>
         {
             Projects.map( (project, i) => {
-                let brief = project.context.slice(0, 100);
+                let brief = project.brief;
                 brief = brief.slice(0, brief.lastIndexOf(' '));
                 return <Card
                     key = {i}

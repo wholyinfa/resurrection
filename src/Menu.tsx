@@ -693,15 +693,15 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
     },[])
 
     const Type = useRef<SectionType>('index');
-    const dialerSequence = (oldType: SectionType) => {
-        if ( !trueMobile.current ) gsap.to('#dialerContainer', {duration: .2,background: animProps.color(oldType)});
-        else gsap.set('#dialerContainer', {background: 'transparent'});
-
+    const applyShade = (oldType: SectionType) => {
         const shadeRDeg =  (trueMobile.current) ? 180 : 90;
         const shadeLDeg =  (trueMobile.current) ? 0 : -90;
-        gsap.to('#dialerContainer .shade.R', {duration: .2,background: animProps.shadeBg(shadeRDeg, oldType)})
-        gsap.to('#dialerContainer .shade.L', {duration: .2,background: animProps.shadeBg(shadeLDeg, oldType)});
-    
+        gsap.set('#dialerContainer .shade.R', {background: animProps.shadeBg(shadeRDeg, oldType)});
+        gsap.set('#dialerContainer .shade.L', {background: animProps.shadeBg(shadeLDeg, oldType)});
+    }
+    const dialerSequence = (oldType: SectionType) => {
+        if ( trueMobile.current ) gsap.to('#dialerContainer', {duration: .2,background: animProps.color(oldType)});
+        else gsap.set('#dialerContainer', {background: 'transparent'});
     }
     const paginationSequence = (dissipate?: true, callback?: gsap.Callback | undefined) => {
         const launchList = paginationMap.filter(t => t.current )[0].launchList;
@@ -718,6 +718,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
 
             window.scrollTo({top: 0});
             gsap.to('body', {duration: .2, background: bg});
+            applyShade(type);
             dialerSequence(type);
             Type.current = type;
             allowPagination.current = {
@@ -726,10 +727,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             }
         }
         else
-        allowPagination.current = {
-            up: false,
-            down: false
-        }
+            allowPagination.current = {
+                up: false,
+                down: false
+            };
     }
     useEffect(()=> {
         if ( imposeSequence !== undefined )

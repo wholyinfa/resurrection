@@ -609,7 +609,15 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 if( this.pointerEvent.target.localName !== 'a' ){
                     if( isSnapping.current && isSnapping.current.isActive() ){
                         const oldVars: gsap.TweenVars = isSnapping.current.vars;
-                        isSnapping.current = gsap.to('#dialer', {id: 'Dialer',ease: 'power2.inOut', duration: oldVars.duration, ...setXOrY(Number(oldVars.x)), onUpdate: oldVars.onUpdate, onComplete: oldVars.onComplete, onCompleteParams: oldVars.onCompleteParams });
+                        isSnapping.current = gsap.to('#dialer', {
+                            id: 'Dialer',
+                            ease: 'power2.inOut',
+                            duration: oldVars.duration,
+                            ...setXOrY(Number( (trueMobile.current) ? oldVars.y : oldVars.x)),
+                            onUpdate: oldVars.onUpdate,
+                            onComplete: oldVars.onComplete,
+                            onCompleteParams: oldVars.onCompleteParams
+                        });
                     }else{
                         restoreFromInfinity(Math.round( getXY(this) / menuItemD() ) * menuItemD());
                     }

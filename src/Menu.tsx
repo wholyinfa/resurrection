@@ -25,6 +25,7 @@ function MenuDOM({items, handleKeyDownClick, handleExpansion}: InferProps<typeof
                 <NavLink exact
                 className={ item.ghost ? 'ghost' : '' }
                 key={i}
+                id={item.id}
                 to={item.url}
                 onKeyDown={(e) => handleKeyDownClick(e)}
                 >
@@ -48,6 +49,7 @@ MenuDOM.propTypes = {
 
 interface itemData extends PageData {
     ghost?: boolean | undefined;
+    id?: string;
 };
 let expansionAnimation: gsap.core.Timeline;
 interface paginationMap extends PageData {
@@ -463,6 +465,17 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
         expandDialer(toggle, false);
     }
 
+    const identify = (items : itemData[], pre: 'L' | 'R' | 'M') => {
+        const prefix = ( pre === 'L' ) ? 'LNA_' :
+                       ( pre === 'M' ) ? 'DNA_' :
+                       'RNA_';
+        return items.map( (item, i) => {
+            return item = {
+                ...item,
+                id: prefix+ i
+            };
+        });
+    }
     const history = useHistory();
     const trueXY = useRef<number>(0);
     const infinityApplied = useRef<boolean>();
@@ -480,6 +493,9 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             main: newList.current.slice(),
             right: infiniteItems.current.slice(),
         }
+        endItems.left = identify(endItems.left, 'L');
+        endItems.main = identify(endItems.main, 'M');
+        endItems.right = identify(endItems.right, 'R');
         return ( excess ) ?
         [...endItems.left, ...endItems.right] :
         [...endItems.left, ...endItems.main, ...endItems.right];
@@ -546,7 +562,7 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                 delete newItem.ghost;
             return newItem;
         });
-        newList.current = copy.filter( item => typeof item.ghost === 'undefined' );
+        newList.current = identify(copy.filter( item => typeof item.ghost === 'undefined' ), 'M');
         setItems(newList.current);
 
         if ( history.location.pathname !== newList.current[2].url && !isPaginating.current && isMain.current )
@@ -602,8 +618,10 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
                     this.pointerEvent.target.localName === 'a'
                 ){
                     this.pointerEvent.preventDefault();
-                    const i = addAll().findIndex( t => typeof t.ghost === 'undefined' && t.url === this.pointerEvent.target.pathname);
 
+                    let i = addAll().findIndex( t => t.id === this.pointerEvent.target.id );
+                    if( i < addAll(true).length / 2 && !isSnapping.current )
+                        i = i + addAll(true).length / 2;   
                     const xy = getXY(Draggable.get('#dialer'));
                     restoreFromInfinity(xy, i);
                 }

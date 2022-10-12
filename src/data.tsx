@@ -69,7 +69,7 @@ export const Projects: ProjectType[] = [
         <p>For this reason I could no longer accept Project End as the first representative of my skills and abilities even thought it's a tank of a showcase!</p>
         </>,
         url: 'end',
-        src: '',
+        src: '/end',
         imgSource: {
             preview: require('./Assets/Projects/end/Mobile.jpg'),
             desktop: require('./Assets/Projects/end/Desktop.jpg'),

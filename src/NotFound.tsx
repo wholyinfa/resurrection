@@ -1,9 +1,7 @@
-import React from 'react';
-import PropTypes, {InferProps} from 'prop-types';
+import React, { useEffect } from 'react';
 
-export default function NotFound({}: InferProps<typeof NotFound.propTypes>) {
-    return <h1>NOT FOUND:(</h1>;
-}
-NotFound.propTypes ={
-    
+export default function NotFound() {
+    return <article id='error'>
+        <h1 id='fourOfour'>NOT FOUND :(</h1>
+    </article>
 }

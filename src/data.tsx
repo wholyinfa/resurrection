@@ -55,7 +55,7 @@ export interface ProjectType {
         tablet: string;
         mobile: string;
     };
-    builtWith: ('ps' | 'xd' | 'ai' | 'jq' | 'html' | 'react' | 'css' | 'sass' | 'gsap' | 'js' | 'ts')[];
+    builtWith: builtWith[];
 };
 export const Projects: ProjectType[] = [
     {

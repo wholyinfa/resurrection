@@ -153,7 +153,8 @@ export default function Menu({isMobile, resize, portal, isPaginating, newPage, i
             assemble();
             dialerExpansion.current && expandDialer(true, true);
             document.title = activePage.current.pageData.title;
-            document.getElementsByTagName('article')[0].addEventListener('scroll', (e) => dialerExpansion.current && expandDialer(true, true));
+            const article = document.getElementsByTagName('article')[0];
+            article && article.addEventListener('scroll', (e) => dialerExpansion.current && expandDialer(true, true));
     }, [location]);
 
     const infiniteItems = useRef<itemData[]>([]);

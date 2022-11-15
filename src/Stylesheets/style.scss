@@ -355,3 +355,12 @@ article > .title{
         }
     }
 }
+#error{
+    display: grid;
+    #fourOfour{
+        place-self: center;
+        margin: 0;
+        font-family: latoLight;
+        font-size: 5em;
+    }
+}

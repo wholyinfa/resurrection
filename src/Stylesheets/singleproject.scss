@@ -6,6 +6,7 @@
     text-align: center;
     padding-bottom: 150px;
     overflow-x: hidden;
+    display: grid;
     .post{
         max-width: 800px;
         margin: 100px auto 50px auto;
@@ -76,6 +77,7 @@
         margin: 50px $gap 0 $gap;
         box-sizing: border-box;
         padding: 0 $yGap $yGap $yGap;
+        justify-self: center;
         h2{
             font-size: 18px;
             margin: 0;

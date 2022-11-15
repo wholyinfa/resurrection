@@ -42,7 +42,7 @@ export const Pages: Pages = {
     },
 }
 
-export type builtWith = 'ps' | 'xd' | 'ai' | 'jq' | 'html' | 'react' | 'css' | 'sass' | 'gsap' | 'js' | 'ts';
+export type builtWith = 'ps' | 'xd' | 'ai' | 'jq' | 'html' | 'react' | 'css' | 'sass' | 'gsap' | 'js' | 'ts' | 'semantic';
 export interface ProjectType {
     title: string;
     context: ReactElement;
@@ -96,9 +96,33 @@ export const Projects: ProjectType[] = [
         },
         builtWith: ['xd', 'ps', 'react','html', 'css', 'sass', 'gsap', 'js', 'ts'],
     },
+    {
+        title: 'HN Oil Products',
+        brief: '',
+        context: <>
+        <p>On 2016, an edible oil extraction company has started a journey in the edible oil industry, extracting the finest oil from top-notch source ingredients which ensured quality products to a loyal costumer base.</p>
+        <p>After 2 years of being in the business, HajNabi<sup>&#8482;</sup> has expanded its reach using their website as their main internet business platform. Their era in the industry however, didn't last long.</p>
+        <p>With quality, German-made machinery and dedicated crew, they were offering natural oil products, meaning that the oil was extracted directly from the source product without any additional ingredients and that, quickly gathered the attention of numerous locals to the new business in the city.</p>
+        <p>Soon the word got out about an all-natural oil product and they had to manage numerous orders coming in, which put a lot of stress on the owner and the crew, who weren't used to so much responsibility.</p>
+        <p>Their collapse started, as a few of the main associates, some of which were acquaintances of the owner, left the company, leaving the production hindered and fruitless.</p>
+        <p>Shortly after this, the owner who felt betrayed, exhausted and overworked, has closed its shops to the costumers, leaving the loyal costumers behind the doors.</p>
+        <p>I've made sure that the face of their business, which back then was mainly their website, speaks to the heart of the costumers the moment they enter the website. With an eloquent and unique concept, the whole website gives you the right vibe for an online shop which supports you all the way from its profiling features to the filter and sort options available on the articles and products pages for ease of use.</p>
+        <p>Since the costumers were top priority for HajNabi<sup>&#8482;</sup>, the website's UX is also designed to assist the user in every page. With its visual features and logical functions, the whole website has a sense of fulfillment of its goals, which is showcasing and selling the products to the costumers.</p>
+        </>,
+        url: 'hn',
+        src: '/hajnabi',
+        imgSource: {
+            preview: require('./Assets/Projects/hn/Mobile.jpg'),
+            desktop: require('./Assets/Projects/hn/Desktop.jpg'),
+            tablet: require('./Assets/Projects/hn/Tablet.jpg'),
+            mobile: require('./Assets/Projects/hn/Mobile.jpg')
+        },
+        builtWith: ['ai', 'ps' ,'html', 'css', 'semantic', 'jq', 'js'],
+    },
 ]
 Projects.map( (p, i) => {
     const content = Projects[i].context.props.children;
+    console.log(content[0]);
     if( content )
         Projects[i].brief = content[0].props.children.slice(0, 100)
 })

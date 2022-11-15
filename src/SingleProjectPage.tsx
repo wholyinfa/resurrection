@@ -26,6 +26,7 @@ export default function SingleProjectPage() {
         if ( tool === 'react' ) return addAlt('ReactJS');
         if ( tool === 'sass' ) return addAlt('Sass');
         if ( tool === 'gsap' ) return addAlt('GSAP');
+        if ( tool === 'semantic' ) return addAlt('Semantic UI');
     }
     return <article id='singleProjectPage'>
         <section className='post'>

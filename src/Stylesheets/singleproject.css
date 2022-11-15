@@ -11,21 +11,24 @@
   font-style: normal;
 }
 body {
+  width: 100vw;
+  height: 100vh;
   background: #000;
   color: #fff;
   margin: 0;
   font-size: 16px;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 main, main article {
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 main article {
   padding-bottom: 100px;
   box-sizing: border-box;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .breathingFragment {
@@ -284,11 +287,22 @@ article > .title div {
     width: 230px;
   }
 }
+#error {
+  display: grid;
+}
+#error #fourOfour {
+  place-self: center;
+  margin: 0;
+  font-family: latoLight;
+  font-size: 5em;
+}
+
 #singleProjectPage {
   width: 100%;
   text-align: center;
   padding-bottom: 150px;
   overflow-x: hidden;
+  display: grid;
 }
 #singleProjectPage .post {
   max-width: 800px;
@@ -351,6 +365,7 @@ article > .title div {
   margin: 50px 50px 0 50px;
   box-sizing: border-box;
   padding: 0 30px 30px 30px;
+  justify-self: center;
 }
 #singleProjectPage .builtWith h2 {
   font-size: 18px;

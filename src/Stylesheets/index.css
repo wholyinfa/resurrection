@@ -287,6 +287,16 @@ article > .title div {
     width: 230px;
   }
 }
+#error {
+  display: grid;
+}
+#error #fourOfour {
+  place-self: center;
+  margin: 0;
+  font-family: latoLight;
+  font-size: 5em;
+}
+
 #homePage {
   width: 100vw;
   height: 100vh;
